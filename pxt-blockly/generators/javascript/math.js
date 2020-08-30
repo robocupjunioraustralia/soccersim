@@ -421,3 +421,10 @@ Blockly.JavaScript['math_atan2'] = function(block) {
   return ['Math.atan2(' + argument1 + ', ' + argument0 + ') / Math.PI * 180',
       Blockly.JavaScript.ORDER_DIVISION];
 };
+
+Blockly.JavaScript['math_number_minmax'] = function(block) {
+  var code = parseFloat(block.getFieldValue('SLIDER'));
+  var order = code >= 0 ? Blockly.JavaScript.ORDER_ATOMIC :
+              Blockly.JavaScript.ORDER_UNARY_NEGATION;
+  return [code, order];
+};
