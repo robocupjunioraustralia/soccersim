@@ -12,10 +12,10 @@ goog.provide('Blockly.JavaScript.rcja');
 
 goog.require('Blockly.JavaScript');
 
-
 Blockly.JavaScript['motor_set_speed'] = function(block) {
-  var arg = Blockly.JavaScript.valueToCode(block, 'NUM', Blockly.JavaScript.ORDER_NONE) || '0';
-  var code = 'setMotorSpeed(' + arg + ');\n';
+  var arg1 = block.getFieldValue('motor');
+  var arg2 = Blockly.JavaScript.valueToCode(block, 'speed_input', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var code = 'setMotorSpeed(' + arg1 + ', ' + arg2 + ');\n';
   return code;
 };
 

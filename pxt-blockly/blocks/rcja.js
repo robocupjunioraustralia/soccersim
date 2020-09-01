@@ -25,13 +25,31 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   // Example block
   {
     "type": "motor_set_speed",
-    "message0": "Set motor speed %1",
+    "message0": "Set %1 speed to %2",
     "args0": [
-    {
-      "type": "input_value",
-      "name": "NUM",
-      "check": "Number"
-    }
+      {
+        "type": "field_dropdown",
+        "name": "motor",
+        "options": [
+          [
+            "MotorA",
+            "'motorA'"
+          ],
+          [
+            "MotorB",
+            "'motorB'"
+          ],
+          [
+            "MotorC",
+            "'motorC'"
+          ]
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "speed_input",
+        "check": "Number"
+      }
     ],
     "inputsInline": true,
     "previousStatement": null,
