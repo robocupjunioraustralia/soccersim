@@ -19,6 +19,7 @@
          * 
          * @constructor
          * @param {Array<Robot>} robots List of robots to include in the simulator
+         * @param {Matter.Body} ball a ball
          */
         constructor(robots, ball) {
             this.engine = Engine.create();
@@ -108,10 +109,12 @@
         }
     }
 
+    // TODO: move this to another file
     let title = document.getElementsByTagName("title")[0].innerHTML;
     console.log(title);
     if (title === 'Matter.js Demo') {
         let robots = [
+            // TODO: create actual robots
             Bodies.rectangle(100, 100, 50, 50, {
                 frictionAir: 0.1
             }),
