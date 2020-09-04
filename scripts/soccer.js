@@ -36,8 +36,8 @@
                 element: document.body,
                 engine: this.engine,
                 options: {
-                    width: 800,
-                    height: 600,
+                    width: 546,
+                    height: 729,
                     showVelocity: true,
                     wireframes: false
                 }
@@ -54,10 +54,10 @@
                 this.ball,
 
                 // walls
-                Bodies.rectangle(400, 0, 800, 50, { isStatic: true }),
-                Bodies.rectangle(400, 600, 800, 50, { isStatic: true }),
-                Bodies.rectangle(800, 300, 50, 600, { isStatic: true }),
-                Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
+                Bodies.rectangle(546/2, 0, 546, 50, { isStatic: true }),
+                Bodies.rectangle(546/2, 729, 546, 50, { isStatic: true }),
+                Bodies.rectangle(546, 729/2, 50, 729, { isStatic: true }),
+                Bodies.rectangle(0, 729/2, 50, 729, { isStatic: true })
             ]));
 
             // add mouse control
@@ -80,7 +80,7 @@
             // fit the render viewport to the scene
             Render.lookAt(this.render, {
                 min: { x: 0, y: 0 },
-                max: { x: 800, y: 600 }
+                max: { x: 546, y: 729 }
             });
 
             // Perform updates to robot forces
@@ -118,10 +118,10 @@
             Bodies.rectangle(100, 300, 50, 50, {
                 frictionAir: 0.1
             }),
-            Bodies.rectangle(600, 100, 50, 50, {
+            Bodies.rectangle(400, 100, 50, 50, {
                 frictionAir: 0.1
             }),
-            Bodies.rectangle(600, 300, 50, 50, {
+            Bodies.rectangle(400, 300, 50, 50, {
                 frictionAir: 0.1
             })
         ];
