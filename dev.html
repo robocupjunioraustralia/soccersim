@@ -30,6 +30,7 @@
     <script src="pxt-blockly/blocks/pxt_blockly_functions.js"></script>
     <script src="pxt-blockly/blocks/rcja.js"></script>
     <script src="scripts/blockly-editor.js"></script>
+    <script src="matter-js/build/matter.min.js"></script>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
     <link rel="stylesheet" href="styles/soccer.css" />
@@ -70,14 +71,13 @@
         <div class="column">
             <div id="blocklyDiv"></div>
             <textarea id="importExport" onchange="taChange();" onkeyup="taChange()"></textarea>
+            <input class="button" type="button" value="Export to XML" onclick="toXml()">
+            <input class="button" type="button" value="Import from XML" onclick="fromXml()" id="import">
+            <input class="button" type="button" value="To JavaScript" onclick="toCode('JavaScript')">
         </div>
         <div class="column">
             <div class="buttons">
-                <input class="button" type="button" value="Export to XML" onclick="toXml()">
-                <input class="button" type="button" value="Import from XML" onclick="fromXml()" id="import">
-                <input class="button" type="button" value="To JavaScript" onclick="toCode('JavaScript')">
             </div>
-            
         </div>
     </div>
     <!-- The next three blocks of XML are sample toolboxes for testing basic

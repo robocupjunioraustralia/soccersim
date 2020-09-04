@@ -17,7 +17,7 @@ body {
 }
 
 #blocklyDiv {
-    height: calc(80vh - 52px);
+    height: calc(70vh - 52px);
 }
 
 #importExport {

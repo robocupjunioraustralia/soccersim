@@ -292,7 +292,7 @@
                 name: 'Soccer',
                 id: 'soccer',
                 init: Example.soccer,
-                sourceLink: 'soccer.js'
+                sourceLink: '../../../scripts/soccer.js'
             }
         ]
     });
