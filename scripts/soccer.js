@@ -18,10 +18,11 @@
          * Soccer simulation class
          * 
          * @constructor
+         * @param {HTMLElement} element parent element to place the rendered field on
          * @param {Array<Robot>} robots List of robots to include in the simulator
          * @param {Matter.Body} ball a ball
          */
-        constructor(robots, ball) {
+        constructor(element, robots, ball) {
             this.engine = Engine.create();
             this.world = this.engine.world;
             this.robots = robots;
@@ -34,7 +35,7 @@
 
             // create renderer
             this.render = Render.create({
-                element: document.body,
+                element: element,
                 engine: this.engine,
                 options: {
                     width: 546,
@@ -363,8 +364,29 @@
         // Create a new simulation if selected
         window.Example = window.Example || {};
         window.Example.soccer = function() {
-            var sim = new SoccerSim(robots, ball);
+            var sim = new SoccerSim(document.body, robots, ball);
             return sim.demo();
         };
+    } else {
+        // Assume it is the actual interface
+        // Define robots on the field
+        let one = new UniBot(100,100);
+        let two = new DualBot(100,300);
+        let three = new UniBot(400,100);
+        let four = new UniBot(400,300);
+        let robots = [one, two, three, four];
+        window.robotOne = one;
+        window.robotTwo = two;
+
+        // define the ball
+        let ball = Bodies.circle(300, 100, 10, {
+            frictionAir: 0.1,
+            render: {fillStyle: '#f95a00'}
+        });
+
+        // Create a new simulation
+        var sim = new SoccerSim(document.getElementById('matterjs'), robots, ball);
+        // Engine.run(sim.engine);
+        // Render.run(sim.render);
     }
 })(Matter);
