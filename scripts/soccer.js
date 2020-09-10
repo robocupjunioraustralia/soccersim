@@ -138,6 +138,21 @@
             this.id = this.body.id;
             this.motors = [];
             this.motorPos = [];
+            this.motorOffsets = [];
+            this.numMotors = 0;
+        }
+
+        // x and y components of unit vector pointing in robot's forward direction
+        getRelative(){
+            let angle = this.getBearing();
+            let x = Math.sin(angle);
+            let y = Math.cos(angle);
+            return {sine: x, cosine: y};
+        }
+
+        // Remind self how many motors robot contains
+        getNumMotors(){
+            return this.numMotors;
         }
 
         // Get current centroid position
@@ -181,8 +196,8 @@
         }
     }
 
-    // Bot with single motor in the centre, can only move forwards and back
-    class OneBot extends Robot{
+    class UniBot extends Robot{
+        // Bot with single motor in the centre, can only move forwards and back
         constructor(x, y) {
             super(x, y);
             this.setupMotors();
@@ -190,7 +205,9 @@
 
         // Single motor in the centre
         setupMotors(){
+            this.numMotors = 1;
             this.motors.push(0);
+            this.motorOffsets.push({x:0, y:0});
             let centroid = this.getPos();
             this.motorPos.push({x: centroid.x, y: centroid.y});
         }
@@ -220,9 +237,9 @@
             let forces = [];
             let mPos = this.motorPos[0];
             let absF = (this.motors[0])/100;
-            let angle = this.getBearing();
-            let relFx = -1 * absF * Math.sin(angle);
-            let relFy = absF * Math.cos(angle);
+            let relative = this.getRelative();
+            let relFx = -1 * absF * relative.sine;
+            let relFy = absF * relative.cosine;
             forces.push({
                 fx: relFx, 
                 fy: relFy, 
@@ -232,42 +249,94 @@
         }
     }
 
-    // Single motor robot, very not complete
-    class TwoRobot extends Robot{
+    class DualBot extends Robot{
+        // Bot with 2 motors, one on each side
+        // Can move forwards and back, as well as turn and spin
+        // TODO: currently contains hardcoding of motor position
         constructor(x, y) {
             super(x, y);
             this.setupMotors();
         }
 
+        // One motor on either side, 2 total
         setupMotors(){
+            this.numMotors = 2;
             this.motors.push(0,0);
-            this.motorPos.push({x:0, y:50},{x:0, y:-50});
+            this.motorOffsets.push(
+                {x: 25, y: 0},
+                {x:-25, y: 0}
+            );
+            let offsets = this.motorOffsets;
+            let centroid = this.getPos();
+            this.motorPos.push(
+                {x: centroid.x + offsets[0].x, y: centroid.y + offsets[0].y}, 
+                {x: centroid.x + offsets[1].x, y: centroid.y + offsets[1].y}
+            );
         }
 
+        // Update location of motors per time tick
+        updatePos(){
+            let centroid = this.getPos();
+
+            let relative = this.getRelative();
+            let magnitude = 25;
+
+            let relx = magnitude * relative.cosine;
+            let rely = magnitude * relative.sine;
+
+            this.motorPos[0].x = centroid.x + relx;
+            this.motorPos[0].y = centroid.y + rely;
+
+            this.motorPos[1].x = centroid.x - relx;
+            this.motorPos[1].y = centroid.y - rely;
+        }
+
+        // update force applied to robot per time tick
         updateForce(){
-            let mp = this.getMotorPos(0);
-            let f = {x: this.fx, y: this.fy};
-            Body.applyForce(this.body, {x: (mp.x+this.x), y: (mp.y+this.y)}, f);
+            let forces = this.calculateForce();
+            let vector = {};
+            for (var i = 0; i < this.numMotors; i++){
+                vector = {x: forces[i].fx, y: forces[i].fy};
+                Body.applyForce(this.body, forces[i].from, vector);
+            }
         }
 
+        // Set speed of the one motor
         setMotorSpeed(motorNum, speed){
-            if (motorNum < this.motors.length){
+            if (motorNum < this.numMotors){
                 this.motors[motorNum] = speed;
             }
             this.calculateForce();
         }
-
-        setMotorSpeeds(array){
-            for (var i = 0; i < array.length; i++){
-                this.setMotorSpeed(array[i].motorNum, array[i].speed);
-            }
+        
+        // Set speed of both motors
+        setBothMotorSpeeds(speed0, speed1){
+            this.motors[0] = speed0;
+            this.motors[1] = speed1;
+            this.calculateForce();
         }
 
+        // Calculate relative force for dual motors
         calculateForce(){
-            this.fx = (this.motors[0])/100;
-        }
-    }
+            let forces = [];
+            let relative = this.getRelative();
 
+            for (var i = 0; i < this.numMotors; i++){
+                let mPos = this.motorPos[i];
+                let absF = (this.motors[i])/100;
+                let relFx = -1 * absF * relative.sine;
+                let relFy = absF * relative.cosine;
+                forces.push({
+                    fx: relFx, 
+                    fy: relFy, 
+                    from: mPos
+                });
+            }
+
+            return forces;
+        }
+
+    }
     // TODO: move this to another file
     let title = document.getElementsByTagName("title")[0].innerHTML;
 
@@ -275,16 +344,15 @@
     console.log(title);
     if (title === 'Matter.js Demo') {
         // Define robots on the field
-        let one = new OneBot(100,100);
-        // let two = new TwoRobot(100,300);
-        // let three = new OneBot(400,100);
-        // let four = new OneBot(400,300);
-        let robots = [one];
-        // [one, two, three, four];
+        let one = new UniBot(100,100);
+        let two = new DualBot(100,300);
+        let three = new UniBot(400,100);
+        let four = new UniBot(400,300);
+        let robots = [one, two, three, four];
         console.log(one);
         window.robotOne = one;
-        // window.robotTwo = two;
-        // console.log(two);
+        window.robotTwo = two;
+        console.log(two);
 
         // define the ball
         let ball = Bodies.circle(300, 100, 10, {
