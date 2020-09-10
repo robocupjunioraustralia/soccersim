@@ -490,12 +490,17 @@
                 <category name="RCJA" categorystyle="rcja_category" iconclass="blocklyTreeIconCustom rcja">
                     <label text="RCJA" web-line="2.0" web-line-width="200"></label>
                     <block type="motor_set_speed" gap="32">
-                        <value name="NUM">
+                        <value name="speed_input">
                             <shadow type="math_number_minmax">
                                 <mutation min="-100" max="100">0</mutation>
                             </shadow>
                         </field>
                     </block>
+                    <block type="ball_get_angle"></block>
+                    <block type="ball_get_distance"></block>
+                    <block type="compass_get_heading"></block>
+                    <block type="print"></block>
+                    <block type="on_program_start"></block>
                 </category>
             </xml>
         </body>
