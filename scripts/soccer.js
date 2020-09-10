@@ -98,7 +98,7 @@
                 // TODO: loop through this.robots and call its update function
                 // The update function should apply some provided forces to the
                 // wheels of a robot.
-                for (var i = 0; i < 4; i++){
+                for (var i = 0; i < bots.length; i++){
                     robots[i].updatePos();
                     robots[i].updateForce();
                 }
@@ -129,23 +129,25 @@
          * @param {y} y is the y position of the robot
          */
         constructor(x, y) {
+            // Prevent instantiation of Robot class
             if (new.target === Robot) {
                 throw new TypeError("Cannot instantiate abstract Robot class");
             }
+            // Currently represented by a single rectangle
             this.body = Bodies.rectangle(x, y, 50, 50, {frictionAir: 0.1});
             this.id = this.body.id;
-            this.x = x;
-            this.y = y;
-            this.fx = 0;
-            this.fy = 0;
-            this.m = 0;
             this.motors = [];
             this.motorPos = [];
         }
 
-        // Get current position
+        // Get current centroid position
         getPos(){
-            return {x: this.x, y: this.y};
+            return this.body.position;
+        }
+
+        // Get bearing, in radians
+        getBearing(){
+            return this.body.angle;
         }
 
         // Get array of current motor speeds
@@ -158,18 +160,17 @@
             return this.motorPos[index];
         }
 
-        // Update position
+        // Update motor position per tick
         updatePos(){
-            this.x = this.body.position.x;
-            this.y = this.body.position.y;
+            console.error('Please overwrite updatePos');
         }
 
-        // Update force
+        // Update force per tick
         updateForce(){
             console.error('Please overwrite updateForce');
         }
 
-        // Calculate force depends on motor setup
+        // Force calculations depend on specific robot type
         calculateForce(){
             console.error('Please overwrite calculateForce');
         }
@@ -180,23 +181,32 @@
         }
     }
 
-    // Single motor robot, only moves in y axis
-    class OneRobot extends Robot{
+    // Bot with single motor in the centre, can only move forwards and back
+    class OneBot extends Robot{
         constructor(x, y) {
             super(x, y);
             this.setupMotors();
         }
+
         // Single motor in the centre
         setupMotors(){
-            this.motors.push([0]);
-            this.motorPos.push({x:0, y:0});
+            this.motors.push(0);
+            let centroid = this.getPos();
+            this.motorPos.push({x: centroid.x, y: centroid.y});
         }
 
-        // Single force and motor position
+        // Update location of motors per time tick
+        updatePos(){
+            let centroid = this.getPos();
+            this.motorPos[0].x = centroid.x;
+            this.motorPos[0].y = centroid.y;
+        }
+
+        // update force applied to robot per time tick
         updateForce(){
-            let mp = this.getMotorPos(0);
-            let f = {x: this.fx, y: this.fy};
-            Body.applyForce(this.body, {x: (mp.x+this.x), y: (mp.y+this.y)}, f);
+            let forces = this.calculateForce();
+            let vector = {x: forces[0].fx, y: forces[0].fy};
+            Body.applyForce(this.body, forces[0].from, vector);
         }
 
         // Set speed of the one motor regardless of motorNum
@@ -205,13 +215,24 @@
             this.calculateForce();
         }
 
-        // Only moves along its y axis
+        // Calculate relative force for single motor
         calculateForce(){
-            this.fy = (this.motors[0])/100;
+            let forces = [];
+            let mPos = this.motorPos[0];
+            let absF = (this.motors[0])/100;
+            let angle = this.getBearing();
+            let relFx = -1 * absF * Math.sin(angle);
+            let relFy = absF * Math.cos(angle);
+            forces.push({
+                fx: relFx, 
+                fy: relFy, 
+                from: mPos
+            });
+            return forces;
         }
     }
 
-    // Single motor robot
+    // Single motor robot, very not complete
     class TwoRobot extends Robot{
         constructor(x, y) {
             super(x, y);
@@ -219,7 +240,7 @@
         }
 
         setupMotors(){
-            this.motors.push([0,0]);
+            this.motors.push(0,0);
             this.motorPos.push({x:0, y:50},{x:0, y:-50});
         }
 
@@ -254,15 +275,16 @@
     console.log(title);
     if (title === 'Matter.js Demo') {
         // Define robots on the field
-        let one = new OneRobot(100,100);
-        let two = new TwoRobot(100,300);
-        let three = new OneRobot(400,100);
-        let four = new OneRobot(400,300);
-        let robots = [one, two, three, four];
+        let one = new OneBot(100,100);
+        // let two = new TwoRobot(100,300);
+        // let three = new OneBot(400,100);
+        // let four = new OneBot(400,300);
+        let robots = [one];
+        // [one, two, three, four];
         console.log(one);
-        console.log(two);
         window.robotOne = one;
-        window.robotTwo = two;
+        // window.robotTwo = two;
+        // console.log(two);
 
         // define the ball
         let ball = Bodies.circle(300, 100, 10, {
