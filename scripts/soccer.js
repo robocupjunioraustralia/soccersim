@@ -164,7 +164,7 @@
             let ballX = ball.position.x;
             let ballY = ball.position.y;
             let deltaX = ballX - this.body.position.x;
-            let deltaY = ballY - this.body.position.y;
+            let deltaY = -1 * (ballY - this.body.position.y);
             let distance = Math.sqrt( Math.pow(deltaX,2) + Math.pow(deltaY,2) );
             let angle = Math.atan( deltaX/deltaY );
             return {distance: distance, angle: angle};
@@ -210,7 +210,7 @@
                     res = angle + 360;
                 }
             }
-            return res;
+            return res*degToRad;
         }
 
         // Get absolute body angle in radians
