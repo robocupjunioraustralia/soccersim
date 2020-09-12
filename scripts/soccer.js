@@ -12,6 +12,9 @@
         World = Matter.World,
         Bodies = Matter.Bodies;
     
+    var degToRad = Math.PI/180;
+    var radToDeg = 180/Math.PI;
+    
     class SoccerSim {
 
         /**
@@ -125,16 +128,29 @@
     class Robot {
         /**
          * Abstract class Robot containing all explanations and methods to be overwritten
+         * @param {team} team is the team's goal colour, yellow or blue. TODO: Currently blue team faces up, Yellow is down
          * @param {x} x is the x position of the robot
          * @param {y} y is the y position of the robot
          */
-        constructor(x, y) {
+        constructor(team, x, y) {
             // Prevent instantiation of Robot class
             if (new.target === Robot) {
                 throw new TypeError("Cannot instantiate abstract Robot class");
             }
-            // Currently represented by a single rectangle
-            this.body = Bodies.rectangle(x, y, 50, 50, {frictionAir: 0.1});
+            this.team = team;
+            // TODO: Currently represented by a single rectangle that is blue or yellow
+            if (team == 'blue'){
+                this.body = Bodies.rectangle(x, y, 50, 50, {
+                    frictionAir: 0.1, 
+                    render: { fillStyle: '#1155ff'}
+                });
+                Body.rotate(this.body,180*degToRad);
+            } else {
+                this.body = Bodies.rectangle(x, y, 50, 50, {
+                    frictionAir: 0.1, 
+                    render: { fillStyle: '#ffff00'}
+                });
+            }
             this.id = this.body.id;
             this.motors = [];
             this.motorPos = [];
@@ -142,9 +158,21 @@
             this.numMotors = 0;
         }
 
+        // Gets the relative position of the ball from current robot
+        // Returns an object containing centre-to-centre distance and angle in radians
+        getBallPosition(ball){
+            let ballX = ball.position.x;
+            let ballY = ball.position.y;
+            let deltaX = ballX - this.body.position.x;
+            let deltaY = ballY - this.body.position.y;
+            let distance = Math.sqrt( Math.pow(deltaX,2) + Math.pow(deltaY,2) );
+            let angle = Math.atan( deltaX/deltaY );
+            return {distance: distance, angle: angle};
+        }
+
         // x and y components of unit vector pointing in robot's forward direction
         getRelative(){
-            let angle = this.getBearing();
+            let angle = this.getAngle();
             let x = Math.sin(angle);
             let y = Math.cos(angle);
             return {sine: x, cosine: y};
@@ -160,8 +188,33 @@
             return this.body.position;
         }
 
-        // Get bearing, in radians
+        // Get relative bearing angle in radians
+        // Blue team 0rad points up, yellow team 0rad points down
         getBearing(){
+            let angle = (this.getAngle()*radToDeg)%360;
+
+            // Compensate for yellow facing other way to blue
+            if (this.team == 'blue'){
+                angle -= 180;
+            }
+
+            let res = angle;
+            // If rotated rightwards
+            if (angle > 0){
+                if (angle > 180){
+                    res = -1 * (360-angle);
+                }
+            // If rotated leftwards
+            } else {
+                if (angle < -180){
+                    res = angle + 360;
+                }
+            }
+            return res;
+        }
+
+        // Get absolute body angle in radians
+        getAngle(){
             return this.body.angle;
         }
 
@@ -198,8 +251,8 @@
 
     class UniBot extends Robot{
         // Bot with single motor in the centre, can only move forwards and back
-        constructor(x, y) {
-            super(x, y);
+        constructor(team, x, y) {
+            super(team, x, y);
             this.setupMotors();
         }
 
@@ -253,8 +306,8 @@
         // Bot with 2 motors, one on each side
         // Can move forwards and back, as well as turn and spin
         // TODO: currently contains hardcoding of motor position
-        constructor(x, y) {
-            super(x, y);
+        constructor(team, x, y) {
+            super(team, x, y);
             this.setupMotors();
         }
 
@@ -337,6 +390,7 @@
         }
 
     }
+    
     // TODO: move this to another file
     let title = document.getElementsByTagName("title")[0].innerHTML;
 
@@ -344,21 +398,23 @@
     console.log(title);
     if (title === 'Matter.js Demo') {
         // Define robots on the field
-        let one = new UniBot(100,100);
-        let two = new DualBot(100,300);
-        let three = new UniBot(400,100);
-        let four = new UniBot(400,300);
+        let one = new UniBot('blue',100,300);
+        let two = new UniBot('blue',400,300);
+        let three = new UniBot('yellow',100,100);
+        let four = new UniBot('yellow', 400,100);
+
         let robots = [one, two, three, four];
-        console.log(one);
-        window.robotOne = one;
-        window.robotTwo = two;
-        console.log(two);
+        window.One = one;
+        window.Two = two;
+        window.Three = three;
+        window.Four = four;
 
         // define the ball
         let ball = Bodies.circle(300, 100, 10, {
             frictionAir: 0.1,
             render: {fillStyle: '#f95a00'}
         });
+        window.Ball = ball;
 
         // Create a new simulation if selected
         window.Example = window.Example || {};
