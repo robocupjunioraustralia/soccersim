@@ -377,6 +377,8 @@
         let robots = [one, two, three, four];
         window.robotOne = one;
         window.robotTwo = two;
+        window.robotThree = three;
+        window.robotFour = four;
 
         // define the ball
         let ball = Bodies.circle(300, 100, 10, {
