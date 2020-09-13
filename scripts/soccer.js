@@ -161,21 +161,46 @@
         // Gets the relative position of the ball from current robot
         // Returns an object containing centre-to-centre distance and angle in radians
         getBallPosition(ball){
-            let ballX = ball.position.x;
-            let ballY = ball.position.y;
-            let deltaX = ballX - this.body.position.x;
-            let deltaY = -1 * (ballY - this.body.position.y);
-            let distance = Math.sqrt( Math.pow(deltaX,2) + Math.pow(deltaY,2) );
-            let angle = Math.atan( deltaX/deltaY );
-            return {distance: distance, angle: angle};
+            let ballPos = {x: ball.position.x, y: ball.position.y};
+            let robPos = this.getPos();
+            let delta = {x: ballPos.x - robPos.x, y: -1 * (ballPos.y - robPos.y)};
+            let distance = Math.sqrt( Math.pow(delta.x,2) + Math.pow(delta.y,2) );
+            let angle = Vector.angle(robPos,ball.position)*radToDeg;
+
+            // Compensate for rotation relative to y axis instead of x axis
+            if (this.team == 'blue'){
+                if (angle <= 90 && angle >= -180){
+                    angle += 90;
+                } else if (angle > 90) {
+                    angle -= 270;
+                }
+            } else {
+                if (angle >= -90 && angle <= 180){
+                    angle -= 90;
+                } else if (angle < -90) {
+                    angle += 270;
+                }
+            }
+
+            // Compensate for robot bearing
+            // let robBear = this.getBearing()*radToDeg;
+            // console.log(angle, robBear);
+            // angle -= robBear;
+
+            return {distance: distance, angle: angle*degToRad};
         }
 
-        // x and y components of unit vector pointing in robot's forward direction
-        getRelative(){
+        // Unit direction vector pointing in robot's forward direction
+        getDirectionVector(){
             let angle = this.getAngle();
             let x = Math.sin(angle);
             let y = Math.cos(angle);
-            return {sine: x, cosine: y};
+            return {x: x, y: y};
+        }
+
+        // Get id of body
+        getID(){
+            return this.id;
         }
 
         // Remind self how many motors robot contains
@@ -200,7 +225,7 @@
 
             let res = angle;
             // If rotated rightwards
-            if (angle > 0){
+            if (angle >= 0){
                 if (angle > 180){
                     res = -1 * (360-angle);
                 }
@@ -290,9 +315,9 @@
             let forces = [];
             let mPos = this.motorPos[0];
             let absF = (this.motors[0])/100;
-            let relative = this.getRelative();
-            let relFx = -1 * absF * relative.sine;
-            let relFy = absF * relative.cosine;
+            let direction = this.getDirectionVector();
+            let relFx = -1 * absF * direction.x;
+            let relFy = absF * direction.y;
             forces.push({
                 fx: relFx, 
                 fy: relFy, 
@@ -331,11 +356,11 @@
         updatePos(){
             let centroid = this.getPos();
 
-            let relative = this.getRelative();
+            let direction = this.getDirectionVector();
             let magnitude = 25;
 
-            let relx = magnitude * relative.cosine;
-            let rely = magnitude * relative.sine;
+            let relx = magnitude * direction.y;
+            let rely = magnitude * direction.x;
 
             this.motorPos[0].x = centroid.x + relx;
             this.motorPos[0].y = centroid.y + rely;
@@ -372,13 +397,13 @@
         // Calculate relative force for dual motors
         calculateForce(){
             let forces = [];
-            let relative = this.getRelative();
+            let direction = this.getDirectionVector();
 
             for (var i = 0; i < this.numMotors; i++){
                 let mPos = this.motorPos[i];
                 let absF = (this.motors[i])/100;
-                let relFx = -1 * absF * relative.sine;
-                let relFy = absF * relative.cosine;
+                let relFx = -1 * absF * direction.x;
+                let relFy = absF * direction.y;
                 forces.push({
                     fx: relFx, 
                     fy: relFy, 
