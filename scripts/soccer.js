@@ -165,27 +165,38 @@
             let robPos = this.getPos();
             let delta = {x: ballPos.x - robPos.x, y: -1 * (ballPos.y - robPos.y)};
             let distance = Math.sqrt( Math.pow(delta.x,2) + Math.pow(delta.y,2) );
-            let angle = Vector.angle(robPos,ball.position)*radToDeg;
+            let ballBearing = Vector.angle(robPos,ball.position)*radToDeg;
 
             // Compensate for rotation relative to y axis instead of x axis
             if (this.team == 'blue'){
-                if (angle <= 90 && angle >= -180){
-                    angle += 90;
-                } else if (angle > 90) {
-                    angle -= 270;
+                if (ballBearing <= 90 && ballBearing >= -180){
+                    ballBearing += 90;
+                } else if (ballBearing > 90) {
+                    ballBearing -= 270;
                 }
             } else {
-                if (angle >= -90 && angle <= 180){
-                    angle -= 90;
-                } else if (angle < -90) {
-                    angle += 270;
+                if (ballBearing >= -90 && ballBearing <= 180){
+                    ballBearing -= 90;
+                } else if (ballBearing < -90) {
+                    ballBearing += 270;
                 }
             }
 
             // Compensate for robot bearing
-            // let robBear = this.getBearing()*radToDeg;
-            // console.log(angle, robBear);
-            // angle -= robBear;
+            let robotBearing = this.getBearing()*radToDeg;
+            let angle;
+            if (robotBearing < ballBearing){
+                angle = ballBearing - robotBearing;
+            } else {
+                angle = -1 * (robotBearing - ballBearing);
+            }
+
+            // Limit angle within -180 to 180 deg
+            if (angle > 180){
+                angle = -1 * (360-angle);
+            } else if (angle < -180){
+                angle += 360;
+            }
 
             return {distance: distance, angle: angle*degToRad};
         }
@@ -225,15 +236,11 @@
 
             let res = angle;
             // If rotated rightwards
-            if (angle >= 0){
-                if (angle > 180){
-                    res = -1 * (360-angle);
-                }
+            if (angle > 180) {
+                res = -1 * (360-angle);
             // If rotated leftwards
-            } else {
-                if (angle < -180){
-                    res = angle + 360;
-                }
+            } else if (angle < -180){
+                res = angle + 360;
             }
             return res*degToRad;
         }
