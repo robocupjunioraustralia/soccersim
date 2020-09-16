@@ -373,131 +373,119 @@
         }
     }
 
-    // TODO update dualbot for composite shapes
     class DualBot extends Robot{
         // Bot with 2 motors, one on each side
         // Can move forwards and back, as well as turn and spin
-        // TODO: currently contains hardcoding of motor position
+        // TODO: currently contains hardcoding of bot and motor dimensions/position
         constructor(team, x, y) {
             super(team);
             this.createBot(team, x, y, 50, 50, 10, 25);
         }
+        // Create a square robot with wheels on either side
+        createBot(team, xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight){
 
-        // One motor on either side, 2 total
-        setupMotors(){
-            this.numMotors = 2;
-            this.motors.push(0,0);
-            this.motorOffsets.push(
-                {x: 25, y: 0},
-                {x:-25, y: 0}
-            );
-            let offsets = this.motorOffsets,
-                centroid = this.getPos();
-            this.motorPos.push(
-                {x: centroid.x + offsets[0].x, y: centroid.y + offsets[0].y}, 
-                {x: centroid.x + offsets[1].x, y: centroid.y + offsets[1].y}
-            );
-        }
-
-        createBot(xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight){
             let group = Body.nextGroup(true),
-                wheelBase = 50,
-                wheelAOffset = -width * 0.5 + wheelBase,
-                wheelBOffset = width * 0.5 - wheelBase,
-                wheelYOffset = 0;
+                motorOffset = [{x: bodyWidth/2, y: 0}, {x: -bodyWidth/2, y: 0}],
+                bodyColour,
+                motorColour;
+            
+            // Define colours for each team
+            if (team == 'blue'){
+                bodyColour = '#0000ff';
+                motorColour = '#ffffff';
+            } else {
+                bodyColour = '#ffff00';
+                motorColour = '#000000';
+            }
         
-            let car = Composite.create({ label: 'Car' }),
-                body = Bodies.rectangle(xx, yy, width, height, { 
-                    collisionFilter: {
-                        group: group
-                    }
+            let robot = Composite.create({ label: 'DualBot' }),
+                body = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
+                    collisionFilter: { group: group },
+                    frictionAir: 0.1, 
+                    render: { fillStyle: bodyColour}
                 });
         
-            let wheelA = Bodies.rectangle(xx + wheelAOffset, yy + wheelYOffset, motorWidth, motorHeight, { 
-                collisionFilter: {
-                    group: group
-                },
-                friction: 0.8
+            let motorA = Bodies.rectangle(xPos + motorOffset[0].x, yPos + motorOffset[0].y, motorWidth, motorHeight, {
+                collisionFilter: { group: group },
+                frictionAir: 0.1, 
+                render: { fillStyle: motorColour}
+            });
+
+            let motorB = Bodies.rectangle(xPos + motorOffset[1].x, yPos + motorOffset[1].y, motorWidth, motorHeight, {
+                collisionFilter: { group: group },
+                frictionAir: 0.1, 
+                render: { fillStyle: motorColour}
             });
                         
-            let wheelB = Bodies.rectangle(xx + wheelBOffset, yy + wheelYOffset, motorWidth, motorHeight, { 
-                collisionFilter: {
-                    group: group
-                },
-                friction: 0.8
-            });
-                        
-            let axelA = Constraint.create({
+            let attachAA = Constraint.create({
+                bodyA: motorA,
+                pointA: {x: 0, y: motorHeight/2},
                 bodyB: body,
-                pointB: { x: wheelAOffset, y: 12 },
-                bodyA: wheelA,
-                pointA: {x: 0, y: 12},
+                pointB: { x: motorOffset[0].x, y: motorHeight/2 },
                 stiffness: 1,
                 length: 0
             });
 
-            let axelC = Constraint.create({
+            let attachAB = Constraint.create({
+                bodyA: motorA,
+                pointA: {x: 0, y: -motorHeight/2},
                 bodyB: body,
-                pointB: { x: wheelAOffset, y: -12 },
-                bodyA: wheelA,
-                pointA: {x: 0, y: -12},
-                stiffness: 1,
-                length: 0
-            });
-                            
-            let axelB = Constraint.create({
-                bodyB: body,
-                pointB: { x: wheelBOffset, y: 12 },
-                bodyA: wheelB,
-                pointA: {x: 0, y: 12},
+                pointB: { x: motorOffset[0].x, y: -motorHeight/2 },
                 stiffness: 1,
                 length: 0
             });
 
-            let axelD = Constraint.create({
+            let attachBA = Constraint.create({
+                bodyA: motorB,
+                pointA: {x: 0, y: motorHeight/2},
                 bodyB: body,
-                pointB: { x: wheelBOffset, y: -12},
-                bodyA: wheelB,
-                pointA: {x: 0, y: -12},
+                pointB: { x: motorOffset[1].x, y: motorHeight/2 },
+                stiffness: 1,
+                length: 0
+            });
+
+            let attachBB = Constraint.create({
+                bodyA: motorB,
+                pointA: {x: 0, y: -motorHeight/2},
+                bodyB: body,
+                pointB: { x: motorOffset[1].x, y: -motorHeight/2 },
                 stiffness: 1,
                 length: 0
             });
             
-            Composite.addBody(car, body);
-            Composite.addBody(car, wheelA);
-            Composite.addBody(car, wheelB);
-            Composite.addConstraint(car, axelA);
-            Composite.addConstraint(car, axelB);
-            
-            Composite.addConstraint(car, axelC);
-            Composite.addConstraint(car, axelD);
-
+            Composite.addBody(robot, body);
+            Composite.addBody(robot, motorA);
+            Composite.addBody(robot, motorB);
+            Composite.addConstraint(robot, attachAA);
+            Composite.addConstraint(robot, attachAB);
+            Composite.addConstraint(robot, attachBA);
+            Composite.addConstraint(robot, attachBB);
     
-            return car;
+            this.body = robot;
+            this.setupMotors(motorOffset);
+
+            // Rotate entire composite shape if blue team
+            if (team == 'blue'){
+                Composite.rotate(this.body,180*degToRad,{x: xPos, y: yPos});
+            }
         }
 
-        // Update location of motors per time tick
-        updatePos(){
-            let centroid = this.getPos(),
-                direction = this.getDirectionVector(),
-                magnitude = 25,
-                relx = magnitude * direction.y,
-                rely = magnitude * direction.x;
-
-            this.motorPos[0].x = centroid.x + relx;
-            this.motorPos[0].y = centroid.y + rely;
-
-            this.motorPos[1].x = centroid.x - relx;
-            this.motorPos[1].y = centroid.y - rely;
+        // One motor on either side, 2 total
+        setupMotors(offset){
+            this.numMotors = 2;
+            this.motors.push(0,0);
+            this.motorOffsets.push(offset[0],offset[1]);
         }
 
         // update force applied to robot per time tick
         updateForce(){
             let forces = this.calculateForce(),
-                vector = {};
+                vector = {},
+                motor;
             for (var i = 0; i < this.numMotors; i++){
                 vector = {x: forces[i].fx, y: forces[i].fy};
-                Body.applyForce(this.body, forces[i].from, vector);
+                motor = this.getMotors()[i];
+                Body.applyForce(motor, motor.position, vector);
             }
         }
 
@@ -522,14 +510,12 @@
                 direction = this.getDirectionVector();
 
             for (var i = 0; i < this.numMotors; i++){
-                let mPos = this.motorPos[i],
-                    absF = (this.motors[i])/100,
+                let absF = (this.motors[i])/100,
                     relFx = -1 * absF * direction.x,
                     relFy = absF * direction.y;
                 forces.push({
                     fx: relFx, 
-                    fy: relFy, 
-                    from: mPos
+                    fy: relFy
                 });
             }
 
@@ -545,9 +531,9 @@
     console.log(title);
     if (title === 'Matter.js Demo') {
         // Define robots on the field
-        let one = new UniBot('blue',100,300),
+        let one = new DualBot('blue',100,300),
             two = new UniBot('blue',400,300),
-            three = new UniBot('yellow',100,100),
+            three = new DualBot('yellow',100,100),
             four = new UniBot('yellow', 400,100);
 
         let robots = [one, two, three, four];
