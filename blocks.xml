@@ -1,0 +1,14 @@
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-rcja" style="display: none">
+    <category name="Motors" categorystyle="motors_category">
+        <label text="Motors" web-class="blocklyFlyoutHeading"></label>
+        <block type="motor_stop"></block>
+        <block type="motor_set_speed">
+            <value name="speed_input">
+                <shadow type="math_number_minmax">
+                    <mutation min="-100" max="100">0</mutation>
+                </shadow>
+            </field>
+        </block>
+        <block type="motor_get_speed"></block>
+    </category>
+</xml>
