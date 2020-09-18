@@ -127,8 +127,6 @@
         /**
          * Abstract class Robot containing all explanations and methods to be overwritten
          * @param {team} team is the team's goal colour, yellow or blue. TODO: Currently blue team faces up, Yellow is down
-         * @param {x} x is the x position of the robot
-         * @param {y} y is the y position of the robot
          */
         constructor(team) {
             // Prevent instantiation of Robot class
@@ -152,39 +150,25 @@
                 delta = {x: ballPos.x - robPos.x, y: -1 * (ballPos.y - robPos.y)},
                 distance = Math.sqrt( Math.pow(delta.x,2) + Math.pow(delta.y,2) ),
                 ballBearing = Vector.angle(robPos,ball.position)*radToDeg;
+            
+            // Adjust from x-axis reference to y-axis reference
+            ballBearing += 270;
 
-            // Compensate for rotation relative to y axis instead of x axis
-            if (this.team == 'blue'){
-                if (ballBearing <= 90 && ballBearing >= -180){
-                    ballBearing += 90;
-                } else if (ballBearing > 90) {
-                    ballBearing -= 270;
-                }
-            } else {
-                if (ballBearing >= -90 && ballBearing <= 180){
-                    ballBearing -= 90;
-                } else if (ballBearing < -90) {
-                    ballBearing += 270;
-                }
+            // Adjust based on colour
+            if (this.team == 'blue') {
+                ballBearing += 180;
+            }
+            
+            // Adjust based on robot heading
+            ballBearing -= this.getBearing() * radToDeg;
+            
+            // Wrap between -180 and 180
+            ballBearing = (ballBearing + 360) % (360);
+            if (ballBearing > 180) {
+                ballBearing -= 360;
             }
 
-            // Compensate for robot bearing
-            let robotBearing = this.getBearing()*radToDeg,
-                angle = 0;
-            if (robotBearing < ballBearing){
-                angle = ballBearing - robotBearing;
-            } else {
-                angle = -1 * (robotBearing - ballBearing);
-            }
-
-            // Limit angle within -180 to 180 deg
-            if (angle > 180){
-                angle = -1 * (360-angle);
-            } else if (angle < -180){
-                angle += 360;
-            }
-
-            return {distance: distance, angle: angle*degToRad};
+            return {distance: distance, angle: ballBearing*degToRad};
         }
 
         // Unit direction vector pointing in robot's forward direction
@@ -208,22 +192,20 @@
         // Get relative bearing angle in radians
         // Blue team 0rad points up, yellow team 0rad points down
         getBearing(){
-            let angle = (this.getAngle()*radToDeg)%360;
+            let angle = this.getAngle() % (2*Math.PI);
 
             // Compensate for yellow facing other way to blue
             if (this.team == 'blue'){
-                angle -= 180;
+                angle += Math.PI;
             }
 
-            let res = angle;
-            // If rotated rightwards
-            if (angle > 180) {
-                res = -1 * (360-angle);
-            // If rotated leftwards
-            } else if (angle < -180){
-                res = angle + 360;
+            // Wrap between -180 and 180 deg
+            angle = (angle + 2*Math.PI) % (2*Math.PI);
+
+            if (angle > Math.PI) {
+                angle -= 2*Math.PI;
             }
-            return res*degToRad;
+            return angle;
         }
 
         // Get absolute body angle in radians
@@ -269,7 +251,12 @@
     }
 
     class UniBot extends Robot{
-        // Bot with single motor in the centre, can only move forwards and back
+        /**
+         * Bot with single motor in the centre, can only move forwards and back
+         * @param {*} team team colour
+         * @param {*} x initial position along the x axis
+         * @param {*} y initial position along the y axis
+         */
         constructor(team, x, y) {
             super(team);
             this.createBot(team, x, y, 50, 50, 10, 25);
@@ -374,9 +361,13 @@
     }
 
     class DualBot extends Robot{
-        // Bot with 2 motors, one on each side
-        // Can move forwards and back, as well as turn and spin
         // TODO: currently contains hardcoding of bot and motor dimensions/position
+        /**
+         * Bot with 2 motors, one on each side. Can move forwards and back, as well as turn and spin
+         * @param {*} team team colour
+         * @param {*} x initial position along the x axis
+         * @param {*} y initial position along the y axis
+         */
         constructor(team, x, y) {
             super(team);
             this.createBot(team, x, y, 50, 50, 10, 25);
