@@ -16,6 +16,7 @@
     
     var degToRad = Math.PI/180;
     var radToDeg = 180/Math.PI;
+    var angleLimit = 0.01;
     
     class SoccerSim {
 
@@ -139,6 +140,8 @@
             this.motorPos = [];
             this.motorOffsets = [];
             this.numMotors = 0;
+            this.forces = [];
+            this.prevAngle = 0;
         }
 
         /*     ----     Methods that apply to all robots      ----      */
@@ -226,6 +229,17 @@
                 arr.push(this.body.bodies[i+1]);
             }
             return arr;
+        }
+
+        // Check if the robot bearing has changed
+        checkChange(){
+            let currAngle = this.getAngle();
+            if (this.prevAngle < currAngle + angleLimit && this.prevAngle > currAngle - angleLimit){
+                return false;
+            } else {
+                this.prevAngle = currAngle;
+                return true;
+            }
         }
 
         /*    ----      Method prototypes for inheritance      ----     */
@@ -317,6 +331,7 @@
             Composite.addConstraint(robot, attachB);
     
             this.body = robot;
+            this.prevAngle = this.getAngle();
             this.setupMotors(motorOffset);
 
             // Rotate entire composite shape if blue team
@@ -330,11 +345,15 @@
             this.numMotors = 1;
             this.motors.push(0);
             this.motorOffsets.push(offset);
+            this.forces.push({fx: 0, fy:0});
         }
 
         // update force applied to robot per time tick
         updateForce(){
-            let forces = this.calculateForce(),
+            if (this.checkChange() == true){
+                this.calculateForce();  
+            }
+            let forces = this.forces,
                 vector = {x: forces[0].fx, y: forces[0].fy},
                 motor = this.getMotors()[0];
             Body.applyForce(motor, motor.position, vector);
@@ -357,7 +376,7 @@
                 fx: relFx, 
                 fy: relFy
             });
-            return forces;
+            this.forces = forces;
         }
     }
 
@@ -454,6 +473,7 @@
             Composite.addConstraint(robot, attachBB);
     
             this.body = robot;
+            this.prevAngle = this.getAngle();
             this.setupMotors(motorOffset);
 
             // Rotate entire composite shape if blue team
@@ -467,11 +487,15 @@
             this.numMotors = 2;
             this.motors.push(0,0);
             this.motorOffsets.push(offset[0],offset[1]);
+            this.forces.push({fx: 0, fy:0},{fx: 0, fy:0});
         }
 
         // update force applied to robot per time tick
         updateForce(){
-            let forces = this.calculateForce(),
+            if (this.checkChange() == true){
+                this.calculateForce();
+            }
+            let forces = this.forces,
                 vector = {},
                 motor;
             for (var i = 0; i < this.numMotors; i++){
@@ -510,8 +534,7 @@
                     fy: relFy
                 });
             }
-
-            return forces;
+            this.forces = forces;
         }
 
     }
