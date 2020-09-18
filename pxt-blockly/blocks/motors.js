@@ -80,7 +80,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Number",
     "colour": 230,
     "tooltip": "",
-    "helpUrl": ""
+    "helpUrl": "",
+    "style": ""
   },
   {
     "type": "ball_get_angle",
@@ -131,7 +132,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "name": "start_input"
       }
     ],
-    "colour": 230,
+    // "colour": 230,
+    "style": "hat_blocks",
     "tooltip": "",
     "helpUrl": ""
   }
