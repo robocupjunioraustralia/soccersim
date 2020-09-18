@@ -519,28 +519,28 @@
     // TODO: move this to another file
     let title = document.getElementsByTagName("title")[0].innerHTML;
 
+    // Define robots on the field
+    let one = new DualBot('blue',100,300),
+    two = new UniBot('blue',400,300),
+    three = new DualBot('yellow',100,100),
+    four = new UniBot('yellow', 400,100);
+
+    let robots = [one, two, three, four];
+    window.One = one;
+    window.Two = two;
+    window.Three = three;
+    window.Four = four;
+
+    // define the ball
+    let ball = Bodies.circle(300, 100, 10, {
+        frictionAir: 0.1,
+        render: {fillStyle: '#f95a00'}
+    });
+    window.Ball = ball;
+
     // Print title of the browser tab
     console.log(title);
     if (title === 'Matter.js Demo') {
-        // Define robots on the field
-        let one = new DualBot('blue',100,300),
-            two = new UniBot('blue',400,300),
-            three = new DualBot('yellow',100,100),
-            four = new UniBot('yellow', 400,100);
-
-        let robots = [one, two, three, four];
-        window.One = one;
-        window.Two = two;
-        window.Three = three;
-        window.Four = four;
-
-        // define the ball
-        let ball = Bodies.circle(300, 100, 10, {
-            frictionAir: 0.1,
-            render: {fillStyle: '#f95a00'}
-        });
-        window.Ball = ball;
-
         // Create a new simulation if selected
         window.Example = window.Example || {};
         window.Example.soccer = function() {
@@ -549,23 +549,6 @@
         };
     } else {
         // Assume it is the actual interface
-        // Define robots on the field
-        let one = new UniBot(100,100);
-        let two = new DualBot(100,300);
-        let three = new UniBot(400,100);
-        let four = new UniBot(400,300);
-        let robots = [one, two, three, four];
-        window.robotOne = one;
-        window.robotTwo = two;
-        window.robotThree = three;
-        window.robotFour = four;
-
-        // define the ball
-        let ball = Bodies.circle(300, 100, 10, {
-            frictionAir: 0.1,
-            render: {fillStyle: '#f95a00'}
-        });
-
         // Create a new simulation
         var sim = new SoccerSim(document.getElementById('matterjs'), robots, ball);
         // Engine.run(sim.engine);
