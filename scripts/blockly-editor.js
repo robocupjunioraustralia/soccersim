@@ -1,8 +1,8 @@
 'use strict';
-var workspace = null;
+var workspace = null,
+    hiddenWorkspace = null;
 
 function start() {
-  setBackgroundColour();
 
   // Parse the URL arguments.
   var toolbox = getToolboxElement();
@@ -11,8 +11,13 @@ function start() {
   ];
   var match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
+
+  // Create hidden workspace
+  hiddenWorkspace = Blockly.inject('helperEditor', {
+    toolbox: toolbox
+  });
   // Create main workspace.
-  workspace = Blockly.inject('blocklyDiv',
+  workspace = Blockly.inject('blocklyEditor1',
       {
         comments: true,
         collapse: true,
@@ -56,13 +61,13 @@ function start() {
       });
   addToolboxButtonCallbacks();
   // Restore previously displayed text.
-  if (sessionStorage) {
-    var text = sessionStorage.getItem('textarea');
-    if (text) {
-      document.getElementById('importExport').value = text;
-    }
-  } else {
-  }
+  // if (sessionStorage) {
+  //   var text = sessionStorage.getItem('textarea');
+  //   if (text) {
+  //     document.getElementById('importExport').value = text;
+  //   }
+  // } else {
+  // }
   taChange();
 }
 
@@ -155,14 +160,6 @@ function addToolboxButtonCallbacks() {
       'randomizeLabelText', randomizeLabelText);
 }
 
-function setBackgroundColour() {
-  // Set background colour to differentiate server vs local copy.
-  if (location.protocol == 'file:') {
-    var lilac = '#d6d6ff';
-    document.body.style.backgroundColor = lilac;
-  }
-}
-
 function getToolboxElement() {
   var match = location.search.match(/toolbox=([^&]+)/);
   // Default to the basic toolbox with categories and untyped variables,
@@ -196,17 +193,17 @@ function toCode(lang) {
 // Disable the "Import from XML" button if the XML is invalid.
 // Preserve text between page reloads.
 function taChange() {
-  var textarea = document.getElementById('importExport');
-  if (sessionStorage) {
-    sessionStorage.setItem('textarea', textarea.value);
-  }
-  var valid = true;
-  try {
-    Blockly.Xml.textToDom(textarea.value);
-  } catch (e) {
-    valid = false;
-  }
-  document.getElementById('import').disabled = !valid;
+  // var textarea = document.getElementById('importExport');
+  // if (sessionStorage) {
+  //   sessionStorage.setItem('textarea', textarea.value);
+  // }
+  // var valid = true;
+  // try {
+  //   Blockly.Xml.textToDom(textarea.value);
+  // } catch (e) {
+  //   valid = false;
+  // }
+  // document.getElementById('import').disabled = !valid;
 }
 
 function logger(e) {

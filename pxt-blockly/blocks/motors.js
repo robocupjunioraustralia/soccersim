@@ -8,7 +8,7 @@
  */
 'use strict';
 
-goog.provide('Blockly.Blocks.rcja');
+goog.provide('Blockly.Blocks.motors');
 
 goog.require('Blockly');
 goog.require('Blockly.Blocks');
@@ -21,8 +21,30 @@ goog.require('Blockly.FieldVariable');
 
 goog.require('Blockly.PXTBlockly.Extensions');
 
+var OPTIONS_MOTORS = [
+  [ "Motor A", "'motorA'" ],
+  [ "Motor B", "'motorB'" ],
+  [ "Motor C", "'motorC'" ]
+];
+
 Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
-  // Example block
+  {
+    "type": "motor_stop",
+    "message0": "Stop %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "motor",
+        "options": OPTIONS_MOTORS
+      }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 230,
+    "tooltip": "Stops a motor",
+    "helpUrl": ""
+  },
   {
     "type": "motor_set_speed",
     "message0": "Set %1 speed to %2",
@@ -30,20 +52,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       {
         "type": "field_dropdown",
         "name": "motor",
-        "options": [
-          [
-            "MotorA",
-            "'motorA'"
-          ],
-          [
-            "MotorB",
-            "'motorB'"
-          ],
-          [
-            "MotorC",
-            "'motorC'"
-          ]
-        ]
+        "options": OPTIONS_MOTORS
       },
       {
         "type": "input_value",
@@ -55,8 +64,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement": null,
     "nextStatement": null,
     "colour": 230,
-    "tooltip": "EV3 Motor",
+    "tooltip": "Starts a motor at a certain speed",
     "helpUrl": ""
+  },
+  {
+    "type": "motor_get_speed",
+    "message0": "Get %1 speed",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "motor",
+        "options": OPTIONS_MOTORS
+      }
+    ],
+    "output": "Number",
+    "colour": 230,
+    "tooltip": "",
+    "helpUrl": "",
+    "style": ""
   },
   {
     "type": "ball_get_angle",
@@ -107,7 +132,8 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
         "name": "start_input"
       }
     ],
-    "colour": 230,
+    // "colour": 230,
+    "style": "hat_blocks",
     "tooltip": "",
     "helpUrl": ""
   }
