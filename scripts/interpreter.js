@@ -1,16 +1,16 @@
 // TODO: clean up all this code into a module
 function setMotorSpeed(motor, speed) {
     if (motor === 'motorA') {
-        robotTwo.setMotorSpeed(0, speed / 100);
+        Two.setMotorSpeed(0, speed / 100);
     } else if (motor === 'motorB') {
-        robotTwo.setMotorSpeed(1, speed / 100);
+        Two.setMotorSpeed(1, speed / 100);
     }
 }
 function setMotorSpeed2(motor, speed) {
     if (motor === 'motorA') {
-        robotOne.setMotorSpeed(0, speed / 100);
+        One.setMotorSpeed(0, speed / 100);
     } else if (motor === 'motorB') {
-        robotOne.setMotorSpeed(1, speed / 100);
+        One.setMotorSpeed(1, speed / 100);
     }
 }
 

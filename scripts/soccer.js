@@ -16,6 +16,7 @@
     
     var degToRad = Math.PI/180;
     var radToDeg = 180/Math.PI;
+    var angleLimit = 0.01;
     
     class SoccerSim {
 
@@ -139,6 +140,8 @@
             this.motorPos = [];
             this.motorOffsets = [];
             this.numMotors = 0;
+            this.forces = [];
+            this.prevAngle = 0;
         }
 
         /*     ----     Methods that apply to all robots      ----      */
@@ -226,6 +229,17 @@
                 arr.push(this.body.bodies[i+1]);
             }
             return arr;
+        }
+
+        // Check if the robot bearing has changed
+        checkChange(){
+            let currAngle = this.getAngle();
+            if (this.prevAngle < currAngle + angleLimit && this.prevAngle > currAngle - angleLimit){
+                return false;
+            } else {
+                this.prevAngle = currAngle;
+                return true;
+            }
         }
 
         /*    ----      Method prototypes for inheritance      ----     */
@@ -317,6 +331,7 @@
             Composite.addConstraint(robot, attachB);
     
             this.body = robot;
+            this.prevAngle = this.getAngle();
             this.setupMotors(motorOffset);
 
             // Rotate entire composite shape if blue team
@@ -330,11 +345,15 @@
             this.numMotors = 1;
             this.motors.push(0);
             this.motorOffsets.push(offset);
+            this.forces.push({fx: 0, fy:0});
         }
 
         // update force applied to robot per time tick
         updateForce(){
-            let forces = this.calculateForce(),
+            if (this.checkChange() == true){
+                this.calculateForce();  
+            }
+            let forces = this.forces,
                 vector = {x: forces[0].fx, y: forces[0].fy},
                 motor = this.getMotors()[0];
             Body.applyForce(motor, motor.position, vector);
@@ -357,7 +376,7 @@
                 fx: relFx, 
                 fy: relFy
             });
-            return forces;
+            this.forces = forces;
         }
     }
 
@@ -454,6 +473,7 @@
             Composite.addConstraint(robot, attachBB);
     
             this.body = robot;
+            this.prevAngle = this.getAngle();
             this.setupMotors(motorOffset);
 
             // Rotate entire composite shape if blue team
@@ -467,11 +487,15 @@
             this.numMotors = 2;
             this.motors.push(0,0);
             this.motorOffsets.push(offset[0],offset[1]);
+            this.forces.push({fx: 0, fy:0},{fx: 0, fy:0});
         }
 
         // update force applied to robot per time tick
         updateForce(){
-            let forces = this.calculateForce(),
+            if (this.checkChange() == true){
+                this.calculateForce();
+            }
+            let forces = this.forces,
                 vector = {},
                 motor;
             for (var i = 0; i < this.numMotors; i++){
@@ -510,8 +534,7 @@
                     fy: relFy
                 });
             }
-
-            return forces;
+            this.forces = forces;
         }
 
     }
@@ -519,28 +542,28 @@
     // TODO: move this to another file
     let title = document.getElementsByTagName("title")[0].innerHTML;
 
+    // Define robots on the field
+    let one = new DualBot('blue',100,300),
+    two = new UniBot('blue',400,300),
+    three = new DualBot('yellow',100,100),
+    four = new UniBot('yellow', 400,100);
+
+    let robots = [one, two, three, four];
+    window.One = one;
+    window.Two = two;
+    window.Three = three;
+    window.Four = four;
+
+    // define the ball
+    let ball = Bodies.circle(300, 100, 10, {
+        frictionAir: 0.1,
+        render: {fillStyle: '#f95a00'}
+    });
+    window.Ball = ball;
+
     // Print title of the browser tab
     console.log(title);
     if (title === 'Matter.js Demo') {
-        // Define robots on the field
-        let one = new DualBot('blue',100,300),
-            two = new UniBot('blue',400,300),
-            three = new DualBot('yellow',100,100),
-            four = new UniBot('yellow', 400,100);
-
-        let robots = [one, two, three, four];
-        window.One = one;
-        window.Two = two;
-        window.Three = three;
-        window.Four = four;
-
-        // define the ball
-        let ball = Bodies.circle(300, 100, 10, {
-            frictionAir: 0.1,
-            render: {fillStyle: '#f95a00'}
-        });
-        window.Ball = ball;
-
         // Create a new simulation if selected
         window.Example = window.Example || {};
         window.Example.soccer = function() {
@@ -549,23 +572,6 @@
         };
     } else {
         // Assume it is the actual interface
-        // Define robots on the field
-        let one = new UniBot(100,100);
-        let two = new DualBot(100,300);
-        let three = new UniBot(400,100);
-        let four = new UniBot(400,300);
-        let robots = [one, two, three, four];
-        window.robotOne = one;
-        window.robotTwo = two;
-        window.robotThree = three;
-        window.robotFour = four;
-
-        // define the ball
-        let ball = Bodies.circle(300, 100, 10, {
-            frictionAir: 0.1,
-            render: {fillStyle: '#f95a00'}
-        });
-
         // Create a new simulation
         var sim = new SoccerSim(document.getElementById('matterjs'), robots, ball);
         // Engine.run(sim.engine);
