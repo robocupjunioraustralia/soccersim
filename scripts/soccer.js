@@ -14,9 +14,15 @@
         Constraint = Matter.Constraint,
         Bodies = Matter.Bodies;
     
-    var degToRad = Math.PI/180;
-    var radToDeg = 180/Math.PI;
-    var angleLimit = 0.01;
+    var degToRad = Math.PI/180,
+        radToDeg = 180/Math.PI,
+        fieldWidth = 546,
+        fieldHeight = 729,
+        yellow = '#ffff00',
+        blue = '#0000ff',
+        white = '#ffffff',
+        black = '#000000',
+        angleLimit = 0.01;
     
     class SoccerSim {
 
@@ -44,8 +50,8 @@
                 element: element,
                 engine: this.engine,
                 options: {
-                    width: 546,
-                    height: 729,
+                    width: fieldWidth,
+                    height: fieldHeight,
                     showVelocity: true,
                     wireframes: false
                 }
@@ -57,22 +63,23 @@
             this.runner = Runner.create();
             Runner.run(this.runner, this.engine);
 
-            
-            // Create obj containing all bodies
+            // Field markings and objects array
+            let fieldObjects = this.createFieldObjects();
             // Ball array
             let balls = [this.ball];
             // Borders array
             let walls = [];
-            walls.push(Bodies.rectangle(546/2, 0, 546, 50, { isStatic: true }),
-                    Bodies.rectangle(546/2, 729, 546, 50, { isStatic: true }),
-                    Bodies.rectangle(546, 729/2, 50, 729, { isStatic: true }),
-                    Bodies.rectangle(0, 729/2, 50, 729, { isStatic: true }));
+            walls.push(Bodies.rectangle(fieldWidth/2, 0, fieldWidth, 20, { isStatic: true }),
+                    Bodies.rectangle(fieldWidth/2, fieldHeight, fieldWidth, 20, { isStatic: true }),
+                    Bodies.rectangle(fieldWidth, fieldHeight/2, 20, fieldHeight, { isStatic: true }),
+                    Bodies.rectangle(0, fieldHeight/2, 20, fieldHeight, { isStatic: true }));
             // Add all robots
             let bots = [];
             for (var i = 0; i < this.robots.length; i++) {
                 bots.push(this.robots[i].body);
             }
             // Add to world
+            World.add(this.world, fieldObjects);
             World.add(this.world, balls);
             World.add(this.world, walls);
             World.add(this.world, bots);
@@ -97,7 +104,7 @@
             // fit the render viewport to the scene
             Render.lookAt(this.render, {
                 min: { x: 0, y: 0 },
-                max: { x: 546, y: 729 }
+                max: { x: fieldWidth, y: fieldHeight }
             });
 
             // Perform updates to robot forces
@@ -106,6 +113,61 @@
                     robots[i].updateForce();
                 }
             });
+        }
+
+        // Create all elements of the playing field
+        createFieldObjects(){
+
+            // Create field
+            let field = Matter.Bodies.rectangle(fieldWidth/2, fieldHeight/2, fieldWidth, fieldHeight, {
+                collisionFilter: {
+                    group: -1,
+                    category: 2,
+                    mask: 0,
+                },
+                render: { fillStyle: '#366f0b'}
+            });
+
+            // Create markings body
+            let top = Bodies.rectangle(fieldWidth/2, 0.1 * fieldHeight, 0.74*fieldWidth, 14, {isSensor: true, render: {fillStyle : white}}),
+            bottom = Bodies.rectangle(fieldWidth/2, 0.9 * fieldHeight, 0.74*fieldWidth, 14, {isSensor: true, render: {fillStyle : white}}),
+                right = Bodies.rectangle(0.86*fieldWidth, fieldHeight/2, 14, 0.81*fieldHeight, {isSensor: true, render: {fillStyle : white}}),
+                left = Bodies.rectangle(0.14*fieldWidth, fieldHeight/2, 14, 0.81*fieldHeight, {isSensor: true, render: {fillStyle : white}}),
+                markings = Body.create({parts: [top,bottom,left,right], isSensor: true, isStatic: true});
+            
+            // Penalty areas
+            bottom = Bodies.rectangle(fieldWidth/2, 0.77 * fieldHeight, 0.5*fieldWidth, 7, {isSensor: true, render: {fillStyle : black}});
+            right = Bodies.rectangle(0.75*fieldWidth, 0.84*fieldHeight, 7, 0.14*fieldHeight, {isSensor: true, render: {fillStyle : black}});
+            left = Bodies.rectangle(0.25*fieldWidth, 0.84*fieldHeight, 7, 0.14*fieldHeight, {isSensor: true, render: {fillStyle : black}});
+            let topPenalty = Body.create({parts: [bottom,left,right], isSensor: true, isStatic: true});
+
+            top = Bodies.rectangle(fieldWidth/2, 0.23 * fieldHeight, 0.5*fieldWidth, 7, {isSensor: true, render: {fillStyle : black}});
+            right = Bodies.rectangle(0.75*fieldWidth, 0.16*fieldHeight, 7, 0.14*fieldHeight, {isSensor: true, render: {fillStyle : black}});
+            left = Bodies.rectangle(0.25*fieldWidth, 0.16*fieldHeight, 7, 0.14*fieldHeight, {isSensor: true, render: {fillStyle : black}});
+            let bottomPenalty = Body.create({parts: [top,left,right], isSensor: true, isStatic: true});
+
+            // Goal posts
+            top = Bodies.rectangle(fieldWidth/2, 0.93 * fieldHeight, 0.25*fieldWidth, 4, {render: {fillStyle : black}});
+            right = Bodies.rectangle(0.62*fieldWidth, 0.91*fieldHeight, 4, 0.04*fieldHeight, {render: {fillStyle : black}});
+            left = Bodies.rectangle(0.38*fieldWidth, 0.91*fieldHeight, 4, 0.04*fieldHeight, {render: {fillStyle : black}});
+            let topGoalPost = Body.create({parts: [top,left,right], isStatic: true});
+
+            bottom = Bodies.rectangle(fieldWidth/2, 0.07 * fieldHeight, 0.25*fieldWidth, 4, {render: {fillStyle : black}});
+            right = Bodies.rectangle(0.62*fieldWidth, 0.09*fieldHeight, 4, 0.04*fieldHeight, {render: {fillStyle : black}});
+            left = Bodies.rectangle(0.38*fieldWidth, 0.09*fieldHeight, 4, 0.04*fieldHeight, {render: {fillStyle : black}});
+            let bottomGoalPost = Body.create({parts: [bottom,left,right], isStatic: true});
+
+            // Goal areas
+            let yellowArea = Bodies.rectangle(fieldWidth/2, 0.92 * fieldHeight, 0.24*fieldWidth, 15, {isSensor: true, render: {fillStyle : yellow}});
+            let blueArea = Bodies.rectangle(fieldWidth/2, 0.08 * fieldHeight, 0.24*fieldWidth, 15, {isSensor: true, render: {fillStyle : blue}});
+
+            // Black dots
+            let dotOne = Bodies.circle(fieldWidth/2, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}}),
+                dotTwo = Bodies.circle(0.33*fieldWidth, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}}),
+                dotThree = Bodies.circle(0.66*fieldWidth, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}});
+            
+            let fieldObjects = [field, topPenalty, bottomPenalty, blueArea, yellowArea, markings, topGoalPost, bottomGoalPost, dotOne, dotTwo, dotThree];
+            return fieldObjects;
         }
 
         /**
@@ -287,24 +349,24 @@
             
             // Define colours for each team
             if (team == 'blue'){
-                bodyColour = '#0000ff';
-                motorColour = '#ffffff';
+                bodyColour = blue;
+                motorColour = white;
             } else {
-                bodyColour = '#ffff00';
-                motorColour = '#000000';
+                bodyColour = yellow;
+                motorColour = black;
             }
         
             let robot = Composite.create({ label: 'UniBot' }),
                 body = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
                     collisionFilter: { group: group },
                     frictionAir: 0.1, 
-                    render: { fillStyle: bodyColour}
+                    render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
                 });
         
             let motor = Bodies.rectangle(xPos + motorOffset.x, yPos + motorOffset.y, motorWidth, motorHeight, {
                 collisionFilter: { group: group },
                 frictionAir: 0.1, 
-                render: { fillStyle: motorColour}
+                render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
             });
                         
             let attachA = Constraint.create({
@@ -402,30 +464,30 @@
             
             // Define colours for each team
             if (team == 'blue'){
-                bodyColour = '#0000ff';
-                motorColour = '#ffffff';
+                bodyColour = blue;
+                motorColour = white;
             } else {
-                bodyColour = '#ffff00';
-                motorColour = '#000000';
+                bodyColour = yellow;
+                motorColour = black;
             }
         
             let robot = Composite.create({ label: 'DualBot' }),
                 body = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
                     collisionFilter: { group: group },
                     frictionAir: 0.1, 
-                    render: { fillStyle: bodyColour}
+                    render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
                 });
         
             let motorA = Bodies.rectangle(xPos + motorOffset[0].x, yPos + motorOffset[0].y, motorWidth, motorHeight, {
                 collisionFilter: { group: group },
                 frictionAir: 0.1, 
-                render: { fillStyle: motorColour}
+                render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
             });
 
             let motorB = Bodies.rectangle(xPos + motorOffset[1].x, yPos + motorOffset[1].y, motorWidth, motorHeight, {
                 collisionFilter: { group: group },
                 frictionAir: 0.1, 
-                render: { fillStyle: motorColour}
+                render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
             });
                         
             let attachAA = Constraint.create({
