@@ -29,11 +29,10 @@
     <script src="pxt-blockly/blocks/pxt_blockly_functions.js"></script>
     <script src="pxt-blockly/blocks/pxt_blockly_functions.js"></script>
     <script src="pxt-blockly/blocks/motors.js"></script>
-    <script src="scripts/blockly-editor.js"></script>
     <script src="matter-js/build/matter.min.js"></script>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
-    <!-- <link rel="stylesheet" href="styles/soccer.css" /> -->
+    <link rel="stylesheet" href="styles/soccer.css" />
     <style>
         
     </style>
@@ -67,23 +66,38 @@
         <div class="column">
             <div id="editor-buttons">
                 <div id="robot-select-buttons" class="buttons has-addons">
-                    <div class="button is-info is-selected" id="switch-robot-1">Robot 1 Program</div>
-                    <div class="button" id="switch-robot-2">Robot 2 Program</div>
+                    <div class="button is-info is-selected" id="switch-robot-1" 
+                        onclick="blocklyControls.switchProgram('robot1')">Robot 1 Program</div>
+                    <div class="button" id="switch-robot-2"
+                        onclick="blocklyControls.switchProgram('robot2')">Robot 2 Program</div>
                 </div>
                 <div id="save-buttons" class="buttons">
-                    <div class="button">Clear</div>
-                    <div class="button is-primary">Save</div>
+                    <div class="button" onclick="blocklyControls.clearWorkspace()">Clear</div>
+                    <div class="button is-primary" onclick="blocklyControls.saveProgram()">Save</div>
+                    <div class="file is-primary" id="load-file">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="resume" id="uploaded-file">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Load
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="button is-primary" onclick="blocklyControls.downloadAsFile()">
+                        <span class="icon is-small">
+                            <i class="fas fa-download"></i>
+                        </span>
+                        <span>Download</span>
+                    </div>
                 </div>
             </div>
-            <div id="blocklyDiv"></div>
-            <textarea id="importExport" onchange="taChange();" onkeyup="taChange()"></textarea>
-            <input class="button" type="button" value="Export to XML" onclick="toXml()">
-            <input class="button" type="button" value="Import from XML" onclick="fromXml()" id="import">
-            <input class="button" type="button" value="To JavaScript" onclick="toCode('JavaScript')">
-            <input class="button" type="button" value="Compile and run" onclick="runSoccerSim()">
-            <textarea id="importExport2" onchange="taChange();" onkeyup="taChange()"></textarea>
+            <div id="blocklyEditor1"></div>
         </div>
-        <div class="column">
+        <div class="column matterjs-column">
             <div id="matterjs"></div>
         </div>
     </div>
@@ -230,8 +244,11 @@
     <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
 </xml>
 </body>
+<script src="scripts/blockly-editor.js"></script>
+<script src="scripts/simcontrols.js"></script>  
 <script src="js-interpreter/acorn_interpreter.js"></script>
 <script src="scripts/interpreter.js"></script>
 <script src="scripts/soccer.js"></script>
+<script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
 </html>
         

@@ -11,7 +11,7 @@ function start() {
   var match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
   // Create main workspace.
-  workspace = Blockly.inject('blocklyDiv',
+  workspace = Blockly.inject('blocklyEditor1',
       {
         comments: true,
         collapse: true,
@@ -55,13 +55,13 @@ function start() {
       });
   addToolboxButtonCallbacks();
   // Restore previously displayed text.
-  if (sessionStorage) {
-    var text = sessionStorage.getItem('textarea');
-    if (text) {
-      document.getElementById('importExport').value = text;
-    }
-  } else {
-  }
+  // if (sessionStorage) {
+  //   var text = sessionStorage.getItem('textarea');
+  //   if (text) {
+  //     document.getElementById('importExport').value = text;
+  //   }
+  // } else {
+  // }
   taChange();
 }
 
@@ -187,17 +187,17 @@ function toCode(lang) {
 // Disable the "Import from XML" button if the XML is invalid.
 // Preserve text between page reloads.
 function taChange() {
-  var textarea = document.getElementById('importExport');
-  if (sessionStorage) {
-    sessionStorage.setItem('textarea', textarea.value);
-  }
-  var valid = true;
-  try {
-    Blockly.Xml.textToDom(textarea.value);
-  } catch (e) {
-    valid = false;
-  }
-  document.getElementById('import').disabled = !valid;
+  // var textarea = document.getElementById('importExport');
+  // if (sessionStorage) {
+  //   sessionStorage.setItem('textarea', textarea.value);
+  // }
+  // var valid = true;
+  // try {
+  //   Blockly.Xml.textToDom(textarea.value);
+  // } catch (e) {
+  //   valid = false;
+  // }
+  // document.getElementById('import').disabled = !valid;
 }
 
 function logger(e) {
