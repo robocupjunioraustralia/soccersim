@@ -14,11 +14,9 @@
     blocklyControls.saveProgram = function(robot) {
         // Defaults to currently selected robot
         robot = robot || blocklyControls.selected;
-        console.log('Saving current program' + robot);
         let xml = Blockly.Xml.workspaceToDom(workspace);
         localStorage.setItem('soccersim-' + robot,
             Blockly.Xml.domToPrettyText(xml));
-        console.log('saved ' + robot);
     };
 
     /**
@@ -30,11 +28,12 @@
         robot = robot || blocklyControls.selected;
         // Defaults to currently selected robot
         let xml = localStorage.getItem('soccersim-' + robot);
-        console.log(xml);
+        if (!xml) {
+            xml = '<xml xmlns="https://developers.google.com/blockly/xml"/>';
+        }
         currentWorkspace.clear();
         let dom = Blockly.Xml.textToDom(xml);
         Blockly.Xml.domToWorkspace(dom, currentWorkspace);
-        console.log('loaded ' + robot);
     };
 
     /**
