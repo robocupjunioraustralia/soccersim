@@ -73,7 +73,7 @@
                 </div>
                 <div id="save-buttons" class="buttons">
                     <div class="button" onclick="blocklyControls.clearWorkspace()">Clear</div>
-                    <div class="button is-primary" onclick="blocklyControls.saveProgram()">Save</div>
+                    <!-- <div class="button is-primary" onclick="blocklyControls.saveProgram()">Save</div> -->
                     <div class="file is-primary" id="load-file">
                         <label class="file-label">
                             <input class="file-input" type="file" name="resume" id="uploaded-file">
@@ -96,9 +96,25 @@
                 </div>
             </div>
             <div id="blocklyEditor1"></div>
+            <div id="helperEditor" style="display:none"></div>
         </div>
         <div class="column matterjs-column">
+            <div id="sim-run-buttons" class="buttons">
+                <div class="button is-success" id="run-robots" onclick="simControls.getCode()">
+                    <span class="icon is-small">
+                        <i class="fas fa-play"></i>
+                    </span>
+                    <span>Run all</span>
+                </div>
+                <div class="button is-danger" disabled id="stop-robots" onclick="intptr.stopSim();simControls.stopSim()">
+                    <span class="icon is-small">
+                        <i class="fas fa-stop"></i>
+                    </span>
+                    <span>Stop all</span>
+                </div>
+            </div>
             <div id="matterjs"></div>
+            <div id="notifications"></div>
         </div>
     </div>
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-rcja" style="display: none">
@@ -245,10 +261,10 @@
 </xml>
 </body>
 <script src="scripts/blockly-editor.js"></script>
-<script src="scripts/simcontrols.js"></script>  
+<script src="scripts/soccer.js"></script>
 <script src="js-interpreter/acorn_interpreter.js"></script>
 <script src="scripts/interpreter.js"></script>
-<script src="scripts/soccer.js"></script>
+<script src="scripts/simcontrols.js"></script>  
 <script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
 </html>
         

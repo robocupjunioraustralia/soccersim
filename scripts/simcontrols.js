@@ -2,29 +2,44 @@
  * @description Simulation and editor controls for the SoccerSim interface.
  */
 ;(function() {
-    var blocklyControls = {};
+    let blocklyControls = {},
+        simControls = {};
     blocklyControls.selected = 'robot1';
+    blocklyControls.robots = ['robot1', 'robot2'];
 
+    /**
+     * Saves the current workspace into localStorage
+     * @param {String} robot Robot ID
+     */
     blocklyControls.saveProgram = function(robot) {
         // Defaults to currently selected robot
         robot = robot || blocklyControls.selected;
+        console.log('Saving current program' + robot);
         let xml = Blockly.Xml.workspaceToDom(workspace);
         localStorage.setItem('soccersim-' + robot,
             Blockly.Xml.domToPrettyText(xml));
         console.log('saved ' + robot);
     };
 
-    blocklyControls.loadProgram = function (robot) {
+    /**
+     * Loads the selected robot from localStorage into the workspace
+     * @param {String} robot robot ID
+     */
+    blocklyControls.loadProgram = function (robot, currentWorkspace) {
+        currentWorkspace = currentWorkspace || workspace;
         robot = robot || blocklyControls.selected;
         // Defaults to currently selected robot
         let xml = localStorage.getItem('soccersim-' + robot);
         console.log(xml);
-        workspace.clear();
+        currentWorkspace.clear();
         let dom = Blockly.Xml.textToDom(xml);
-        Blockly.Xml.domToWorkspace(dom, workspace);
+        Blockly.Xml.domToWorkspace(dom, currentWorkspace);
         console.log('loaded ' + robot);
     };
 
+    /**
+     * 
+     */
     blocklyControls.clearWorkspace = function() {
         if (!confirm('Are you sure you want to clear the workspace?')) {
             return;
@@ -56,7 +71,7 @@
                 window.URL.revokeObjectURL(url);
             }, 0);
         }
-    }
+    };
 
     blocklyControls.downloadAsFile = function(robot) {
         // Defaults to currently selected robot
@@ -66,9 +81,6 @@
     };
 
     blocklyControls.uploadFile = function () {
-        if (!confirm('Are you sure you want to clear the workspace and upload your file?')) {
-            return;
-        }
         if (this.files.length !== 1) {
             return;
         }
@@ -80,9 +92,9 @@
                 let xml = evt.target.result;
                 let dom = Blockly.Xml.textToDom(xml);
                 Blockly.Xml.domToWorkspace(dom, workspace);
-            }
+                document.getElementById("uploaded-file").value = "";
+            };
         }
-        console.log();
     };
 
     document.getElementById("uploaded-file").addEventListener("change", blocklyControls.uploadFile, false);
@@ -114,7 +126,66 @@
 
         // Load saved program
         blocklyControls.loadProgram();
-
     };
+
+    /**
+     * Use the hidden workspace to load all programs and get code.
+     */
+    simControls.getCode = function() {
+        let robots = [window.One, window.Three];
+        let codes = [];
+        
+        // Show loading
+        document.getElementById('notifications').innerHTML = '';
+        let runButton = document.getElementById('run-robots');
+        let stopButton = document.getElementById('stop-robots');
+        runButton.classList.add('is-loading');
+        runButton.setAttribute('disabled', '');
+        stopButton.removeAttribute('disabled');
+
+        // Save program so we can load it easily
+        blocklyControls.saveProgram();
+        
+        for (let robot of blocklyControls.robots) {
+            blocklyControls.loadProgram(robot, hiddenWorkspace);
+            // Convert to code
+            try {
+                codes.push(Blockly.JavaScript.workspaceToCode(hiddenWorkspace));
+            } catch (error) {
+                simControls.showError(error.toString());
+                stopButton.setAttribute('disabled', '');
+                runButton.removeAttribute('disabled');
+                console.log(error);
+            }
+        }
+        runButton.classList.remove('is-loading');
+        intptr.startSim(robots, codes);
+    };
+
+    simControls.stopSim = function() {
+        let runButton = document.getElementById('run-robots');
+        let stopButton = document.getElementById('stop-robots');
+        stopButton.setAttribute('disabled', '');
+        runButton.removeAttribute('disabled');
+    };
+
+    simControls.showError = function(message) {
+        const errorBox = document.createElement('div');
+        errorBox.classList.add('notification', 'is-danger', 'is-light');
+        errorBox.innerHTML = 'There was an problem when running your program. Please <a' + 
+        ' href="https://github.com/kcnotes/soccersim/issues" target="_blank">submit an issue on GitHub</a>.<br/>' + 
+        message;
+        
+        const closeIcon = document.createElement('button');
+        closeIcon.classList.add('delete');
+        closeIcon.addEventListener('click', function() {
+            errorBox.remove();
+        });
+        errorBox.appendChild(closeIcon);
+        
+        document.getElementById('notifications').appendChild(errorBox);
+    };
+
     window.blocklyControls = blocklyControls;
+    window.simControls = simControls;
 })();

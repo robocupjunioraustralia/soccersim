@@ -1,5 +1,6 @@
 'use strict';
-var workspace = null;
+var workspace = null,
+    hiddenWorkspace = null;
 
 function start() {
 
@@ -10,6 +11,11 @@ function start() {
   ];
   var match = location.search.match(/side=([^&]+)/);
   var side = match ? match[1] : 'start';
+
+  // Create hidden workspace
+  hiddenWorkspace = Blockly.inject('helperEditor', {
+    toolbox: toolbox
+  });
   // Create main workspace.
   workspace = Blockly.inject('blocklyEditor1',
       {
