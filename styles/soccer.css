@@ -9,8 +9,11 @@
 }
 
 /* Blockly layout */
-#soccersim #blocklyEditor1 {
+#soccersim #blocklyEditor1,
+#helperEditor {
     height: calc(70vh - 52px);
+    width: 100%;
+    display: block;
 }
 
 #soccersim #importExport {
@@ -27,10 +30,14 @@
     vertical-align: top;
 }
 
-#soccersim #save-buttons,
+#soccersim #save-buttons .button,
 #soccersim #load-file {
-    margin-bottom: .5rem;
+    margin-bottom: 1rem;
     margin-right: .5rem;
+}
+
+#soccersim #sim-run-buttons .button {
+    margin-bottom: .5rem;
 }
 
 /* Right simulator */
