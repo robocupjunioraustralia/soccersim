@@ -2,7 +2,6 @@
 var workspace = null;
 
 function start() {
-  setBackgroundColour();
 
   // Parse the URL arguments.
   var toolbox = getToolboxElement();
@@ -153,14 +152,6 @@ function addToolboxButtonCallbacks() {
     'toggleCollapsed', toggleCollapsed);
   workspace.registerButtonCallback(
       'randomizeLabelText', randomizeLabelText);
-}
-
-function setBackgroundColour() {
-  // Set background colour to differentiate server vs local copy.
-  if (location.protocol == 'file:') {
-    var lilac = '#d6d6ff';
-    document.body.style.backgroundColor = lilac;
-  }
 }
 
 function getToolboxElement() {

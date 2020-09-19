@@ -33,26 +33,22 @@
     <script src="matter-js/build/matter.min.js"></script>
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
-    <link rel="stylesheet" href="styles/soccer.css" />
+    <!-- <link rel="stylesheet" href="styles/soccer.css" /> -->
     <style>
         
     </style>
 </head>
-<body onload="start()">
+<body onload="start()" id="soccersim">
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <a class="navbar-item" href="#" alt="RCJA SoccerSim">
+            <a class="navbar-item" href="index.html" alt="RCJA SoccerSim">
                 <img src="assets/soccersim-logo-dark.svg" />
             </a>
         </div>
         
-        <div id="navbarBasicExample" class="navbar-menu">
-            <div class="navbar-start">
-                <a class="navbar-item">Docs</a>
-            </div>
-            
+        <div class="navbar-menu">
             <div class="navbar-end">
-                <a class="navbar-item">About</a>
+                <a class="navbar-item" href="https://rcjnsw.github.io/soccersim-docs/">Docs</a>
                 <!-- <div class="navbar-item">
                     <div class="buttons">
                         <a class="button is-primary">
@@ -69,6 +65,16 @@
     
     <div class="columns">
         <div class="column">
+            <div id="editor-buttons">
+                <div id="robot-select-buttons" class="buttons has-addons">
+                    <div class="button is-info is-selected" id="switch-robot-1">Robot 1 Program</div>
+                    <div class="button" id="switch-robot-2">Robot 2 Program</div>
+                </div>
+                <div id="save-buttons" class="buttons">
+                    <div class="button">Clear</div>
+                    <div class="button is-primary">Save</div>
+                </div>
+            </div>
             <div id="blocklyDiv"></div>
             <textarea id="importExport" onchange="taChange();" onkeyup="taChange()"></textarea>
             <input class="button" type="button" value="Export to XML" onclick="toXml()">
