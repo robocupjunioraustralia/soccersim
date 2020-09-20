@@ -66,7 +66,7 @@
             return this.robot.getBallPosition(Ball).distance;
         }
         getCompassHeading() {
-            return this.robot.getBallPosition(Ball).getBearing()*180/Math.PI;
+            return this.robot.getBearing()*180/Math.PI;
         }
     }
 
