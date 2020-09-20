@@ -131,7 +131,7 @@
      * Use the hidden workspace to load all programs and get code.
      */
     simControls.getCode = function() {
-        let robots = [window.One, window.Three];
+        let robots = [window.One, window.Two];
         let codes = [];
         
         // Show loading

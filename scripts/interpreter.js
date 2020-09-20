@@ -24,11 +24,11 @@
             if (speed < -100) speed = -100;
             switch (motor) {
                 case 'motorA':
-                    this.robot.setMotorSpeed(0, speed / 200);
+                    this.robot.setMotorSpeed(0, speed / 500);
                     this.speeds[0] = speed;
                     break;
                 case 'motorB':
-                    this.robot.setMotorSpeed(1, speed / 200);
+                    this.robot.setMotorSpeed(1, speed / 500);
                     this.speeds[1] = speed;
                     break;
                 default:
@@ -112,8 +112,10 @@
     intptr.stopSim = function(robots) {
         intptr.stopAll = true;
         intptr.robots.forEach((robot) => {
-            robot.setMotorSpeed(0, 0);
-            robot.setMotorSpeed(1, 0);
+            setTimeout(() => {
+                robot.setMotorSpeed(0, 0);
+                robot.setMotorSpeed(1, 0);
+            }, 1);
         });
     };
 

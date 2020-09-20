@@ -158,13 +158,13 @@
             let bottomGoalPost = Body.create({parts: [bottom,left,right], isStatic: true});
 
             // Goal areas
-            let yellowArea = Bodies.rectangle(fieldWidth/2, 0.92 * fieldHeight, 0.24*fieldWidth, 15, {isSensor: true, render: {fillStyle : yellow}});
-            let blueArea = Bodies.rectangle(fieldWidth/2, 0.08 * fieldHeight, 0.24*fieldWidth, 15, {isSensor: true, render: {fillStyle : blue}});
+            let yellowArea = Bodies.rectangle(fieldWidth/2, 0.92 * fieldHeight, 0.24*fieldWidth, 15, {isStatic: true, isSensor: true, render: {fillStyle : yellow}});
+            let blueArea = Bodies.rectangle(fieldWidth/2, 0.08 * fieldHeight, 0.24*fieldWidth, 15, {isStatic: true, isSensor: true, render: {fillStyle : blue}});
 
             // Black dots
-            let dotOne = Bodies.circle(fieldWidth/2, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}}),
-                dotTwo = Bodies.circle(0.33*fieldWidth, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}}),
-                dotThree = Bodies.circle(0.66*fieldWidth, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}});
+            let dotOne = Bodies.circle(fieldWidth/2, fieldHeight/2, 4, {isStatic: true, isSensor: true, render: {fillStyle : black}}),
+                dotTwo = Bodies.circle(0.33*fieldWidth, fieldHeight/2, 4, {isStatic: true, isSensor: true, render: {fillStyle : black}}),
+                dotThree = Bodies.circle(0.66*fieldWidth, fieldHeight/2, 4, {isStatic: true, isSensor: true, render: {fillStyle : black}});
             
             let fieldObjects = [field, topPenalty, bottomPenalty, blueArea, yellowArea, markings, topGoalPost, bottomGoalPost, dotOne, dotTwo, dotThree];
             return fieldObjects;
@@ -452,7 +452,12 @@
          */
         constructor(team, x, y) {
             super(team);
-            this.createBot(team, x, y, 50, 50, 10, 25);
+            this.dribbler = {
+                height: 4,
+                width: 5,
+                offset: 12
+            };
+            this.createBot(team, x, y, 40, 40, 5, 20);
         }
         // Create a square robot with wheels on either side
         createBot(team, xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight){
@@ -472,10 +477,29 @@
             }
         
             let robot = Composite.create({ label: 'DualBot' }),
-                body = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
+                catchAreaA = Bodies.rectangle(xPos + this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                    collisionFilter: { group: group },
+                    frictionAir: 0.1,
+                    render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
+                }),
+                catchAreaB = Bodies.rectangle(xPos - this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                    collisionFilter: { group: group },
+                    frictionAir: 0.1,
+                    render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
+                });
+
+
+
+            let centre = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
+                collisionFilter: { group: group },
+                    frictionAir: 0.1, 
+                    render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1},
+                });
+
+            let body = Body.create({
                     collisionFilter: { group: group },
                     frictionAir: 0.1, 
-                    render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
+                    parts: [centre, catchAreaA, catchAreaB]
                 });
         
             let motorA = Bodies.rectangle(xPos + motorOffset[0].x, yPos + motorOffset[0].y, motorWidth, motorHeight, {
@@ -496,7 +520,8 @@
                 bodyB: body,
                 pointB: { x: motorOffset[0].x, y: motorHeight/2 },
                 stiffness: 1,
-                length: 0
+                length: 0,
+                render: { lineWidth: 0 }
             });
 
             let attachAB = Constraint.create({
@@ -505,7 +530,8 @@
                 bodyB: body,
                 pointB: { x: motorOffset[0].x, y: -motorHeight/2 },
                 stiffness: 1,
-                length: 0
+                length: 0,
+                render: { lineWidth: 0 }
             });
 
             let attachBA = Constraint.create({
@@ -514,7 +540,8 @@
                 bodyB: body,
                 pointB: { x: motorOffset[1].x, y: motorHeight/2 },
                 stiffness: 1,
-                length: 0
+                length: 0,
+                render: { lineWidth: 0 }
             });
 
             let attachBB = Constraint.create({
@@ -523,7 +550,8 @@
                 bodyB: body,
                 pointB: { x: motorOffset[1].x, y: -motorHeight/2 },
                 stiffness: 1,
-                length: 0
+                length: 0,
+                render: { lineWidth: 0 }
             });
             
             Composite.addBody(robot, body);
@@ -585,12 +613,18 @@
         // Calculate relative force for dual motors
         calculateForce(){
             let forces = [],
-                direction = this.getDirectionVector();
+                direction = this.getDirectionVector(),
+                motorBodies = this.getMotors();
 
             for (var i = 0; i < this.numMotors; i++){
                 let absF = (this.motors[i])/100,
                     relFx = -1 * absF * direction.x,
                     relFy = absF * direction.y;
+                if (this.motors[i] == 0) {
+                    motorBodies[i].frictionAir = 0.8;
+                } else {
+                    motorBodies[i].frictionAir = 0.1;
+                }
                 forces.push({
                     fx: relFx, 
                     fy: relFy
@@ -605,19 +639,15 @@
     let title = document.getElementsByTagName("title")[0].innerHTML;
 
     // Define robots on the field
-    let one = new DualBot('blue',100,300),
-    two = new UniBot('blue',400,300),
-    three = new DualBot('yellow',100,100),
-    four = new UniBot('yellow', 400,100);
+    let one = new DualBot('blue',200, 600),
+    two = new DualBot('blue',350, 600);
 
-    let robots = [one, two, three, four];
+    let robots = [one, two];
     window.One = one;
     window.Two = two;
-    window.Three = three;
-    window.Four = four;
 
     // define the ball
-    let ball = Bodies.circle(300, 100, 10, {
+    let ball = Bodies.circle(fieldWidth/2, fieldHeight/2, 10, {
         frictionAir: 0.1,
         render: {fillStyle: '#f95a00'}
     });
