@@ -11,7 +11,7 @@
 /* Blockly layout */
 #soccersim #blocklyEditor1,
 #helperEditor {
-    height: calc(70vh - 52px);
+    height: calc(85vh - 52px);
     width: 100%;
     display: block;
 }
@@ -40,6 +40,10 @@
     margin-right: .5rem;
 }
 
+#soccersim #sim-run-buttons {
+    justify-content: center;
+}
+
 #soccersim #sim-run-buttons .button {
     margin-bottom: .5rem;
 }
@@ -47,6 +51,25 @@
 /* Right simulator */
 .matterjs-column {
     text-align: center;
+    background: #111;
+    padding-top: 20px;
+    margin: -10px -10px -10px 0;
+}
+
+/* Layout breakpoint */
+@media screen and (max-width: 1530px) {
+    #soccersim .columns {
+        display: block;
+    }
+
+    .matterjs-column,
+    .column.is-three-fifths {
+        display: block;
+        width: 100%;
+        flex-basis: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
 }
 
 
