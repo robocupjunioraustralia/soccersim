@@ -7,7 +7,10 @@
     var motorFunctions = [
         'setMotorSpeed',
         'stopMotor',
-        'getMotorSpeed'
+        'getMotorSpeed',
+        'getBallAngle',
+        'getBallDistance',
+        'getCompassHeading'
     ];
 
     class RobotFunctions {

@@ -27,7 +27,7 @@ function start() {
             spacing: 20,
             length: 3,
             colour: '#ccc',
-            snap: true
+            snap: false
           },
         horizontalLayout: false,
         maxBlocks: Infinity,
@@ -52,8 +52,8 @@ function start() {
           {
             controls: true,
             wheel: true,
-            startScale: 1.0,
-            maxScale: 4,
+            startScale: 0.8,
+            maxScale: 3,
             minScale: 0.25,
             scaleSpeed: 1.1
           },
