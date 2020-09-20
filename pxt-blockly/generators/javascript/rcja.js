@@ -19,6 +19,19 @@ Blockly.JavaScript['motor_set_speed'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['motor_stop'] = function(block) {
+  var arg1 = block.getFieldValue('motor');
+  var code = 'stopMotor(' + arg1 + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['motor_get_speed'] = function(block) {
+  var arg1 = block.getFieldValue('motor');
+  var code = 'getMotorSpeed(' + arg1 + ')';
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+
 Blockly.JavaScript['ball_get_angle'] = function(block) {
   var code = 'getBallAngle()';
   return [code, Blockly.JavaScript.ORDER_NONE];

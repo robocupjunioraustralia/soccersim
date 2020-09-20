@@ -69,7 +69,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
   },
   {
     "type": "motor_get_speed",
-    "message0": "Get %1 speed",
+    "message0": "%1 speed",
     "args0": [
       {
         "type": "field_dropdown",

@@ -6,8 +6,8 @@
 
     var motorFunctions = [
         'setMotorSpeed',
-        // 'stopMotor',
-        // 'getMotorSpeed'
+        'stopMotor',
+        'getMotorSpeed'
     ];
 
     class RobotFunctions {
