@@ -84,30 +84,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "style": ""
   },
   {
-    "type": "ball_get_angle",
-    "message0": "Get ball angle",
-    "output": "Number",
-    "colour": 230,
-    "tooltip": "",
-    "helpUrl": ""
-  },
-  {
-    "type": "ball_get_distance",
-    "message0": "Get ball distance",
-    "output": "Number",
-    "colour": 230,
-    "tooltip": "",
-    "helpUrl": ""
-  },
-  {
-    "type": "compass_get_heading",
-    "message0": "Get compass heading",
-    "output": "Number",
-    "colour": 230,
-    "tooltip": "",
-    "helpUrl": ""
-  },
-  {
     "type": "print",
     "message0": "Print %1",
     "args0": [

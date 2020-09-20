@@ -56,6 +56,15 @@
                     return 0;
             }
         }
+        getBallAngle() {
+            return this.robot.getBallPosition(Ball).angle*180/Math.PI;
+        }
+        getBallDistance() {
+            return this.robot.getBallPosition(Ball).distance;
+        }
+        getCompassHeading() {
+            return this.robot.getBallPosition(Ball).getBearing()*180/Math.PI;
+        }
     }
 
     let intptr = {

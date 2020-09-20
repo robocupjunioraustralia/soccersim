@@ -118,6 +118,21 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_CONTROLS_WHILEUNTIL_HELPURL}",
     "extensions": ["controls_whileUntil_tooltip"]
   },
+  // Block for 'while forever' loop
+  {
+    "type": "controls_whileForever",
+    "message0": "repeat forever",
+    "message1": "%{BKY_CONTROLS_REPEAT_INPUT_DO} %1",
+    "args1": [{
+      "type": "input_statement",
+      "name": "DO"
+    }],
+    "previousStatement": null,
+    "nextStatement": null,
+    "style": "loop_blocks",
+    "helpUrl": "",
+    "extensions": []
+  },
   // Block for 'for' loop.
   {
     "type": "controls_for",
