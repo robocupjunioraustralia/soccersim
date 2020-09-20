@@ -161,9 +161,9 @@
             let blueArea = Bodies.rectangle(fieldWidth/2, 0.08 * fieldHeight, 0.24*fieldWidth, 15, {isSensor: true, render: {fillStyle : blue}});
 
             // Black dots
-            let dotOne = Bodies.circle(fieldWidth/2, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}}),
-                dotTwo = Bodies.circle(0.33*fieldWidth, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}}),
-                dotThree = Bodies.circle(0.66*fieldWidth, fieldHeight/2, 4, {isSensor: true, render: {fillStyle : black}});
+            let dotOne = Bodies.circle(fieldWidth/2, fieldHeight/2, 4, {isSensor: true, isStatic: true, render: {fillStyle : black}}),
+                dotTwo = Bodies.circle(0.33*fieldWidth, fieldHeight/2, 4, {isSensor: true, isStatic: true, render: {fillStyle : black}}),
+                dotThree = Bodies.circle(0.66*fieldWidth, fieldHeight/2, 4, {isSensor: true, isStatic: true, render: {fillStyle : black}});
             
             let fieldObjects = [field, topPenalty, bottomPenalty, blueArea, yellowArea, markings, topGoalPost, bottomGoalPost, dotOne, dotTwo, dotThree];
             return fieldObjects;
