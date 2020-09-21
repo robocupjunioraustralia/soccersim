@@ -336,6 +336,11 @@
          */
         constructor(team, x, y) {
             super(team);
+            this.dribbler = {
+                height: 4,
+                width: 5,
+                offset: 12
+            };
             this.createBot(team, x, y, 50, 50, 10, 25);
         }
 
@@ -357,11 +362,21 @@
             }
         
             let robot = Composite.create({ label: 'UniBot' }),
-                body = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
+                catchAreaA = Bodies.rectangle(xPos + this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                    render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
+                }),
+                catchAreaB = Bodies.rectangle(xPos - this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                    render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
+                }),
+                centre = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
+                    render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1},
+                });
+
+            let body = Body.create({
                     collisionFilter: { group: group },
                     frictionAir: 0.1, 
-                    render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
-                });
+                    parts: [centre, catchAreaA, catchAreaB]
+            });
         
             let motor = Bodies.rectangle(xPos + motorOffset.x, yPos + motorOffset.y, motorWidth, motorHeight, {
                 collisionFilter: { group: group },
@@ -478,21 +493,12 @@
         
             let robot = Composite.create({ label: 'DualBot' }),
                 catchAreaA = Bodies.rectangle(xPos + this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
-                    collisionFilter: { group: group },
-                    frictionAir: 0.1,
                     render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
                 }),
                 catchAreaB = Bodies.rectangle(xPos - this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
-                    collisionFilter: { group: group },
-                    frictionAir: 0.1,
                     render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
-                });
-
-
-
-            let centre = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
-                collisionFilter: { group: group },
-                    frictionAir: 0.1, 
+                }),
+                centre = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
                     render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1},
                 });
 
