@@ -648,7 +648,7 @@
 
     // define the ball
     let ball = Bodies.circle(fieldWidth/2, fieldHeight/2, 10, {
-        frictionAir: 0.1,
+        frictionAir: 0.02,
         render: {fillStyle: '#f95a00'}
     });
     window.Ball = ball;

@@ -7,6 +7,10 @@
     blocklyControls.selected = 'robot1';
     blocklyControls.robots = ['robot1', 'robot2'];
 
+    let jsControls = {};
+    jsControls.selected = 'robot1';
+    jsControls.robots = ['robot1', 'robot2'];
+
     /**
      * Saves the current workspace into localStorage
      * @param {String} robot Robot ID
@@ -35,6 +39,13 @@
         let dom = Blockly.Xml.textToDom(xml);
         Blockly.Xml.domToWorkspace(dom, currentWorkspace);
     };
+
+    jsControls.loadProgram = function (robot, currentEditor) {
+        currentEditor = currentEditor
+        robot = robot || blocklyControls.selected;
+
+        currentWorkspace.clear();
+    }
 
     /**
      * 
@@ -78,6 +89,12 @@
         let xml = Blockly.Xml.workspaceToDom(workspace);
         download(Blockly.Xml.domToPrettyText(xml), robot, 'application/xml');
     };
+
+    jsControls.downloadAsFile = function(robot) {
+        robot = robot || jsControls.selected;
+        let js = codeMirrorEditor.getValue();
+        download(js, robot, 'text/javascript');
+    }
 
     blocklyControls.uploadFile = function () {
         if (this.files.length !== 1) {
@@ -161,6 +178,30 @@
         intptr.startSim(robots, codes);
     };
 
+    simControls.getCodeJS = function() {
+        let robots = [window.One];
+        let codes = [];
+        
+        // Show loading
+        document.getElementById('notifications').innerHTML = '';
+        let runButton = document.getElementById('run-robots');
+        let stopButton = document.getElementById('stop-robots');
+        runButton.classList.add('is-loading');
+        runButton.setAttribute('disabled', '');
+        stopButton.removeAttribute('disabled');
+
+        // Save program so we can load it easily
+        // jsControls.saveProgram();
+        
+        for (let robot of jsControls.robots) {
+            // jsControls.loadProgram(robot, hiddenWorkspace);
+            // Convert to code
+            codes.push(codeMirrorEditor.getValue());
+        }
+        runButton.classList.remove('is-loading');
+        intptr.startSim(robots, codes);
+    };
+
     simControls.stopSim = function() {
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
@@ -186,5 +227,6 @@
     };
 
     window.blocklyControls = blocklyControls;
+    window.jsControls = jsControls;
     window.simControls = simControls;
 })();
