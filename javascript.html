@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SoccerSim</title>
+
+    <script src="matter-js/build/matter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js" integrity="sha512-WWC1A/JchDFZ2ZGaNyMC7CmPFXGLI/6Ih7WN6YG0DX1NGMkW5lqCVFxCmEx3e56Z7iqdQGpO0f+m2t9CJhdb2Q==" crossorigin="anonymous"></script>    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="styles/soccer.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw==" crossorigin="anonymous" />
+    <script src="mode/javascript/javascript.js"></script>
+    <style>
+        
+    </style>
+</head>
+<body id="soccersim">
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html" alt="RCJA SoccerSim">
+                <img src="assets/soccersim-logo-dark.svg" />
+            </a>
+        </div>
+        
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <a class="navbar-item" href="https://rcjnsw.github.io/soccersim-docs/">Docs</a>
+                <!-- <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-primary">
+                            <strong>Sign up</strong>
+                        </a>
+                        <a class="button is-light">
+                            Log in
+                        </a>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </nav>
+    
+    <div class="columns">
+        <div class="column is-three-fifths">
+            <div id="editor-buttons">
+                <div id="robot-select-buttons" class="buttons has-addons">
+                    <div class="button is-info is-selected" id="switch-robot-1" 
+                        onclick="blocklyControls.switchProgram('robot1')">Robot 1 Program</div>
+                    <div class="button" id="switch-robot-2"
+                        onclick="blocklyControls.switchProgram('robot2')">Robot 2 Program</div>
+                </div>
+                <div id="save-buttons" class="buttons">
+                    <div class="button" onclick="blocklyControls.clearWorkspace()">Clear</div>
+                    <!-- <div class="button is-primary" onclick="blocklyControls.saveProgram()">Save</div> -->
+                    <div class="file is-primary" id="load-file">
+                        <label class="file-label">
+                            <input class="file-input" type="file" name="resume" id="uploaded-file">
+                            <span class="file-cta">
+                                <span class="file-icon">
+                                    <i class="fas fa-upload"></i>
+                                </span>
+                                <span class="file-label">
+                                    Load
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="button is-primary" onclick="jsControls.downloadAsFile()">
+                        <span class="icon is-small">
+                            <i class="fas fa-download"></i>
+                        </span>
+                        <span>Download</span>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <textarea id="myTextArea" code="myTextArea"></textarea>
+            </div>        
+        </div>
+        <div class="column matterjs-column">
+            <div id="sim-run-buttons" class="buttons">
+                <div class="button is-success" id="run-robots" onclick="simControls.getCodeJS()">
+                    <span class="icon is-small">
+                        <i class="fas fa-play"></i>
+                    </span>
+                    <span>Run all</span>
+                </div>
+                <div class="button is-danger" disabled id="stop-robots" onclick="intptr.stopSim();simControls.stopSim()">
+                    <span class="icon is-small">
+                        <i class="fas fa-stop"></i>
+                    </span>
+                    <span>Stop all</span>
+                </div>
+            </div>
+            <div id="matterjs"></div>
+            <div id="notifications"></div>
+        </div>
+    </div>
+
+</body>
+
+
+<script src="scripts/soccer.js"></script>
+<script src="js-interpreter/acorn_interpreter.js"></script>
+<script src="scripts/interpreter.js"></script>
+<script src="scripts/simcontrols.js"></script>  
+<script src="scripts/javascript.js"></script>
+<script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
+</html>
+        

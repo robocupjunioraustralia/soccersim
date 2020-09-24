@@ -16,6 +16,12 @@
     display: block;
 }
 
+#soccersim .CodeMirror {
+    height: calc(85vh - 52px);
+    width: 100%;
+    display: block;
+}
+
 #soccersim #importExport {
     height: calc(20vh - 10px);
     border: 0;
