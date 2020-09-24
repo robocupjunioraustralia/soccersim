@@ -4,6 +4,7 @@
         lineNumbers: true,
         matchBrackets: true,
         continueComments: "Enter",
+        mode: "javascript",
         extraKeys: {"Ctrl-Q": "toggleComment"}
       });
 
