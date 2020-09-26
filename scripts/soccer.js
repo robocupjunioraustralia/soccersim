@@ -12,8 +12,11 @@
         World = Matter.World,
         Composite = Matter.Composite,
         Constraint = Matter.Constraint,
-        Bodies = Matter.Bodies;
+        Bodies = Matter.Bodies,
+        Vertices = Matter.Vertices,
+        Svg = Matter.Svg;
     
+    // Global variables
     var degToRad = Math.PI/180,
         radToDeg = 180/Math.PI,
         fieldWidth = 546,
@@ -208,8 +211,12 @@
 
         /*     ----     Methods that apply to all robots      ----      */
 
+        // Get absolute body angle in radians
+        getAngle(){
+            return this.body.bodies[0].angle;
+        }
+        
         // Gets the relative position of the ball from current robot
-        // Returns an object containing centre-to-centre distance and angle in radians
         getBallPosition(ball){
             let ballPos = {x: ball.position.x, y: ball.position.y},
                 robPos = this.getPos(),
@@ -234,29 +241,12 @@
                 ballBearing -= 360;
             }
 
+            // Returns an object containing centre-to-centre distance and angle in radians
             return {distance: distance, angle: ballBearing*degToRad};
         }
 
-        // Unit direction vector pointing in robot's forward direction
-        getDirectionVector(){
-            let angle = this.getAngle(),
-                x = Math.sin(angle),
-                y = Math.cos(angle);
-            return {x: x, y: y};
-        }
-
-        // Remind self how many motors robot contains
-        getNumMotors(){
-            return this.numMotors;
-        }
-
-        // Get current robot body centroid position
-        getPos(){
-            return this.body.bodies[0].position;
-        }
-
         // Get relative bearing angle in radians
-        // Blue team 0rad points up, yellow team 0rad points down
+        // TODO: Blue team 0rad points up, yellow team 0rad points down
         getBearing(){
             let angle = this.getAngle() % (2*Math.PI);
 
@@ -274,12 +264,15 @@
             return angle;
         }
 
-        // Get absolute body angle in radians
-        getAngle(){
-            return this.body.bodies[0].angle;
+        // Unit direction vector pointing in robot's forward direction
+        getDirectionVector(){
+            let angle = this.getAngle(),
+                x = Math.sin(angle),
+                y = Math.cos(angle);
+            return {x: x, y: y};
         }
 
-        // Get array of current set motor speeds
+        // Get array of currently set motor speeds
         getMotorSpeeds(){
             return this.motors;
         }
@@ -292,11 +285,15 @@
             }
             return arr;
         }
+        // Get robot main body centroid position
+        getPos(){
+            return this.body.bodies[0].position;
+        }
 
-        // Check if the robot bearing has changed
+        // Check if the robot bearing has changed enough to require update
         checkChange(){
             let currAngle = this.getAngle();
-            if (this.prevAngle < currAngle + angleLimit && this.prevAngle > currAngle - angleLimit){
+            if ( (this.prevAngle < currAngle + angleLimit) && (this.prevAngle > currAngle - angleLimit) ){
                 return false;
             } else {
                 this.prevAngle = currAngle;
@@ -306,9 +303,10 @@
 
         /*    ----      Method prototypes for inheritance      ----     */
 
-        // Update force per tick
-        updateForce(){
-            console.error('Please overwrite updateForce');
+
+        // Create compound body representing body of robot and its motors
+        createBot(xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight) {
+            console.error('Please overwrite createBot');
         }
 
         // Force calculations depend on specific robot type
@@ -320,10 +318,10 @@
         setMotorSpeed(motorNum, speed){
             console.error('Please overwrite setMotorSpeed');
         }
-
-        // Create compound body representing body of robot and its motors
-        createBot(xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight) {
-            console.error('Please overwrite createBot');
+        
+        // Update force per tick
+        updateForce(){
+            console.error('Please overwrite updateForce');
         }
     }
 
@@ -333,6 +331,7 @@
          * @param {*} team team colour
          * @param {*} x initial position along the x axis
          * @param {*} y initial position along the y axis
+         * @param {dribbler} dribbler pair of forks on front of robot to 'catch' ball
          */
         constructor(team, x, y) {
             super(team);
@@ -347,6 +346,7 @@
         // Create a square robot with wheel in the centre
         createBot(team, xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight){
 
+            // Define a group of parts that won't collide with each other
             let group = Body.nextGroup(true),
                 motorOffset = {x: 0, y: 0},
                 bodyColour,
@@ -360,30 +360,34 @@
                 bodyColour = yellow;
                 motorColour = black;
             }
-        
+            
+            // Create an empty composite, the dribbler catch posts and centre body
             let robot = Composite.create({ label: 'UniBot' }),
-                catchAreaA = Bodies.rectangle(xPos + this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                dribblerA = Bodies.rectangle(xPos + this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
                     render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
                 }),
-                catchAreaB = Bodies.rectangle(xPos - this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                dribblerB = Bodies.rectangle(xPos - this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
                     render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
                 }),
                 centre = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
                     render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1},
                 });
 
+            // merge parts into single robot body
             let body = Body.create({
                     collisionFilter: { group: group },
                     frictionAir: 0.1, 
-                    parts: [centre, catchAreaA, catchAreaB]
+                    parts: [centre, dribblerA, dribblerB]
             });
-        
+            
+            // central motor
             let motor = Bodies.rectangle(xPos + motorOffset.x, yPos + motorOffset.y, motorWidth, motorHeight, {
                 collisionFilter: { group: group },
                 frictionAir: 0.1, 
                 render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
             });
-                        
+            
+            // Motor attach point A
             let attachA = Constraint.create({
                 bodyA: motor,
                 pointA: {x: 0, y: motorHeight/2},
@@ -393,6 +397,7 @@
                 length: 0
             });
 
+            // Motor attach point B
             let attachB = Constraint.create({
                 bodyA: motor,
                 pointA: {x: 0, y: -motorHeight/2},
@@ -402,11 +407,13 @@
                 length: 0
             });
             
+            // Form the composite body
             Composite.addBody(robot, body);
             Composite.addBody(robot, motor);
             Composite.addConstraint(robot, attachA);
             Composite.addConstraint(robot, attachB);
-    
+            
+            // Set attributes
             this.body = robot;
             this.prevAngle = this.getAngle();
             this.setupMotors(motorOffset);
@@ -425,18 +432,7 @@
             this.forces.push({fx: 0, fy:0});
         }
 
-        // update force applied to robot per time tick
-        updateForce(){
-            if (this.checkChange() == true){
-                this.calculateForce();  
-            }
-            let forces = this.forces,
-                vector = {x: forces[0].fx, y: forces[0].fy},
-                motor = this.getMotors()[0];
-            Body.applyForce(motor, motor.position, vector);
-        }
-
-        // Set speed of the one motor regardless of motorNum
+        // Set speed of the single motor regardless of motorNum
         setMotorSpeed(motorNum, speed){
             this.motors[0] = speed;
             this.calculateForce();
@@ -447,6 +443,7 @@
             let forces = [],
                 absF = (this.motors[0])/100,
                 direction = this.getDirectionVector(),
+                // Relative forces are calculated based on direction vector
                 relFx = -1 * absF * direction.x,
                 relFy = absF * direction.y;
             forces.push({
@@ -454,6 +451,17 @@
                 fy: relFy
             });
             this.forces = forces;
+        }
+
+        // update force applied to robot per time tick
+        updateForce(){
+            if (this.checkChange() == true){
+                this.calculateForce();  
+            }
+            let forces = this.forces,
+                vector = {x: forces[0].fx, y: forces[0].fy},
+                motor = this.getMotors()[0];
+            Body.applyForce(motor, motor.position, vector);
         }
     }
 
@@ -464,6 +472,7 @@
          * @param {*} team team colour
          * @param {*} x initial position along the x axis
          * @param {*} y initial position along the y axis
+         * @param {dribbler} dribbler pair of forks on front of robot to 'catch' ball
          */
         constructor(team, x, y) {
             super(team);
@@ -477,8 +486,12 @@
         // Create a square robot with wheels on either side
         createBot(team, xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight){
 
+            // Define a group of parts that won't collide with each other
             let group = Body.nextGroup(true),
-                motorOffset = [{x: bodyWidth/2, y: 0}, {x: -bodyWidth/2, y: 0}],
+            // Define motor centre position relative to origin of robot body
+                motorOffset = [
+                    { x: bodyWidth/2, y: 0 },
+                    {x: -bodyWidth/2, y: 0 }],
                 bodyColour,
                 motorColour;
             
@@ -491,37 +504,42 @@
                 motorColour = black;
             }
         
+            // Create an empty composite, the dribbler catch posts and centre body
             let robot = Composite.create({ label: 'DualBot' }),
-                catchAreaA = Bodies.rectangle(xPos + this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                dribblerA = Bodies.rectangle(xPos + this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
                     render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
                 }),
-                catchAreaB = Bodies.rectangle(xPos - this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
+                dribblerB = Bodies.rectangle(xPos - this.dribbler.offset, yPos + bodyHeight/2 + this.dribbler.height/2, this.dribbler.width, this.dribbler.height, {
                     render: {fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
                 }),
                 centre = Bodies.rectangle(xPos, yPos, bodyWidth, bodyHeight, {
                     render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1},
-                });
+            });
 
+            // merge parts into single robot body
             let body = Body.create({
                     collisionFilter: { group: group },
                     frictionAir: 0.1, 
-                    parts: [centre, catchAreaA, catchAreaB]
-                });
-        
-            let motorA = Bodies.rectangle(xPos + motorOffset[0].x, yPos + motorOffset[0].y, motorWidth, motorHeight, {
+                    parts: [centre, dribblerA, dribblerB]
+            });
+            
+            // Left motor
+            let motorLeft = Bodies.rectangle(xPos + motorOffset[0].x, yPos + motorOffset[0].y, motorWidth, motorHeight, {
                 collisionFilter: { group: group },
                 frictionAir: 0.1, 
                 render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
             });
 
-            let motorB = Bodies.rectangle(xPos + motorOffset[1].x, yPos + motorOffset[1].y, motorWidth, motorHeight, {
+            // Right motor
+            let motorRight = Bodies.rectangle(xPos + motorOffset[1].x, yPos + motorOffset[1].y, motorWidth, motorHeight, {
                 collisionFilter: { group: group },
                 frictionAir: 0.1, 
                 render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
             });
-                        
-            let attachAA = Constraint.create({
-                bodyA: motorA,
+            
+            // Left motor attachment point A
+            let attachLeftA = Constraint.create({
+                bodyA: motorLeft,
                 pointA: {x: 0, y: motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[0].x, y: motorHeight/2 },
@@ -530,8 +548,9 @@
                 render: { lineWidth: 0 }
             });
 
-            let attachAB = Constraint.create({
-                bodyA: motorA,
+            // Left motor attachment point B
+            let attachLeftB = Constraint.create({
+                bodyA: motorLeft,
                 pointA: {x: 0, y: -motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[0].x, y: -motorHeight/2 },
@@ -540,8 +559,9 @@
                 render: { lineWidth: 0 }
             });
 
-            let attachBA = Constraint.create({
-                bodyA: motorB,
+            // Right motor attachment point A
+            let attachRightA = Constraint.create({
+                bodyA: motorRight,
                 pointA: {x: 0, y: motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[1].x, y: motorHeight/2 },
@@ -550,8 +570,9 @@
                 render: { lineWidth: 0 }
             });
 
-            let attachBB = Constraint.create({
-                bodyA: motorB,
+            // Right motor attachment point B
+            let attachRightB = Constraint.create({
+                bodyA: motorRight,
                 pointA: {x: 0, y: -motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[1].x, y: -motorHeight/2 },
@@ -560,14 +581,16 @@
                 render: { lineWidth: 0 }
             });
             
+            // Form the composite body
             Composite.addBody(robot, body);
-            Composite.addBody(robot, motorA);
-            Composite.addBody(robot, motorB);
-            Composite.addConstraint(robot, attachAA);
-            Composite.addConstraint(robot, attachAB);
-            Composite.addConstraint(robot, attachBA);
-            Composite.addConstraint(robot, attachBB);
+            Composite.addBody(robot, motorLeft);
+            Composite.addBody(robot, motorRight);
+            Composite.addConstraint(robot, attachLeftA);
+            Composite.addConstraint(robot, attachLeftB);
+            Composite.addConstraint(robot, attachRightA);
+            Composite.addConstraint(robot, attachRightB);
     
+            // Set attributes
             this.body = robot;
             this.prevAngle = this.getAngle();
             this.setupMotors(motorOffset);
@@ -586,21 +609,6 @@
             this.forces.push({fx: 0, fy:0},{fx: 0, fy:0});
         }
 
-        // update force applied to robot per time tick
-        updateForce(){
-            if (this.checkChange() == true){
-                this.calculateForce();
-            }
-            let forces = this.forces,
-                vector = {},
-                motor;
-            for (var i = 0; i < this.numMotors; i++){
-                vector = {x: forces[i].fx, y: forces[i].fy};
-                motor = this.getMotors()[i];
-                Body.applyForce(motor, motor.position, vector);
-            }
-        }
-
         // Set speed of the one motor
         setMotorSpeed(motorNum, speed){
             if (motorNum < this.numMotors){
@@ -610,7 +618,7 @@
         }
         
         // Set speed of both motors
-        setBothMotorSpeeds(speed0, speed1){
+        setMotorSpeedAll(speed0, speed1){
             this.motors[0] = speed0;
             this.motors[1] = speed1;
             this.calculateForce();
@@ -621,11 +629,13 @@
             let forces = [],
                 direction = this.getDirectionVector(),
                 motorBodies = this.getMotors();
-
+            // Calculate relative forces for all motors
             for (var i = 0; i < this.numMotors; i++){
                 let absF = (this.motors[i])/100,
+                // Relative forces are calculated based on direction vector
                     relFx = -1 * absF * direction.x,
                     relFy = absF * direction.y;
+                // Increase friction on non-active motors
                 if (this.motors[i] == 0) {
                     motorBodies[i].frictionAir = 0.8;
                 } else {
@@ -639,6 +649,315 @@
             this.forces = forces;
         }
 
+        // update force applied to robot per time tick
+        updateForce(){
+            // Only recalculate here if enough change in robot bearing
+            if (this.checkChange() == true){
+                this.calculateForce();
+            }
+            let forces = this.forces,
+                vector = {},
+                motor;
+            // constantly apply forces as long as motors spin
+            for (var i = 0; i < this.numMotors; i++){
+                vector = {x: forces[i].fx, y: forces[i].fy};
+                motor = this.getMotors()[i];
+                Body.applyForce(motor, motor.position, vector);
+            }
+        }
+
+    }
+
+    class TriBot extends Robot{
+        /**
+         * Bot with three motors, 120 deg from each other. Motors defined in order of left, right, back
+         * @param {*} team team colour
+         * @param {*} x initial position along the x axis
+         * @param {*} y initial position along the y axis
+         */
+        constructor(team, x, y) {
+            super(team);
+            this.createBot(team, x, y, 4, 12);
+        }
+
+        // JQuery and AJAX to fetch SVG file of robot outline
+        parseSVG(name){
+            if (typeof $ !== 'undefined') {
+                // Ensure loading and processing of svg before further processing
+                $.ajaxSetup({async: false});
+                let vertices = [];
+                $.get('../../assets/' + name + '.svg').done(function(data) {
+                    $(data).find('path').each(function(i, path) {
+                        let points = Svg.pathToVertices(path,3);
+                        // Only required if SVG itself is upside down
+                        Vertices.rotate(points,180*degToRad,{x:0,y:0});
+                        vertices.push(points);
+                    });
+                });
+                return vertices;
+            }
+        }
+
+        // Create a square robot with wheel in the centre
+        createBot(team, xPos, yPos, motorWidth, motorHeight){
+
+            // Define a group of parts that won't collide with each other
+            let group = Body.nextGroup(true),
+                // In order of Left, Right, Back motors 
+                motorOffset = [
+                    {x: 17.5, y: 10},
+                    {x: -17.5, y: 10},
+                    {x: 0, y: -17.5}
+                ],
+                bodyColour,
+                motorColour;
+            
+            // Define colours for each team
+            if (team == 'blue'){
+                bodyColour = blue;
+                motorColour = white;
+            } else {
+                bodyColour = yellow;
+                motorColour = black;
+            }
+
+            // Parse the SVG to create vertices
+            let svgName = 'TriBot',
+                vertices = this.parseSVG(svgName);
+            
+            // create empty composite body 
+            let robot = Composite.create({ label: 'TriBot' });
+
+            // Create main body from SVG vertices
+            let body = Bodies.fromVertices(xPos, yPos, vertices, {
+                collisionFilter: { group: group },
+                frictionAir: 0.1,
+                render: { fillStyle: bodyColour, strokeStyle: '#2E2B44', lineWidth: 1}
+            });
+
+            // Scale body to approx 50 pixel width/length
+            Body.scale(body,0.3,0.3);
+            
+            // Left motor
+            let motorLeft = Bodies.rectangle(xPos + motorOffset[0].x, yPos + motorOffset[0].y, motorWidth, motorHeight, {
+                collisionFilter: { group: group },
+                frictionAir: 0.1, 
+                render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
+            });
+
+            // Right motor 
+            let motorRight = Bodies.rectangle(xPos + motorOffset[1].x, yPos + motorOffset[1].y, motorWidth, motorHeight, {
+                collisionFilter: { group: group },
+                frictionAir: 0.1, 
+                render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
+            });
+
+            // Back motor
+            let motorBack = Bodies.rectangle(xPos + motorOffset[2].x, yPos + motorOffset[2].y, motorWidth, motorHeight, {
+                collisionFilter: { group: group },
+                frictionAir: 0.1, 
+                render: { fillStyle: motorColour, strokeStyle: '#2E2B44', lineWidth: 1}
+            });
+            
+            // Left motor attachment point A
+            let attachLeftA = Constraint.create({
+                bodyA: motorLeft,
+                pointA: {
+                    x: 0, 
+                    y: motorHeight/2
+                },
+                bodyB: body,
+                pointB: { 
+                    x: motorOffset[0].x - ((motorHeight/2) * Math.sin(30*degToRad)), 
+                    y: motorOffset[0].y + ((motorHeight/2) * Math.cos(30*degToRad))
+                },
+                stiffness: 1,
+                length: 0,
+                render: { lineWidth: 0 }
+            });
+
+            // Left motor attachment point B
+            let attachLeftB = Constraint.create({
+                bodyA: motorLeft,
+                pointA: {
+                    x: 0, 
+                    y: -motorHeight/2
+                },
+                bodyB: body,
+                pointB: { 
+                    x: motorOffset[0].x + ((motorHeight/2) * Math.sin(30*degToRad)), 
+                    y: motorOffset[0].y - ((motorHeight/2) * Math.cos(30*degToRad))
+                },
+                stiffness: 1,
+                length: 0,
+                render: { lineWidth: 0 }
+            });
+
+            // Right motor attachment point A
+            let attachRightA = Constraint.create({
+                bodyA: motorRight,
+                pointA: {
+                    x: 0, 
+                    y: -motorHeight/2
+                },
+                bodyB: body,
+                pointB: { 
+                    x: motorOffset[1].x + ((motorHeight/2) * Math.sin(150*degToRad)), 
+                    y: motorOffset[1].y - ((motorHeight/2) * Math.cos(150*degToRad))
+                },
+                stiffness: 1,
+                length: 0,
+                render: { lineWidth: 0 }
+            });
+
+            // Right motor attachment point B
+            let attachRightB = Constraint.create({
+                bodyA: motorRight,
+                pointA: {
+                    x: 0, 
+                    y: motorHeight/2
+                },
+                bodyB: body,
+                pointB: { 
+                    x: motorOffset[1].x - ((motorHeight/2) * Math.sin(150*degToRad)), 
+                    y: motorOffset[1].y + ((motorHeight/2) * Math.cos(150*degToRad))
+                },
+                stiffness: 1,
+                length: 0,
+                render: { lineWidth: 0 }
+            });
+
+            // Back motor attachment point A
+            let attachBackA = Constraint.create({
+                bodyA: motorBack,
+                pointA: {
+                    x: 0, 
+                    y: motorHeight/2
+                },
+                bodyB: body,
+                pointB: { 
+                    x: motorOffset[2].x + motorHeight/2, 
+                    y: motorOffset[2].y
+                },
+                stiffness: 1,
+                length: 0,
+                render: { lineWidth: 0 }
+            });
+
+            // Back motor attachment point B
+            let attachBackB = Constraint.create({
+                bodyA: motorBack,
+                pointA: {
+                    x: 0, 
+                    y: -motorHeight/2
+                },
+                bodyB: body,
+                pointB: { 
+                    x: motorOffset[2].x - motorHeight/2, 
+                    y: motorOffset[2].y
+                },
+                stiffness: 1,
+                length: 0,
+                render: { lineWidth: 0 }
+            });
+            
+            // Form the composite body
+            Composite.addBody(robot, body);
+            Composite.addBody(robot, motorLeft);
+            Composite.addBody(robot, motorRight);
+            Composite.addBody(robot, motorBack);
+            Composite.addConstraint(robot, attachLeftA);
+            Composite.addConstraint(robot, attachLeftB);
+            Composite.addConstraint(robot, attachRightA);
+            Composite.addConstraint(robot, attachRightB);
+            Composite.addConstraint(robot, attachBackA);
+            Composite.addConstraint(robot, attachBackB);
+    
+            // Set attributes
+            this.body = robot;
+            this.prevAngle = this.getAngle();
+            this.setupMotors(motorOffset);
+
+            // Rotate entire composite shape if blue team
+            if (team == 'blue'){
+                Composite.rotate(this.body,180*degToRad,{x: xPos, y: yPos});
+            }
+        }
+
+        // 3 motors equally spaced around pitch circle diameter
+        setupMotors(offset){
+            this.numMotors = 3;
+            this.motors.push(0,0,0);
+            this.motorOffsets.push(offset[0],offset[1],offset[2]);
+            this.forces.push({fx: 0, fy:0},{fx: 0, fy:0},{fx: 0, fy:0});
+        }
+
+        // Set speed of the one motor
+        setMotorSpeed(motorNum, speed){
+            if (motorNum < this.numMotors){
+                this.motors[motorNum] = speed;
+            }
+            this.calculateForce();
+        }
+        
+        // Set speed of all motors
+        setMotorSpeedAll(speed0, speed1, speed2){
+            this.motors[0] = speed0;
+            this.motors[1] = speed1;
+            this.motors[2] = speed2;
+            this.calculateForce();
+        }
+
+        // Override for TriBot, adjusted for individual motor directions
+        getDirectionVector(motor){
+            let angle = this.body.bodies[motor+1].angle,
+                x = Math.sin(angle),
+                y = Math.cos(angle);
+            return {x: x, y: y};
+        }
+
+        // Calculate relative force for dual motors
+        calculateForce(){
+            let forces = [],
+                motorBodies = this.getMotors(),
+                direction;
+            // Calculate relative forces of all motors
+            for (var i = 0; i < this.numMotors; i++){
+                direction = this.getDirectionVector(i);
+                let absF = (this.motors[i])/100,
+                // Relative forces are calculated based on direction vector
+                    relFx = -1 * absF * direction.x,
+                    relFy = absF * direction.y;
+                // Increase friction for non-active motors
+                if (this.motors[i] == 0) {
+                    motorBodies[i].frictionAir = 0.8;
+                } else {
+                    motorBodies[i].frictionAir = 0.1;
+                }
+                forces.push({
+                    fx: relFx, 
+                    fy: relFy
+                });
+            }
+            this.forces = forces;
+        }
+
+        // update force applied to robot per time tick
+        updateForce(){
+            // Only recalculate forces on tick if enough bearing change
+            if (this.checkChange() == true){
+                this.calculateForce();
+            }
+            let forces = this.forces,
+                vector = {},
+                motor;
+            // Continuously apply a force as long as motors are active
+            for (var i = 0; i < this.numMotors; i++){
+                vector = {x: forces[i].fx, y: forces[i].fy};
+                motor = this.getMotors()[i];
+                Body.applyForce(motor, motor.position, vector);
+            }
+        }
     }
     
     // TODO: move this to another file
@@ -646,7 +965,7 @@
 
     // Define robots on the field
     let one = new DualBot('blue',200, 600),
-    two = new DualBot('blue',350, 600);
+    two = new TriBot('blue',350, 600);
 
     let robots = [one, two];
     window.One = one;

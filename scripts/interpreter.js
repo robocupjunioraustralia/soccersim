@@ -23,11 +23,11 @@
             if (speed > 100) speed = 100;
             if (speed < -100) speed = -100;
             switch (motor) {
-                case 'motorA':
+                case 'motorLeft':
                     this.robot.setMotorSpeed(0, speed / 500);
                     this.speeds[0] = speed;
                     break;
-                case 'motorB':
+                case 'motorRight':
                     this.robot.setMotorSpeed(1, speed / 500);
                     this.speeds[1] = speed;
                     break;
@@ -37,11 +37,11 @@
         }
         stopMotor(motor) {
             switch (motor) {
-                case 'motorA':
+                case 'motorLeft':
                     this.robot.setMotorSpeed(0, 0);
                     this.speeds[0] = 0;
                     break;
-                case 'motorB':
+                case 'motorRight':
                     this.robot.setMotorSpeed(1, 0);
                     this.speeds[0] = 0;
                     break;
@@ -51,9 +51,9 @@
         }
         getMotorSpeed(motor) {
             switch (motor) {
-                case 'motorA':
+                case 'motorLeft':
                     return this.speeds[0];
-                case 'motorB':
+                case 'motorRight':
                     return this.speeds[1];
                 default:
                     return 0;
