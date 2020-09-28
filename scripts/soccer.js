@@ -201,7 +201,7 @@
                 throw new TypeError("Cannot instantiate abstract Robot class");
             }
             this.team = team;
-            this.motors = [];
+            this.motorSpeeds = [];
             this.motorPos = [];
             this.motorOffsets = [];
             this.numMotors = 0;
@@ -274,7 +274,7 @@
 
         // Get array of currently set motor speeds
         getMotorSpeeds(){
-            return this.motors;
+            return this.motorSpeeds;
         }
 
         // Get array of motor bodies
@@ -427,21 +427,21 @@
         // Single motor in the centre
         setupMotors(offset){
             this.numMotors = 1;
-            this.motors.push(0);
+            this.motorSpeeds.push(0);
             this.motorOffsets.push(offset);
             this.forces.push({fx: 0, fy:0});
         }
 
         // Set speed of the single motor regardless of motorNum
         setMotorSpeed(motorNum, speed){
-            this.motors[0] = speed;
+            this.motorSpeeds[0] = speed;
             this.calculateForce();
         }
 
         // Calculate relative force for single motor
         calculateForce(){
             let forces = [],
-                absF = (this.motors[0])/100,
+                absF = (this.motorSpeeds[0])/100,
                 direction = this.getDirectionVector(),
                 // Relative forces are calculated based on direction vector
                 relFx = -1 * absF * direction.x,
@@ -604,7 +604,7 @@
         // One motor on either side, 2 total
         setupMotors(offset){
             this.numMotors = 2;
-            this.motors.push(0,0);
+            this.motorSpeeds.push(0,0);
             this.motorOffsets.push(offset[0],offset[1]);
             this.forces.push({fx: 0, fy:0},{fx: 0, fy:0});
         }
@@ -612,15 +612,15 @@
         // Set speed of the one motor
         setMotorSpeed(motorNum, speed){
             if (motorNum < this.numMotors){
-                this.motors[motorNum] = speed;
+                this.motorSpeeds[motorNum] = speed;
             }
             this.calculateForce();
         }
         
         // Set speed of both motors
         setMotorSpeedAll(speed0, speed1){
-            this.motors[0] = speed0;
-            this.motors[1] = speed1;
+            this.motorSpeeds[0] = speed0;
+            this.motorSpeeds[1] = speed1;
             this.calculateForce();
         }
 
@@ -631,12 +631,12 @@
                 motorBodies = this.getMotors();
             // Calculate relative forces for all motors
             for (var i = 0; i < this.numMotors; i++){
-                let absF = (this.motors[i])/100,
+                let absF = (this.motorSpeeds[i])/100,
                 // Relative forces are calculated based on direction vector
                     relFx = -1 * absF * direction.x,
                     relFy = absF * direction.y;
                 // Increase friction on non-active motors
-                if (this.motors[i] == 0) {
+                if (this.motorSpeeds[i] == 0) {
                     motorBodies[i].frictionAir = 0.8;
                 } else {
                     motorBodies[i].frictionAir = 0.1;
@@ -887,7 +887,7 @@
         // 3 motors equally spaced around pitch circle diameter
         setupMotors(offset){
             this.numMotors = 3;
-            this.motors.push(0,0,0);
+            this.motorSpeeds.push(0,0,0);
             this.motorOffsets.push(offset[0],offset[1],offset[2]);
             this.forces.push({fx: 0, fy:0},{fx: 0, fy:0},{fx: 0, fy:0});
         }
@@ -895,16 +895,16 @@
         // Set speed of the one motor
         setMotorSpeed(motorNum, speed){
             if (motorNum < this.numMotors){
-                this.motors[motorNum] = speed;
+                this.motorSpeeds[motorNum] = speed;
             }
             this.calculateForce();
         }
         
         // Set speed of all motors
         setMotorSpeedAll(speed0, speed1, speed2){
-            this.motors[0] = speed0;
-            this.motors[1] = speed1;
-            this.motors[2] = speed2;
+            this.motorSpeeds[0] = speed0;
+            this.motorSpeeds[1] = speed1;
+            this.motorSpeeds[2] = speed2;
             this.calculateForce();
         }
 
@@ -924,12 +924,12 @@
             // Calculate relative forces of all motors
             for (var i = 0; i < this.numMotors; i++){
                 direction = this.getDirectionVector(i);
-                let absF = (this.motors[i])/100,
+                let absF = (this.motorSpeeds[i])/100,
                 // Relative forces are calculated based on direction vector
                     relFx = -1 * absF * direction.x,
                     relFy = absF * direction.y;
                 // Increase friction for non-active motors
-                if (this.motors[i] == 0) {
+                if (this.motorSpeeds[i] == 0) {
                     motorBodies[i].frictionAir = 0.8;
                 } else {
                     motorBodies[i].frictionAir = 0.1;
