@@ -7,6 +7,5 @@
         mode: "javascript",
         extraKeys: {"Ctrl-Q": "toggleComment"}
       });
-
       window.codeMirrorEditor = editor;
 })();
