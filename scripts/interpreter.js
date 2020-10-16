@@ -16,7 +16,7 @@
     class RobotFunctions {
         constructor(robot) {
             this.robot = robot;
-            this.speeds = [0, 0];
+            this.speeds = [0, 0, 0];
         }
         setMotorSpeed(motor, speed) {
             if (typeof speed !== 'number') return;
@@ -31,6 +31,10 @@
                     this.robot.setMotorSpeed(1, speed / 500);
                     this.speeds[1] = speed;
                     break;
+                case 'motorC':
+                    this.robot.setMotorSpeed(2, speed / 500);
+                    this.speeds[2] = speed;
+                    break;
                 default:
                     break;
             }
@@ -43,7 +47,11 @@
                     break;
                 case 'motorB':
                     this.robot.setMotorSpeed(1, 0);
-                    this.speeds[0] = 0;
+                    this.speeds[1] = 0;
+                    break;
+                case 'motorC':
+                    this.robot.setMotorSpeed(2, 0);
+                    this.speeds[2] = 0;
                     break;
                 default:
                     break;
@@ -55,6 +63,8 @@
                     return this.speeds[0];
                 case 'motorB':
                     return this.speeds[1];
+                case 'motorC':
+                    return this.speeds[2];
                 default:
                     return 0;
             }
