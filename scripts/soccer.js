@@ -211,6 +211,29 @@
 
         /*     ----     Methods that apply to all robots      ----      */
 
+        // Turn given relative positions into absolute positions on the field
+        adjustPos(team, xPos, yPos){
+            // Adjust x and y pos to be relative to team origin points
+            if (team == 'yellow'){
+                xPos = -xPos + fieldWidth/2;
+            } else {
+                xPos = xPos + fieldWidth/2;
+                yPos = -yPos + fieldHeight;
+            }
+            return {x: xPos, y: yPos};
+        }
+
+        // Check if the robot bearing has changed enough to require update
+        checkChange(){
+            let currAngle = this.getAngle();
+            if ( (this.prevAngle < currAngle + angleLimit) && (this.prevAngle > currAngle - angleLimit) ){
+                return false;
+            } else {
+                this.prevAngle = currAngle;
+                return true;
+            }
+        }
+
         // Get absolute body angle in radians
         getAngle(){
             return this.body.bodies[0].angle;
@@ -290,15 +313,22 @@
             return this.body.bodies[0].position;
         }
 
-        // Check if the robot bearing has changed enough to require update
-        checkChange(){
-            let currAngle = this.getAngle();
-            if ( (this.prevAngle < currAngle + angleLimit) && (this.prevAngle > currAngle - angleLimit) ){
-                return false;
-            } else {
-                this.prevAngle = currAngle;
-                return true;
-            }
+        // Manually apply motor array
+        setMotorArray(array){
+            this.motorSpeeds = array;
+            this.calculateForce();
+        }
+
+        // Set the robot main body centroid position
+        setPos(xPos, yPos){
+            // Stop robot motion
+            let previous = this.stopMovement();
+            // Adjust position coordinates to absolute
+            let absPos = this.adjustPos(this.team, xPos, yPos);
+            Body.setPosition(this.body.bodies[0], absPos);
+            
+            // Return copy of previous motor speeds
+            return previous;
         }
 
         /*    ----      Method prototypes for inheritance      ----     */
@@ -317,6 +347,11 @@
         // Setting motor speeds depend on motor setup
         setMotorSpeed(motorNum, speed){
             console.error('Please overwrite setMotorSpeed');
+        }
+
+        // Stop movement of the robot, returning its original motorspeeds
+        stopMovement(){
+            console.error('Please overwrite stopMovement');
         }
         
         // Update force per tick
@@ -340,11 +375,15 @@
                 width: 5,
                 offset: 12
             };
-            this.createBot(team, x, y, 50, 50, 10, 25);
+            this.createBot(team, x, y, 40, 40, 10, 25);
         }
 
         // Create a square robot with wheel in the centre
         createBot(team, xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight){
+            // Adjust position coordinates to absolute
+            let absPos = this.adjustPos(team, xPos, yPos);
+            xPos = absPos.x;
+            yPos = absPos.y;
 
             // Define a group of parts that won't collide with each other
             let group = Body.nextGroup(true),
@@ -438,6 +477,13 @@
             this.calculateForce();
         }
 
+        // Stop movement of the robot, returning its original motorspeeds
+        stopMovement(){
+            let previous = this.getMotorSpeeds().slice();
+            this.setMotorSpeed(0,0);
+            return previous;
+        }
+
         // Calculate relative force for single motor
         calculateForce(){
             let forces = [],
@@ -485,6 +531,10 @@
         }
         // Create a square robot with wheels on either side
         createBot(team, xPos, yPos, bodyWidth, bodyHeight, motorWidth, motorHeight){
+            // Adjust position coordinates to absolute
+            let absPos = this.adjustPos(team, xPos, yPos);
+            xPos = absPos.x;
+            yPos = absPos.y;
 
             // Define a group of parts that won't collide with each other
             let group = Body.nextGroup(true),
@@ -624,6 +674,13 @@
             this.calculateForce();
         }
 
+        // Stop movement of the robot, returning its original motorspeeds
+        stopMovement(){
+            let previous = this.getMotorSpeeds().slice();
+            this.setMotorSpeedAll(0,0);
+            return previous;
+        }
+
         // Calculate relative force for dual motors
         calculateForce(){
             let forces = [],
@@ -706,6 +763,10 @@
 
         // Create a square robot with wheel in the centre
         createBot(team, xPos, yPos, motorWidth, motorHeight){
+            // Adjust position coordinates to absolute
+            let absPos = this.adjustPos(team, xPos, yPos);
+            xPos = absPos.x;
+            yPos = absPos.y;
 
             // Define a group of parts that won't collide with each other
             let group = Body.nextGroup(true),
@@ -1105,6 +1166,13 @@
             return {x: x, y: y};
         }
 
+        // Stop movement of the robot, returning its original motorspeeds
+        stopMovement(){
+            let previous = this.getMotorSpeeds().slice();
+            this.setMotorSpeedAll(0,0,0);
+            return previous;
+        }
+
         // Calculate relative force for dual motors
         calculateForce(){
             let forces = [],
@@ -1153,12 +1221,14 @@
     let title = document.getElementsByTagName("title")[0].innerHTML;
 
     // Define robots on the field
-    let one = new DualBot('blue',200, 600),
-    two = new TriBot('blue',350, 600);
+    let one = new DualBot('blue',-75, 130),
+    two = new TriBot('blue',75, 130),
+    three = new UniBot('yellow',-75,130);
 
-    let robots = [one, two];
+    let robots = [one, two, three];
     window.One = one;
     window.Two = two;
+    window.Three = three;
 
     // define the ball
     let ball = Bodies.circle(fieldWidth/2, fieldHeight/2, 10, {
