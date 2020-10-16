@@ -432,7 +432,7 @@
                 pointA: {x: 0, y: motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset.x, y: motorHeight/2 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0
             });
 
@@ -442,7 +442,7 @@
                 pointA: {x: 0, y: -motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset.x, y: -motorHeight/2 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0
             });
             
@@ -481,6 +481,7 @@
         stopMovement(){
             let previous = this.getMotorSpeeds().slice();
             this.setMotorSpeed(0,0);
+            // Body.setStatic(this.body.bodies[0],true)
             return previous;
         }
 
@@ -593,7 +594,7 @@
                 pointA: {x: 0, y: motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[0].x, y: motorHeight/2 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -604,7 +605,7 @@
                 pointA: {x: 0, y: -motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[0].x, y: -motorHeight/2 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -615,7 +616,7 @@
                 pointA: {x: 0, y: motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[1].x, y: motorHeight/2 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -626,7 +627,7 @@
                 pointA: {x: 0, y: -motorHeight/2},
                 bodyB: body,
                 pointB: { x: motorOffset[1].x, y: -motorHeight/2 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -1021,7 +1022,7 @@
                     x: motorOffset[0].x - ((motorHeight/2) * Math.sin(30*degToRad)), 
                     y: motorOffset[0].y + ((motorHeight/2) * Math.cos(30*degToRad))
                 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -1038,7 +1039,7 @@
                     x: motorOffset[0].x + ((motorHeight/2) * Math.sin(30*degToRad)), 
                     y: motorOffset[0].y - ((motorHeight/2) * Math.cos(30*degToRad))
                 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -1055,7 +1056,7 @@
                     x: motorOffset[1].x + ((motorHeight/2) * Math.sin(150*degToRad)), 
                     y: motorOffset[1].y - ((motorHeight/2) * Math.cos(150*degToRad))
                 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -1072,7 +1073,7 @@
                     x: motorOffset[1].x - ((motorHeight/2) * Math.sin(150*degToRad)), 
                     y: motorOffset[1].y + ((motorHeight/2) * Math.cos(150*degToRad))
                 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -1089,7 +1090,7 @@
                     x: motorOffset[2].x + motorHeight/2, 
                     y: motorOffset[2].y
                 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
@@ -1106,7 +1107,7 @@
                     x: motorOffset[2].x - motorHeight/2, 
                     y: motorOffset[2].y
                 },
-                stiffness: 1,
+                stiffness: 0.7,
                 length: 0,
                 render: { lineWidth: 0 }
             });
