@@ -31,7 +31,7 @@
         // Defaults to currently selected robot
         robot = robot || jsControls.selected;
         let js = codeMirrorEditor.getValue();
-        localStorage.setItem('soccersim-' + robot, js);
+        localStorage.setItem('soccersim-js-' + robot, js);
     };
 
     /**
@@ -42,7 +42,7 @@
         currentWorkspace = currentWorkspace || workspace;
         robot = robot || blocklyControls.selected;
         // Defaults to currently selected robot
-        let xml = localStorage.getItem('soccersim-' + robot);
+        let xml = localStorage.getItem('soccersim-js-' + robot);
         if (!xml) {
             xml = '<xml xmlns="https://developers.google.com/blockly/xml"/>';
         }
@@ -55,7 +55,7 @@
         currentEditor = currentEditor;
         robot = robot || jsControls.selected;
         console.log(robot);
-        let js = localStorage.getItem('soccersim-' + robot);
+        let js = localStorage.getItem('soccersim-js-' + robot);
         if (!js) {
             js = '';
         }
@@ -138,8 +138,7 @@
         }
     };
 
-    document.getElementById("uploaded-file").addEventListener("change", blocklyControls.uploadFile, false);
-
+    
     jsControls.uploadFile = function () {
         if (this.files.length !== 1) {
             return;
@@ -155,9 +154,6 @@
             };
         }
     };
-
-    document.getElementById("uploaded-file").addEventListener("change", jsControls.uploadFile, false);
-
 
     /**
      * Handle switching editor between robot 1 and 2
@@ -264,12 +260,11 @@
         stopButton.removeAttribute('disabled');
 
         // Save program so we can load it easily
-        //jsControls.saveProgram();
+        jsControls.saveProgram();
         
         for (let robot of jsControls.robots) {
-            //jsControls.loadProgram(robot, hiddenWorkspace);
-            // Convert to code
-            codes.push(codeMirrorEditor.getValue());
+            let js = localStorage.getItem('soccersim-js-' + robot);
+            codes.push(js);
         }
         runButton.classList.remove('is-loading');
         intptr.startSim(robots, codes);
@@ -298,6 +293,18 @@
         
         document.getElementById('notifications').appendChild(errorBox);
     };
+
+    simControls.init = function() {
+        // Add event listener to the appropriate interface only
+        if (window.config && window.config.INTERFACE_TYPE === 'javascript') {
+            document.getElementById("uploaded-file").addEventListener("change", jsControls.uploadFile, false);
+        }
+        else if (window.config && window.config.INTERFACE_TYPE === 'blocks') {
+            document.getElementById("uploaded-file").addEventListener("change", blocklyControls.uploadFile, false);
+        }
+    }
+
+    simControls.init();
 
     window.blocklyControls = blocklyControls;
     window.jsControls = jsControls;
