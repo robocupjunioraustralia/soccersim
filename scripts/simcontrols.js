@@ -24,6 +24,17 @@
     };
 
     /**
+     * Saves the current workspace into localStorage
+     * @param {String} robot Robot ID
+     */
+    jsControls.saveProgram = function(robot) {
+        // Defaults to currently selected robot
+        robot = robot || jsControls.selected;
+        let js = codeMirrorEditor.getValue();
+        localStorage.setItem('soccersim-js-' + robot, js);
+    };
+
+    /**
      * Loads the selected robot from localStorage into the workspace
      * @param {String} robot robot ID
      */
@@ -31,7 +42,7 @@
         currentWorkspace = currentWorkspace || workspace;
         robot = robot || blocklyControls.selected;
         // Defaults to currently selected robot
-        let xml = localStorage.getItem('soccersim-' + robot);
+        let xml = localStorage.getItem('soccersim-js-' + robot);
         if (!xml) {
             xml = '<xml xmlns="https://developers.google.com/blockly/xml"/>';
         }
@@ -41,10 +52,14 @@
     };
 
     jsControls.loadProgram = function (robot, currentEditor) {
-        currentEditor = currentEditor
-        robot = robot || blocklyControls.selected;
-
-        currentWorkspace.clear();
+        currentEditor = currentEditor;
+        robot = robot || jsControls.selected;
+        console.log(robot);
+        let js = localStorage.getItem('soccersim-js-' + robot);
+        if (!js) {
+            js = '';
+        }
+        codeMirrorEditor.setValue(js);
     }
 
     /**
@@ -55,6 +70,16 @@
             return;
         }
         workspace.clear();
+    };
+
+    /**
+     * 
+     */
+    jsControls.clearWorkspace = function() {
+        if (!confirm('Are you sure you want to clear the workspace?')) {
+            return;
+        }
+        codeMirrorEditor.setValue('');
     };
 
     /**
@@ -113,7 +138,22 @@
         }
     };
 
-    document.getElementById("uploaded-file").addEventListener("change", blocklyControls.uploadFile, false);
+    
+    jsControls.uploadFile = function () {
+        if (this.files.length !== 1) {
+            return;
+        }
+        let file = this.files[0];
+        if (file) {
+            let reader = new FileReader();
+            reader.readAsText(file, "UTF-8");
+            reader.onload = function (evt) {
+                let js = evt.target.result;
+                codeMirrorEditor.setValue(js);
+                document.getElementById("uploaded-file").value = "";
+            };
+        }
+    };
 
     /**
      * Handle switching editor between robot 1 and 2
@@ -142,6 +182,35 @@
 
         // Load saved program
         blocklyControls.loadProgram();
+    };
+
+    /**
+     * Handle switching editor between robot 1 and 2
+     * @param {String} robot 'robot1' or 'robot2'
+     */
+    jsControls.switchProgram = function(robot) {
+        if (robot === jsControls.selected) return;
+        
+        // Automatically save
+        jsControls.saveProgram();
+
+        // Switch to the other robot
+        let robot1TabSelector = document.getElementById('switch-robot-1');
+        let robot2TabSelector = document.getElementById('switch-robot-2');
+        jsControls.selected = robot;
+        
+        let selectorClasses = ['is-info', 'is-selected'];
+        if (robot === 'robot1') {
+            robot1TabSelector.classList.add(...selectorClasses);
+            robot2TabSelector.classList.remove(...selectorClasses);
+        }
+        else if (robot === 'robot2') {
+            robot1TabSelector.classList.remove(...selectorClasses);
+            robot2TabSelector.classList.add(...selectorClasses);
+        }
+
+        // Load saved program
+        jsControls.loadProgram();
     };
 
     /**
@@ -179,7 +248,7 @@
     };
 
     simControls.getCodeJS = function() {
-        let robots = [window.One];
+        let robots = [window.One, window.Two];
         let codes = [];
         
         // Show loading
@@ -191,12 +260,11 @@
         stopButton.removeAttribute('disabled');
 
         // Save program so we can load it easily
-        // jsControls.saveProgram();
+        jsControls.saveProgram();
         
         for (let robot of jsControls.robots) {
-            // jsControls.loadProgram(robot, hiddenWorkspace);
-            // Convert to code
-            codes.push(codeMirrorEditor.getValue());
+            let js = localStorage.getItem('soccersim-js-' + robot);
+            codes.push(js);
         }
         runButton.classList.remove('is-loading');
         intptr.startSim(robots, codes);
@@ -225,6 +293,18 @@
         
         document.getElementById('notifications').appendChild(errorBox);
     };
+
+    simControls.init = function() {
+        // Add event listener to the appropriate interface only
+        if (window.config && window.config.INTERFACE_TYPE === 'javascript') {
+            document.getElementById("uploaded-file").addEventListener("change", jsControls.uploadFile, false);
+        }
+        else if (window.config && window.config.INTERFACE_TYPE === 'blocks') {
+            document.getElementById("uploaded-file").addEventListener("change", blocklyControls.uploadFile, false);
+        }
+    }
+
+    simControls.init();
 
     window.blocklyControls = blocklyControls;
     window.jsControls = jsControls;
