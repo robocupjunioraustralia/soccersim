@@ -42,7 +42,7 @@
         currentWorkspace = currentWorkspace || workspace;
         robot = robot || blocklyControls.selected;
         // Defaults to currently selected robot
-        let xml = localStorage.getItem('soccersim-js-' + robot);
+        let xml = localStorage.getItem('soccersim-' + robot);
         if (!xml) {
             xml = '<xml xmlns="https://developers.google.com/blockly/xml"/>';
         }
