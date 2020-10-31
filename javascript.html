@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <title>SoccerSim</title>
 
-    <script src="matter-js/build/matter.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.js" integrity="sha512-WWC1A/JchDFZ2ZGaNyMC7CmPFXGLI/6Ih7WN6YG0DX1NGMkW5lqCVFxCmEx3e56Z7iqdQGpO0f+m2t9CJhdb2Q==" crossorigin="anonymous"></script>    
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
@@ -45,13 +44,13 @@
             <div id="editor-buttons">
                 <div id="robot-select-buttons" class="buttons has-addons">
                     <div class="button is-info is-selected" id="switch-robot-1" 
-                        onclick="blocklyControls.switchProgram('robot1')">Robot 1 Program</div>
+                        onclick="jsControls.switchProgram('robot1')">Robot 1 Program</div>
                     <div class="button" id="switch-robot-2"
-                        onclick="blocklyControls.switchProgram('robot2')">Robot 2 Program</div>
+                        onclick="jsControls.switchProgram('robot2')">Robot 2 Program</div>
                 </div>
                 <div id="save-buttons" class="buttons">
-                    <div class="button" onclick="blocklyControls.clearWorkspace()">Clear</div>
-                    <!-- <div class="button is-primary" onclick="blocklyControls.saveProgram()">Save</div> -->
+                    <div class="button" onclick="jsControls.clearWorkspace()">Clear</div>
+                    <!-- <div class="button is-primary" onclick="jsControls.saveProgram()">Save</div> -->
                     <div class="file is-primary" id="load-file">
                         <label class="file-label">
                             <input class="file-input" type="file" name="resume" id="uploaded-file">
@@ -98,13 +97,23 @@
     </div>
 
 </body>
-
-
-<script src="scripts/soccer.js"></script>
-<script src="js-interpreter/acorn_interpreter.js"></script>
+<script type="text/javascript">
+    window.config = {}; 
+    window.config.INTERFACE_TYPE = 'javascript';
+</script>
+<script type="text/javascript" src="lib/decomp.js"></script>
+<script type="text/javascript" src="lib/pathseg.js"></script>
+<script src="lib/matter.min.js"></script>
+<script src="scripts/robot.js"></script>
+<script src="scripts/unibot.js"></script>
+<script src="scripts/dualbot.js"></script>
+<script src="scripts/tribot.js"></script>
+<script src="scripts/soccersim.js"></script>
+<script src="lib/acorn_interpreter.js"></script>
 <script src="scripts/interpreter.js"></script>
-<script src="scripts/simcontrols.js"></script>  
+<script src="scripts/simcontrols.js"></script>
 <script src="scripts/javascript.js"></script>
+<script src="scripts/sim-setup.js"></script>
 <script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
 </html>
         
