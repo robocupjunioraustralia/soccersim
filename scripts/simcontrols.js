@@ -11,6 +11,11 @@
     jsControls.selected = 'robot1';
     jsControls.robots = ['robot1', 'robot2'];
 
+    // Define controls for modifying robots directly
+    let robotControls = {};
+    robotControls.robots = null;
+    robotControls.ball = null;
+
     /**
      * Saves the current workspace into localStorage
      * @param {String} robot Robot ID
@@ -217,7 +222,7 @@
      * Use the hidden workspace to load all programs and get code.
      */
     simControls.getCode = function() {
-        let robots = [window.One, window.Two];
+        let robots = robotControls.robots;
         let codes = [];
         
         // Show loading
@@ -248,7 +253,7 @@
     };
 
     simControls.getCodeJS = function() {
-        let robots = [window.One, window.Two];
+        let robots = robotControls.robots;
         let codes = [];
         
         // Show loading
@@ -305,6 +310,32 @@
     }
 
     simControls.init();
+
+    // Add references to robot objects to simcontrols
+    robotControls.setRobots = function(bots){
+        robotControls.robots = {
+            'robot1': bots[0],
+            'robot2': bots[1]
+        };
+    }
+
+    // Add a reference to ball object to simcontrols
+    robotControls.setBall = function(ball){
+        robotControls.ball = ball;
+    }
+
+    // Change the type of the robot, ie. dualbot -> tribot
+    robotControls.switchType = function(type){
+        robot = blocklyControls.selected;
+        robotObj = robotControls.robots[robot]
+        if (robotObj.type != type){
+            old = sim.removeBot(robotObj);
+            add = sim.addBot(type, old);
+            robotControls.robots[robot] = add;
+        }
+    }
+
+    window.robotControls = robotControls;
 
     window.blocklyControls = blocklyControls;
     window.jsControls = jsControls;

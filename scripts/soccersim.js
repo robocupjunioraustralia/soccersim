@@ -175,6 +175,24 @@
             return fieldObjects;
         }
 
+        // Removes a bot
+        removeBot(robot){
+            position = {x:robot.body.position.x, y:robot.body.position.y}
+            World.remove(this.world, robot.body);
+        }
+
+        // Adds a bot
+        addBot(robot, old){
+            let add = null;
+            if (robot === 'DualBot'){
+                add = new DualBot('blue', old.x, old.y, fieldWidth, fieldHeight);
+            } else if (robot === 'TriBot'){
+                add = new TriBot('blue', old.x, old.y, fieldWidth, fieldHeight);
+            }
+            World.add(this.world, add.body)
+            return add;
+        }
+
         /**
          * Allow this class to work with MatterTools.Demo
          */

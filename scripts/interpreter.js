@@ -110,9 +110,9 @@
      */
     intptr.generateInterpreters = function(robots, codes) {
         intptr.robotsRunning = robots.length;
-        intptr.robots = robots;
+        intptr.robots = Object.values(robots);
         for (let i = 0; i < robots.length; i++) {
-            let robotFuncs = new RobotFunctions(robots[i]);
+            let robotFuncs = new RobotFunctions(intptr.robots[i]);
             let interpreter = new Interpreter(codes[i], intptr.generateInitFunc(robotFuncs));
             intptr.interpreters.push(interpreter);
         }

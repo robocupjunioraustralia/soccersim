@@ -19,6 +19,7 @@
          */
         constructor(team, x, y, fieldWidth, fieldHeight) {
             super(team);
+            this.type = 'TriBot';
             this.createBot(team, x, y, 4, 12);
         }
 
