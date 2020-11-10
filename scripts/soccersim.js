@@ -175,19 +175,22 @@
             return fieldObjects;
         }
 
-        // Removes a bot
+        // Removes a bot and returns its original position
         removeBot(robot){
-            position = {x:robot.body.position.x, y:robot.body.position.y}
+            console.log('Robot.body properties are', robot.body)
+            let position = {x:robot.body.bodies[0].position.x, y:robot.body.bodies[0].position.y}
+            console.log('Returning original robot position of ', position)
             World.remove(this.world, robot.body);
+            return position;
         }
 
-        // Adds a bot
-        addBot(robot, old){
+        // Adds a bot to a specific position
+        addBot(robot, pos){
             let add = null;
             if (robot === 'DualBot'){
-                add = new DualBot('blue', old.x, old.y, fieldWidth, fieldHeight);
+                add = new DualBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
             } else if (robot === 'TriBot'){
-                add = new TriBot('blue', old.x, old.y, fieldWidth, fieldHeight);
+                add = new TriBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
             }
             World.add(this.world, add.body)
             return add;

@@ -313,6 +313,7 @@
 
     // Add references to robot objects to simcontrols
     robotControls.setRobots = function(bots){
+        console.log('robotControls.setRobots');
         robotControls.robots = {
             'robot1': bots[0],
             'robot2': bots[1]
@@ -321,11 +322,13 @@
 
     // Add a reference to ball object to simcontrols
     robotControls.setBall = function(ball){
+        console.log('robotControls.setBall');
         robotControls.ball = ball;
     }
 
     // Change the type of the robot, ie. dualbot -> tribot
     robotControls.switchType = function(type){
+        console.log('robotControls.switchType', type);
         robot = blocklyControls.selected;
         robotObj = robotControls.robots[robot]
         if (robotObj.type != type){
