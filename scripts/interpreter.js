@@ -105,12 +105,12 @@
 
     /**
      * Generate JS-Interpreter Interpreters
-     * @param {Robot} robots All robots to generate interpreters for
+     * @param {Array<Robot>} robots All robots to generate interpreters for
      * @param {Array<String>} codes Each code for each robot
      */
     intptr.generateInterpreters = function(robots, codes) {
         intptr.robotsRunning = robots.length;
-        intptr.robots = Object.values(robots);
+        intptr.robots = robots
         for (let i = 0; i < robots.length; i++) {
             let robotFuncs = new RobotFunctions(intptr.robots[i]);
             let interpreter = new Interpreter(codes[i], intptr.generateInitFunc(robotFuncs));
@@ -129,11 +129,16 @@
         });
     };
 
+    /**
+     * 
+     * @param {Object<Robots>} robots Dictionary holding robot objects with keys robot1, robot2, etc. 
+     * @param {*} codes JS code that robots will run
+     */
     intptr.startSim = function(robots, codes) {
         intptr.stopAll = false;
         intptr.robotsRunning = 0;
         intptr.interpreters = [];
-        let interpreters = intptr.generateInterpreters(robots, codes);
+        let interpreters = intptr.generateInterpreters(Object.values(robots), codes);
         interpreters.forEach((interpreter) => {
             function nextStep() {
                 var i = 0;

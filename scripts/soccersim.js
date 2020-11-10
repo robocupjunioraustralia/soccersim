@@ -177,9 +177,7 @@
 
         // Removes a bot and returns its original position
         removeBot(robot){
-            console.log('Robot.body properties are', robot.body)
-            let position = {x:robot.body.bodies[0].position.x, y:robot.body.bodies[0].position.y}
-            console.log('Returning original robot position of ', position)
+            let position = robot.adjustPos(robot.team, robot.body.bodies[0].position.x, robot.body.bodies[0].position.y, true)
             World.remove(this.world, robot.body);
             return position;
         }
