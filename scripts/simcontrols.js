@@ -222,7 +222,7 @@
      * Use the hidden workspace to load all programs and get code.
      */
     simControls.getCode = function() {
-        let robots = robotControls.robots;
+        let robots = Object.values(robotControls.robots);
         let codes = [];
         
         // Show loading
@@ -249,11 +249,11 @@
             }
         }
         runButton.classList.remove('is-loading');
-        intptr.startSim(robots, codes);
+        intptr.startSim(robots, codes, robotControls.ball);
     };
 
     simControls.getCodeJS = function() {
-        let robots = robotControls.robots;
+        let robots = Object.values(robotControls.robots);
         let codes = [];
         
         // Show loading
@@ -272,7 +272,7 @@
             codes.push(js);
         }
         runButton.classList.remove('is-loading');
-        intptr.startSim(robots, codes);
+        intptr.startSim(robots, codes, robotControls.ball);
     };
 
     simControls.stopSim = function() {
@@ -307,7 +307,7 @@
         else if (window.config && window.config.INTERFACE_TYPE === 'blocks') {
             document.getElementById("uploaded-file").addEventListener("change", blocklyControls.uploadFile, false);
         }
-    }
+    };
 
     simControls.init();
 
@@ -317,23 +317,23 @@
             'robot1': bots[0],
             'robot2': bots[1]
         };
-    }
+    };
 
     // Add a reference to ball object to simcontrols
     robotControls.setBall = function(ball){
         robotControls.ball = ball;
-    }
+    };
 
     // Change the type of the robot, ie. dualbot -> tribot
     robotControls.switchType = function(type){
         robot = blocklyControls.selected;
-        robotObj = robotControls.robots[robot]
+        robotObj = robotControls.robots[robot];
         if (robotObj.type != type){
             old = sim.removeBot(robotObj);
             add = sim.addBot(type, old);
             robotControls.robots[robot] = add;
         }
-    }
+    };
 
     window.robotControls = robotControls;
     window.blocklyControls = blocklyControls;
