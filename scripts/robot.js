@@ -38,17 +38,18 @@
         /*     ----     Methods that apply to all robots      ----      */
 
         // Turn given relative positions into absolute positions on the field
-        adjustPos(team, xPos, yPos){
+        // If reverse is true, turn absolute positions into relative positions
+        adjustPos(team, xPos, yPos, reverse = false){
             // Adjust x and y pos to be relative to team origin points
             if (team == 'yellow'){
                 xPos = -xPos + this.fieldWidth/2;
             } else {
-                xPos = xPos + this.fieldWidth/2;
+                xPos = (reverse === false) ? xPos + this.fieldWidth/2 : xPos - this.fieldWidth/2;
                 yPos = -yPos + this.fieldHeight;
             }
             return {x: xPos, y: yPos};
         }
-
+        
         // Check if the robot bearing has changed enough to require update
         checkChange(){
             let currAngle = this.getAngle();

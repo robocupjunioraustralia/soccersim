@@ -28,7 +28,6 @@
     <script src="pxt-blockly/blocks/variables_dynamic.js"></script>
     <script src="pxt-blockly/blocks/procedures.js"></script>
     <script src="pxt-blockly/blocks/pxt_blockly_functions.js"></script>
-    <script src="pxt-blockly/blocks/pxt_blockly_functions.js"></script>
     <script src="pxt-blockly/blocks/motors.js"></script>
     <script src="pxt-blockly/blocks/sensors.js"></script>
     
@@ -70,6 +69,33 @@
                     <div class="button" id="switch-robot-2"
                         onclick="blocklyControls.switchProgram('robot2')">Robot 2 Program</div>
                 </div>
+                <!-- Drop down menu for selecting types of robots -->
+                <div class="dropdown">
+                    <div class="dropdown-trigger">
+                        <button id="robot-type-button" class="button" aria-haspopup="true" aria-controls="dropdown-menu"
+                        onclick="robotControls.dropOnClick()"
+                        onblur="robotControls.dropOnBlur()">
+                            <!-- Drop down initial text -->
+                            <span>Robot Type</span>
+                            <!-- Drop down point down icon -->
+                            <span class="icon is-small">
+                                <i class="fas fa-angle-down" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                    <!-- Drop down contents -->
+                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content">
+                            <a onmousedown="robotControls.switchType('DualBot')" class="dropdown-item">
+                                DualBot
+                            </a>
+                            <a onmousedown="robotControls.switchType('TriBot')" class="dropdown-item">
+                                TriBot
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Robot code save/load buttons -->
                 <div id="save-buttons" class="buttons">
                     <div class="button" onclick="blocklyControls.clearWorkspace()">Clear</div>
                     <!-- <div class="button is-primary" onclick="blocklyControls.saveProgram()">Save</div> -->
@@ -304,7 +330,6 @@
 <script src="lib/matter.min.js"></script>
 <script src="scripts/blockly-editor.js"></script>
 <script src="scripts/robot.js"></script>
-<script src="scripts/unibot.js"></script>
 <script src="scripts/dualbot.js"></script>
 <script src="scripts/tribot.js"></script>
 <script src="scripts/soccersim.js"></script>

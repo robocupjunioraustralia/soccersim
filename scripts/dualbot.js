@@ -26,6 +26,7 @@
                 width: 5,
                 offset: 12
             };
+            this.type = 'DualBot';
             this.createBot(team, x, y, 40, 40, 5, 20);
         }
         // Create a square robot with wheels on either side

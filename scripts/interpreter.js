@@ -14,8 +14,9 @@
     ];
 
     class RobotFunctions {
-        constructor(robot) {
+        constructor(robot, ball) {
             this.robot = robot;
+            this.ball = ball;
             this.speeds = [0, 0, 0];
         }
         setMotorSpeed(motor, speed) {
@@ -70,10 +71,10 @@
             }
         }
         getBallAngle() {
-            return this.robot.getBallPosition(Ball).angle*180/Math.PI;
+            return this.robot.getBallPosition(this.ball).angle*180/Math.PI;
         }
         getBallDistance() {
-            return this.robot.getBallPosition(Ball).distance;
+            return this.robot.getBallPosition(this.ball).distance;
         }
         getCompassHeading() {
             return this.robot.getBearing()*180/Math.PI;
@@ -105,14 +106,14 @@
 
     /**
      * Generate JS-Interpreter Interpreters
-     * @param {Robot} robots All robots to generate interpreters for
+     * @param {Array<Robot>} robots All robots to generate interpreters for
      * @param {Array<String>} codes Each code for each robot
      */
-    intptr.generateInterpreters = function(robots, codes) {
+    intptr.generateInterpreters = function(robots, codes, ball) {
         intptr.robotsRunning = robots.length;
         intptr.robots = robots;
         for (let i = 0; i < robots.length; i++) {
-            let robotFuncs = new RobotFunctions(robots[i]);
+            let robotFuncs = new RobotFunctions(intptr.robots[i], ball);
             let interpreter = new Interpreter(codes[i], intptr.generateInitFunc(robotFuncs));
             intptr.interpreters.push(interpreter);
         }
@@ -129,11 +130,16 @@
         });
     };
 
-    intptr.startSim = function(robots, codes) {
+    /**
+     * 
+     * @param {Array<Robot>} array of Robots to start simulation
+     * @param {*} codes JS code that robots will run
+     */
+    intptr.startSim = function(robots, codes, ball) {
         intptr.stopAll = false;
         intptr.robotsRunning = 0;
         intptr.interpreters = [];
-        let interpreters = intptr.generateInterpreters(robots, codes);
+        let interpreters = intptr.generateInterpreters(robots, codes, ball);
         interpreters.forEach((interpreter) => {
             function nextStep() {
                 var i = 0;

@@ -113,9 +113,10 @@
             });
 
             // Perform updates to robot forces
+            let self = this;
             Events.on(this.engine, 'beforeUpdate', function (event) {
-                for (var i = 0; i < bots.length; i++){
-                    robots[i].updateForce();
+                for (var i = 0; i < self.robots.length; i++){
+                    self.robots[i].updateForce();
                 }
             });
         }
@@ -173,6 +174,29 @@
             
             let fieldObjects = [field, topPenalty, bottomPenalty, blueArea, yellowArea, markings, topGoalPost, bottomGoalPost, dotOne, dotTwo, dotThree];
             return fieldObjects;
+        }
+
+        // Removes a bot and returns its original position
+        removeBot(robot){
+            let position = robot.adjustPos(robot.team, robot.body.bodies[0].position.x, robot.body.bodies[0].position.y, true);
+            this.robots = this.robots.filter(function(bot) {
+                return bot != robot;
+            });
+            World.remove(this.world, robot.body);
+            return position;
+        }
+
+        // Adds a bot to a specific position
+        addBot(robot, pos){
+            let add = null;
+            if (robot === 'DualBot'){
+                add = new DualBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
+            } else if (robot === 'TriBot'){
+                add = new TriBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
+            }
+            this.robots.push(add);
+            World.add(this.world, add.body);
+            return add;
         }
 
         /**
