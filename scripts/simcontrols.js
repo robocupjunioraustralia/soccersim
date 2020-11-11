@@ -59,13 +59,12 @@
     jsControls.loadProgram = function (robot, currentEditor) {
         currentEditor = currentEditor;
         robot = robot || jsControls.selected;
-        console.log(robot);
         let js = localStorage.getItem('soccersim-js-' + robot);
         if (!js) {
             js = '';
         }
         codeMirrorEditor.setValue(js);
-    }
+    };
 
     /**
      * 
@@ -280,7 +279,7 @@
     simControls.stopSim = function() {
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
-        let typeButton = document.getElementById('robot-type-button')
+        let typeButton = document.getElementById('robot-type-button');
         stopButton.setAttribute('disabled', '');
         runButton.removeAttribute('disabled');
         typeButton.removeAttribute('disabled');
@@ -330,13 +329,24 @@
 
     // Change the type of the robot, ie. dualbot -> tribot
     robotControls.switchType = function(type){
-        robot = blocklyControls.selected;
-        robotObj = robotControls.robots[robot];
+        let robot = null;
+        if (window.config && window.config.INTERFACE_TYPE === 'blocks') {
+            robot = blocklyControls.selected;
+        }
+        else if (window.config && window.config.INTERFACE_TYPE === 'javascript') {
+            robot = jsControls.selected;
+        }
+        if (!robot) {
+            console.error('No selected robot or available interface');
+            return;
+        }
+
+        let robotObj = robotControls.robots[robot];
         if (robotObj.type != type){
             // Removes old bot and get its pos
-            old = sim.removeBot(robotObj);
+            let old = sim.removeBot(robotObj);
             // Add new bot and get obj, add to robotControls
-            add = sim.addBot(type, old);
+            let add = sim.addBot(type, old);
             robotControls.robots[robot] = add;
         }
     };
@@ -344,7 +354,7 @@
     // Toggles the dropdown menu for selecting robot type
     robotControls.dropOnClick = function(){
         document.querySelector('.dropdown').classList.toggle('is-active');
-    }
+    };
 
     // Closes dropdown menu when clicking away from it
     robotControls.dropOnBlur = function(){
@@ -352,7 +362,7 @@
         if (dropdown.classList.contains('is-active')){
             dropdown.classList.toggle('is-active');
         }
-    }
+    };
 
     window.robotControls = robotControls;
     window.blocklyControls = blocklyControls;
