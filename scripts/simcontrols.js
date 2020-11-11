@@ -335,6 +335,17 @@
         }
     };
 
+    robotControls.dropOnClick = function(){
+        document.querySelector('.dropdown').classList.toggle('is-active');
+    }
+
+    robotControls.dropOnBlur = function(){
+        let dropdown = document.querySelector('.dropdown');
+        if (dropdown.classList.contains('is-active')){
+            dropdown.classList.toggle('is-active');
+        }
+    }
+
     window.robotControls = robotControls;
     window.blocklyControls = blocklyControls;
     window.jsControls = jsControls;
