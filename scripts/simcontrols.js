@@ -229,8 +229,10 @@
         document.getElementById('notifications').innerHTML = '';
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
+        let typeButton = document.getElementById('robot-type-button')
         runButton.classList.add('is-loading');
         runButton.setAttribute('disabled', '');
+        typeButton.setAttribute('disabled', '');
         stopButton.removeAttribute('disabled');
 
         // Save program so we can load it easily
@@ -278,8 +280,10 @@
     simControls.stopSim = function() {
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
+        let typeButton = document.getElementById('robot-type-button')
         stopButton.setAttribute('disabled', '');
         runButton.removeAttribute('disabled');
+        typeButton.removeAttribute('disabled');
     };
 
     simControls.showError = function(message) {
@@ -329,16 +333,20 @@
         robot = blocklyControls.selected;
         robotObj = robotControls.robots[robot];
         if (robotObj.type != type){
+            // Removes old bot and get its pos
             old = sim.removeBot(robotObj);
+            // Add new bot and get obj, add to robotControls
             add = sim.addBot(type, old);
             robotControls.robots[robot] = add;
         }
     };
 
+    // Toggles the dropdown menu for selecting robot type
     robotControls.dropOnClick = function(){
         document.querySelector('.dropdown').classList.toggle('is-active');
     }
 
+    // Closes dropdown menu when clicking away from it
     robotControls.dropOnBlur = function(){
         let dropdown = document.querySelector('.dropdown');
         if (dropdown.classList.contains('is-active')){
