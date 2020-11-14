@@ -66,6 +66,7 @@
 
             // create runner
             this.runner = Runner.create();
+            this.runner.isFixed = true;
             Runner.run(this.runner, this.engine);
 
             // Field markings and objects array
