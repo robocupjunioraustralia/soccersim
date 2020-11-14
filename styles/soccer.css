@@ -101,3 +101,7 @@ line.blocklyFlyoutLine {
     font-weight: 900;
     fill: white;
 }
+
+#notification-modal {
+    z-index: 1000;
+}

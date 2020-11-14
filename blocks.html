@@ -45,20 +45,54 @@
         
         <div class="navbar-menu">
             <div class="navbar-end">
-                <a class="navbar-item" href="https://rcjnsw.github.io/soccersim-docs/">Docs</a>
-                <!-- <div class="navbar-item">
+                <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-primary">
-                            <strong>Sign up</strong>
+                        <a class="button is-success" onclick="openModal('notification-modal')">
+                            What's new
                         </a>
-                        <a class="button is-light">
-                            Log in
-                        </a>
+                        <a class="button is-dark" href="https://rcjnsw.github.io/soccersim-docs/" target="_blank">Docs</a>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </nav>
+
+    <div class="modal" id="notification-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">SoccerSim updates: what's new</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <div class="content">
+                    <article class="message is-danger">
+                        <div class="message-header">
+                            <p>Timing changes</p>
+                        </div>
+                        <div class="message-body">
+                            <p>We have made <strong>timing changes</strong> that may affect your code, especially if you are looping for a certain number of times. If you use <code>repeat __ times</code>, please <strong>divide that number by about 20</strong> - and test it out.</p>
+
+                            <p>These timing changes are necessary as we prepare for the competition setup. Talk to your mentor or <a href="https://github.com/rcjnsw/soccersim/issues">contact RoboCup Junior NSW</a> for more information.</p>
+                        </div>
+                    </article>
+                    <h2>New features</h2>
+                    <ul>
+                        <li><b>TriBots, three wheeled robots</b>, are now available! This will let you move around in all directions without rotating. This is suited for advanced competitors as it includes some trigonometry!</li>
+                        <li><b>Initial positions</b> can now be set. </li>
+                    </ul>
+                    <h2>Bug fixes</h2>
+                    <ul>
+                        <li>Timing changes have been implemented, to make sure the interations are consistent between browsers and computers.</li>
+                        <li>Programs now autosave just before running the simulation, and will automatically load when you close and open the window.</li>
+                    </ul>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button">Close</button>
+            </footer>
+        </div>
+    </div>
     
     <div class="columns">
         <div class="column is-three-fifths">
