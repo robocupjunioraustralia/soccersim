@@ -122,12 +122,6 @@
 
     intptr.stopSim = function(robots) {
         intptr.stopAll = true;
-        intptr.robots.forEach((robot) => {
-            setTimeout(() => {
-                robot.setMotorSpeed(0, 0);
-                robot.setMotorSpeed(1, 0);
-            }, 1);
-        });
     };
 
     /**
@@ -140,20 +134,44 @@
         intptr.robotsRunning = 0;
         intptr.interpreters = [];
         let interpreters = intptr.generateInterpreters(robots, codes, ball);
-        interpreters.forEach((interpreter) => {
-            function nextStep() {
-                var i = 0;
-                while (!intptr.stopAll && ++i < 1000 * (intptr.robotsRunning + 3)) {
-                    interpreter.step();
+        
+        // Keep track of timing, in order to keep the robots moving consistently
+        // regardless of computer specs
+        let prev = [];
+        let tickrate = 1000/60; // 60 fps for interpreting code
+        // Tick rate is divided between all robots
+
+        function nextStep(interpreter, r) {
+            prev[r] = performance.now();
+            let i = 0;
+            while (!intptr.stopAll && (prev[r] + tickrate / intptr.robotsRunning) > performance.now()) {
+                if (++i > 498) { // only perform 500 steps per tick
+                    continue;
                 }
-                if (interpreter.step() && !intptr.stopAll) {
-                    window.setTimeout(nextStep, 0);
-                } else {
-                    intptr.robotsRunning--;
-                }
+                interpreter.step();
             }
-            nextStep();
-        });
+            // console.log(i); // i must be less than 2000 for the competition - TODO
+            i = 0;
+            if (interpreter.step() && !intptr.stopAll) {
+                window.setTimeout(() => {
+                    nextStep(interpreter, r);
+                }, 0);
+            } else {
+                // Stop the robot if there are no more steps remaining or user has hit 'stop'.
+                robots[r].setMotorSpeed(0, 0);
+                robots[r].setMotorSpeed(1, 0);
+                if (robots[r].type === 'TriBot') {
+                    robots[r].setMotorSpeed(2, 0);
+                }
+                intptr.robotsRunning--;
+            }
+        }
+
+        for (let r in interpreters) {
+            let interpreter = interpreters[r];
+            prev[r] = performance.now(); // set the first tick of the robot
+            nextStep(interpreter, r);
+        }
     };
 
     window.intptr = intptr;
