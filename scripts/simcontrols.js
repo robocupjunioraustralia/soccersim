@@ -229,6 +229,11 @@
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
         let typeButton = document.getElementById('robot-type-button');
+
+        if (runButton.getAttribute('disabled') === '') {
+            return;
+        };
+
         runButton.classList.add('is-loading');
         runButton.setAttribute('disabled', '');
         typeButton.setAttribute('disabled', '');
@@ -261,6 +266,11 @@
         document.getElementById('notifications').innerHTML = '';
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
+
+        if (runButton.getAttribute('disabled') === '') {
+            return;
+        }
+
         runButton.classList.add('is-loading');
         runButton.setAttribute('disabled', '');
         stopButton.removeAttribute('disabled');
@@ -280,6 +290,11 @@
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
         let typeButton = document.getElementById('robot-type-button');
+
+        if (stopButton.getAttribute('disabled') === '') {
+            return;
+        }
+
         stopButton.setAttribute('disabled', '');
         runButton.removeAttribute('disabled');
         typeButton.removeAttribute('disabled');
