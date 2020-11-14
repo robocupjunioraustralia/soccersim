@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright 2020 RoboCupJunior Australia
+ * Copyright 2020 RoboCup Junior Australia
  */
 
 /**
