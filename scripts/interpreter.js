@@ -160,6 +160,9 @@
                 // Stop the robot if there are no more steps remaining or user has hit 'stop'.
                 robots[r].setMotorSpeed(0, 0);
                 robots[r].setMotorSpeed(1, 0);
+                if (robots[r].type === 'TriBot') {
+                    robots[r].setMotorSpeed(2, 0);
+                }
                 intptr.robotsRunning--;
             }
         }
