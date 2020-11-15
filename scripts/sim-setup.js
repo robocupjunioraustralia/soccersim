@@ -20,6 +20,8 @@ let robots = [blue1, blue2];
 robotControls.setRobots(robots);
 robotControls.setBall(ball);
 var sim = new SoccerSim(document.getElementById('matterjs'), robots, ball, fieldWidth, fieldHeight);
+blue1.setPos(-50, 125);
+blue2.setPos(50, 125);
 // Engine.run(sim.engine);
 // Render.run(sim.render);
 
