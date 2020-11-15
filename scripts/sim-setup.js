@@ -41,6 +41,11 @@ var $modals = getAll('.modal');
 var $modalButtons = getAll('.modal-button');
 var $modalCloses = getAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button');
 
+if (!localStorage.getItem('soccersim-shownchanges')) {
+    localStorage.setItem('soccersim-shownchanges', true);
+    openModal('notification-modal');
+}
+
 if ($modalButtons.length > 0) {
     $modalButtons.forEach(function ($el) {
         $el.addEventListener('click', function () {
