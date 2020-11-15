@@ -25,6 +25,11 @@ goog.provide('Blockly.JavaScript.procedures');
 
 goog.require('Blockly.JavaScript');
 
+Blockly.JavaScript['initial_position_set'] = function(block) {
+  var arg1 = block.getFieldValue('position');
+  var code = 'setInitialPosition(' + arg1 + ');\n';
+  return code;
+};
 
 Blockly.JavaScript['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
