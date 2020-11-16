@@ -2,6 +2,7 @@
     "use strict";
     // Matter-js libraries
     var Body = Matter.Body,
+        Composite = Matter.Composite,
         Vector = Matter.Vector;
 
     var degToRad = Math.PI / 180,
@@ -152,7 +153,25 @@
             let previous = this.stopMovement();
             // Adjust position coordinates to absolute
             let absPos = this.adjustPos(this.team, xPos, yPos);
+
+            // Set rotation to 0
+            Composite.rotate(this.body, -this.getBearing(), absPos);
+
+            // Set position to the desired point
             Body.setPosition(this.body.bodies[0], absPos);
+
+            // Set position of attatched objects
+            let motors = this.getMotors();
+            for (let m in motors) {
+                let motorPos = {
+                    x: absPos.x + this.motorOffsets[m].x,
+                    y: absPos.y + this.motorOffsets[m].y
+                };
+                if (this.team === 'blue') {
+                    motorPos = Vector.rotateAbout(motorPos, Math.PI, absPos);
+                }
+                Body.setPosition(motors[m], motorPos);
+            }
             
             // Return copy of previous motor speeds
             return previous;

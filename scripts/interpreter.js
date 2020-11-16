@@ -10,13 +10,41 @@
         'getMotorSpeed',
         'getBallAngle',
         'getBallDistance',
-        'getCompassHeading'
+        'getCompassHeading',
+        'setInitialPosition'
     ];
 
+    const defencePositions = [
+        'far-left',
+        'left',
+        'centre',
+        'right',
+        'far-right'
+    ];
+
+    const kickerPositions = [
+        ...defencePositions,
+        'forward',
+        'mid-forward'
+    ];
+
+    const positionMap = {
+        'far-left':    {x: -100, y: 125},
+        'left':        {x:  -50, y: 125},
+        'centre':      {x:    0, y: 125},
+        'right':       {x:   50, y: 125},
+        'far-right':   {x:  100, y: 125},
+        'forward':     {x:    0, y: 300},
+        'mid-forward': {x:    0, y: 250}
+    };
+
+    console.log(defencePositions, kickerPositions);
+
     class RobotFunctions {
-        constructor(robot, ball) {
+        constructor(robot, ball, id) {
             this.robot = robot;
             this.ball = ball;
+            this.id = id;
             this.speeds = [0, 0, 0];
         }
         setMotorSpeed(motor, speed) {
@@ -79,10 +107,53 @@
         getCompassHeading() {
             return this.robot.getBearing()*180/Math.PI;
         }
+        setInitialPosition(position) {}
+        setKickerPosition(position) {}
+    }
+
+    // DummyRobotFunctions is used to set the initial and kicker positions.
+    class DummyRobotFunctions extends RobotFunctions {
+        constructor(robot, ball, id) {
+            super(robot, ball, id);
+            if (this.id % 2 == 0) { // left robot
+                this.robot.setPos(positionMap.left.x, positionMap.left.y);
+            } else {
+                this.robot.setPos(positionMap.right.x, positionMap.right.y);
+            }
+        }
+        setMotorSpeed(motor, speed) {}
+        stopMotor(motor) {}
+        getMotorSpeed(motor) {}
+        getBallAngle() {
+            return 0;
+        }
+        getBallDistance() {
+            return 0;
+        }
+        getCompassHeading() {
+            return 0;
+        }
+        setInitialPosition(position) {
+            if (!defencePositions.includes(position) || position === 'default') {
+                if (this.id % 2 == 0) { // left robot
+                    this.robot.setPos(positionMap.left.x, positionMap.left.y);
+                } else {
+                    this.robot.setPos(positionMap.right.x, positionMap.right.y);
+                }
+            } else {
+                this.robot.setPos(positionMap[position].x, positionMap[position].y);
+            }
+        }
+        setKickerPosition(position) {
+            if (kickerPositions.contains(position)) {
+                this.kickerPosition = position;
+            }
+        }
     }
 
     let intptr = {
         interpreters: [],
+        startInterpreters: [],
         stopAll: false,
         robotsRunning: 0
     };
@@ -113,21 +184,18 @@
         intptr.robotsRunning = robots.length;
         intptr.robots = robots;
         for (let i = 0; i < robots.length; i++) {
-            let robotFuncs = new RobotFunctions(intptr.robots[i], ball);
+            let robotFuncs = new RobotFunctions(intptr.robots[i], ball, i);
+            let startFuncs = new DummyRobotFunctions(intptr.robots[i], ball, i);
             let interpreter = new Interpreter(codes[i], intptr.generateInitFunc(robotFuncs));
+            let startInterpreter = new Interpreter(codes[i], intptr.generateInitFunc(startFuncs));
             intptr.interpreters.push(interpreter);
+            intptr.startInterpreters.push(startInterpreter);
         }
         return intptr.interpreters;
     };
 
     intptr.stopSim = function(robots) {
         intptr.stopAll = true;
-        intptr.robots.forEach((robot) => {
-            setTimeout(() => {
-                robot.setMotorSpeed(0, 0);
-                robot.setMotorSpeed(1, 0);
-            }, 1);
-        });
     };
 
     /**
@@ -139,21 +207,55 @@
         intptr.stopAll = false;
         intptr.robotsRunning = 0;
         intptr.interpreters = [];
+        intptr.startInterpreters = [];
         let interpreters = intptr.generateInterpreters(robots, codes, ball);
-        interpreters.forEach((interpreter) => {
-            function nextStep() {
-                var i = 0;
-                while (!intptr.stopAll && ++i < 1000 * (intptr.robotsRunning + 3)) {
-                    interpreter.step();
-                }
-                if (interpreter.step() && !intptr.stopAll) {
-                    window.setTimeout(nextStep, 0);
-                } else {
-                    intptr.robotsRunning--;
-                }
+
+        // Set the starting positions for all robots
+        for (let interpreter of intptr.startInterpreters) {
+            let i = 0;
+            while (!intptr.stopAll && i < 1000) {
+                interpreter.step();
+                i++;
             }
-            nextStep();
-        });
+        }
+        
+        // Keep track of timing, in order to keep the robots moving consistently
+        // regardless of computer specs
+        let prev = [];
+        let tickrate = 1000/60; // 60 fps for interpreting code
+        // Tick rate is divided between all robots
+
+        function nextStep(interpreter, r) {
+            prev[r] = performance.now();
+            let i = 0;
+            while (!intptr.stopAll && (prev[r] + tickrate / intptr.robotsRunning) > performance.now()) {
+                if (++i > 498) { // only perform 500 steps per tick
+                    continue;
+                }
+                interpreter.step();
+            }
+            // console.log(i); // i must be less than 2000 for the competition - TODO
+            i = 0;
+            if (interpreter.step() && !intptr.stopAll) {
+                window.setTimeout(() => {
+                    nextStep(interpreter, r);
+                }, 0);
+            } else {
+                // Stop the robot if there are no more steps remaining or user has hit 'stop'.
+                robots[r].setMotorSpeed(0, 0);
+                robots[r].setMotorSpeed(1, 0);
+                if (robots[r].type === 'TriBot') {
+                    robots[r].setMotorSpeed(2, 0);
+                }
+                intptr.robotsRunning--;
+            }
+        }
+
+        for (let r in interpreters) {
+            let interpreter = interpreters[r];
+            prev[r] = performance.now(); // set the first tick of the robot
+            nextStep(interpreter, r);
+        }
     };
 
     window.intptr = intptr;

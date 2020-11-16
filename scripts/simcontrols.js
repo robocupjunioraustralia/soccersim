@@ -228,7 +228,12 @@
         document.getElementById('notifications').innerHTML = '';
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
-        let typeButton = document.getElementById('robot-type-button')
+        let typeButton = document.getElementById('robot-type-button');
+
+        if (runButton.getAttribute('disabled') === '') {
+            return;
+        };
+
         runButton.classList.add('is-loading');
         runButton.setAttribute('disabled', '');
         typeButton.setAttribute('disabled', '');
@@ -261,6 +266,11 @@
         document.getElementById('notifications').innerHTML = '';
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
+
+        if (runButton.getAttribute('disabled') === '') {
+            return;
+        }
+
         runButton.classList.add('is-loading');
         runButton.setAttribute('disabled', '');
         stopButton.removeAttribute('disabled');
@@ -280,6 +290,11 @@
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
         let typeButton = document.getElementById('robot-type-button');
+
+        if (stopButton.getAttribute('disabled') === '') {
+            return;
+        }
+
         stopButton.setAttribute('disabled', '');
         runButton.removeAttribute('disabled');
         typeButton.removeAttribute('disabled');
@@ -306,13 +321,13 @@
         // Add event listener to the appropriate interface only
         if (window.config && window.config.INTERFACE_TYPE === 'javascript') {
             document.getElementById("uploaded-file").addEventListener("change", jsControls.uploadFile, false);
+            jsControls.loadProgram();
         }
         else if (window.config && window.config.INTERFACE_TYPE === 'blocks') {
             document.getElementById("uploaded-file").addEventListener("change", blocklyControls.uploadFile, false);
+            blocklyControls.loadProgram();
         }
     };
-
-    simControls.init();
 
     // Add references to robot objects to simcontrols
     robotControls.setRobots = function(bots){
@@ -368,4 +383,8 @@
     window.blocklyControls = blocklyControls;
     window.jsControls = jsControls;
     window.simControls = simControls;
+
+    window.addEventListener("load", function() {
+        simControls.init();
+    });
 })();

@@ -32,6 +32,33 @@ goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.Mutator');
 goog.require('Blockly.Warning');
 
+var OPTIONS_POSITIONS = [
+  [ "far left", "'far-left'" ],
+  [ "left", "'left'" ],
+  [ "centre", "'centre'" ],
+  [ "right", "'right'" ],
+  [ "far right", "'far-right'" ]
+];
+
+Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
+  {
+    "type": "initial_position_set",
+    "message0": "Set the starting position to %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "position",
+        "options": OPTIONS_POSITIONS
+      }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 190,
+    "tooltip": "Sets the starting position of your robot",
+    "helpUrl": ""
+  }
+]);  // END JSON EXTRACT (Do not delete this comment.)
 
 Blockly.Blocks['procedures_defnoreturn'] = {
   /**
