@@ -280,6 +280,9 @@
         
         for (let robot of jsControls.robots) {
             let js = localStorage.getItem('soccersim-js-' + robot);
+            if (!js) {
+                js = '';
+            }
             codes.push(js);
         }
         runButton.classList.remove('is-loading');
