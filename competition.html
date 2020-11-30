@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>SoccerSim</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="styles/soccer.css" />
+</head>
+
+<body>
+    <section class="hero is-bold is-light is-fullheight">
+        <div class="hero-body columns mx-6">
+            <div class="column has-text-centered">Modal will now appear :O</div>
+            <button class="button is-link is-large modal-button column is-one-third" data-target="matchSetup-modal"
+                aria-haspopup="true">Button</button>
+        </div>
+        <div class="hero-foot has-text-centered">
+            <p class="pt-3 pb-6">Copyright &copy; 2020 RoboCup Junior NSW &bull; <a
+                    href="https://github.com/rcjnsw">GitHub</a></p>
+        </div>
+        <div class="modal" id="matchSetup-modal">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Match Setup</p>
+                    <button class="delete" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="content">
+                        <button class="button mb-4 has-background-white-ter">Coin Flip</button>
+                        <div class="columns">
+                            <div class="column">
+                                <h2 class="has-text-centered has-background-info has-text-white py-3">Blue Team</h2>
+                                <div class="has-background-light px-3 py-3">
+                                    <!-- Robot 1 -->
+                                    Robot 1<br>
+                                    <button class="button is-small">Load File</button><br>
+
+                                    <!-- Drop down menu for selecting types of robots -->
+                                    <div class="dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button id="robot-type-button" class="button is-small" aria-haspopup="true"
+                                                aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
+                                                onblur="robotControls.dropOnBlur()">
+                                                <!-- Drop down initial text -->
+                                                <span>Robot Type</span>
+                                                <!-- Drop down point down icon -->
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <!-- Drop down contents -->
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a onmousedown="robotControls.switchType('DualBot')"
+                                                    class="dropdown-item">
+                                                    DualBot
+                                                </a>
+                                                <a onmousedown="robotControls.switchType('TriBot')"
+                                                    class="dropdown-item">
+                                                    TriBot
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <!-- Robot 2 -->
+                                    Robot 2<br>
+                                    <button class="button is-small">Load File</button><br>
+
+                                    <!-- Drop down menu for selecting types of robots -->
+                                    <div class="dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button id="robot-type-button" class="button is-small" aria-haspopup="true"
+                                                aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
+                                                onblur="robotControls.dropOnBlur()">
+                                                <!-- Drop down initial text -->
+                                                <span>Robot Type</span>
+                                                <!-- Drop down point down icon -->
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <!-- Drop down contents -->
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a onmousedown="robotControls.switchType('DualBot')"
+                                                    class="dropdown-item">
+                                                    DualBot
+                                                </a>
+                                                <a onmousedown="robotControls.switchType('TriBot')"
+                                                    class="dropdown-item">
+                                                    TriBot
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <br>
+                                    <!-- General -->
+                                    General<br>
+
+                                    <!-- Drop down menu for selecting kickoff robot -->
+                                    <div class="dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button id="robot-type-button" class="button is-small" aria-haspopup="true"
+                                                aria-controls="dropdown-menu" onclick="function doSomething(){}"
+                                                onblur="robotControls.dropOnBlur()">
+                                                <!-- Drop down initial text -->
+                                                <span>Kickoff Robot</span>
+                                                <!-- Drop down point down icon -->
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <!-- Drop down contents -->
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a onmousedown="robotControls.switchType('DualBot')"
+                                                    class="dropdown-item">
+                                                    DualBot
+                                                </a>
+                                                <a onmousedown="robotControls.switchType('TriBot')"
+                                                    class="dropdown-item">
+                                                    TriBot
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button class="button is-small">Set as kickoff team</button>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <h2 class="has-text-centered has-background-warning has-text-dark py-3">Yellow Team</h2>
+                                <div class="has-background-light px-3 py-3">
+                                    <!-- Robot 1 -->
+                                    Robot 1<br>
+                                    <button class="button is-small">Load File</button><br>
+
+                                    <!-- Drop down menu for selecting types of robots -->
+                                    <div class="dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button id="robot-type-button" class="button is-small" aria-haspopup="true"
+                                                aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
+                                                onblur="robotControls.dropOnBlur()">
+                                                <!-- Drop down initial text -->
+                                                <span>Robot Type</span>
+                                                <!-- Drop down point down icon -->
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <!-- Drop down contents -->
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a onmousedown="robotControls.switchType('DualBot')"
+                                                    class="dropdown-item">
+                                                    DualBot
+                                                </a>
+                                                <a onmousedown="robotControls.switchType('TriBot')"
+                                                    class="dropdown-item">
+                                                    TriBot
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <!-- Robot 2 -->
+                                    Robot 2<br>
+                                    <button class="button is-small">Load File</button><br>
+
+                                    <!-- Drop down menu for selecting types of robots -->
+                                    <div class="dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button id="robot-type-button" class="button is-small" aria-haspopup="true"
+                                                aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
+                                                onblur="robotControls.dropOnBlur()">
+                                                <!-- Drop down initial text -->
+                                                <span>Robot Type</span>
+                                                <!-- Drop down point down icon -->
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <!-- Drop down contents -->
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a onmousedown="robotControls.switchType('DualBot')"
+                                                    class="dropdown-item">
+                                                    DualBot
+                                                </a>
+                                                <a onmousedown="robotControls.switchType('TriBot')"
+                                                    class="dropdown-item">
+                                                    TriBot
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <br>
+                                    <!-- General -->
+                                    General<br>
+
+                                    <!-- Drop down menu for selecting kickoff robot -->
+                                    <div class="dropdown">
+                                        <div class="dropdown-trigger">
+                                            <button id="robot-type-button" class="button is-small" aria-haspopup="true"
+                                                aria-controls="dropdown-menu" onclick="function doSomething(){}"
+                                                onblur="robotControls.dropOnBlur()">
+                                                <!-- Drop down initial text -->
+                                                <span>Kickoff Robot</span>
+                                                <!-- Drop down point down icon -->
+                                                <span class="icon is-small">
+                                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                                </span>
+                                            </button>
+                                        </div>
+                                        <!-- Drop down contents -->
+                                        <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                            <div class="dropdown-content">
+                                                <a onmousedown="robotControls.switchType('DualBot')"
+                                                    class="dropdown-item">
+                                                    DualBot
+                                                </a>
+                                                <a onmousedown="robotControls.switchType('TriBot')"
+                                                    class="dropdown-item">
+                                                    TriBot
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <button class="button is-small">Set as kickoff team</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button">Close</button>
+                </footer>
+            </div>
+    </section>
+    <script src="scripts/modal.js"></script>
+</body>
+
+</html>
