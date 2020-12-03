@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>SoccerSim</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
+    <link rel="stylesheet" href="styles/competition.css" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+</head>
+<body id="soccersim">
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html" alt="RCJA SoccerSim">
+                <img src="assets/soccersim-logo-dark.svg" />
+            </a>
+        </div>
+    </nav>
+    <div id="level" class="level">
+        <div class="level-left">
+            <div id="blue-team" class="level-item">
+                Blue team
+            </div>
+        </div>
+        <div id="timer" class="level-item">
+            03:25
+        </div>
+        <div class="level-right">
+            <div id="yellow-team" class="level-item">
+                Yellow team
+            </div>
+        </div>
+    </div>
+    <div class="columns is-centered">
+        <div id="blue-score" class="column is-one-fifth has-text-centered scores">
+            1
+        </div>
+        <div class="column matterjs-column">
+            <div id="matterjs"></div>
+            <div id="notifications"></div>
+            <div id="sim-run-buttons" class="buttons field is-grouped">
+                <button class="button is-dark" disabled id="pause-round" onclick="">
+                    <span class="icon is-small">
+                        <i class="fas fa-pause"></i>
+                    </span>
+                    <span>Pause round</span>
+                </button>
+                <button class="button is-success" id="start-round" onclick="simControls.getCodeJS()">
+                    <span class="icon is-small">
+                        <i class="fas fa-play"></i>
+                    </span>
+                    <span>Start round</span>
+                </button>
+                <button class="button is-danger" disabled id="stop-round" onclick="intptr.stopSim();simControls.stopSim()">
+                    <span class="icon is-small">
+                        <i class="fas fa-stop"></i>
+                    </span>
+                    <span>Stop round</span>
+                </button>
+                <button class="button is-light" id="match-setup" onclick="openModal('match-setup-modal')">
+                    <span class="icon is-small">
+                        <i class="fas fa-cog"></i>
+                    </span>
+                    <span>Match setup</span>
+                </button>
+                <button class="button is-light" id="score-setup" onclick="openModal('score-setup-modal')">
+                    <span class="icon is-small">
+                        <i class="fas fa-tools"></i>
+                    </span>
+                    <span>Score setup</span>
+                </button>
+            </div>
+        </div>
+        <div id="yellow-score" class="column is-one-fifth has-text-centered scores">
+            3
+        </div>
+    </div>
+    <div id="match-setup-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Match setup</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+                <button class="button is-light">
+                    Coin flip
+                </button>
+                <div class="columns">
+                    <div class="column">
+                        Blue
+                    </div>
+                    <div class="column">
+                        Yellow
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+    <div id="score-setup-modal" class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Score setup</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+                <div class="columns">
+                    <div class="column">
+                        <div class="has-background-primary">
+                            Blue
+                        </div>
+                        <div class="has-text-black">
+                            Current score: 1
+                            <div class="buttons field is-grouped">
+                                <button class="button is-light" id="yellow-plus" onclick="" aria-label="Increment score">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                </button>
+                                <button class="button is-light" id="yellow-minus" onclick="" aria-label="Decrement score">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-minus"></i>
+                                    </span>
+                                </button>
+                                <button class="button is-light" id="yellow" onclick="">
+                                    <span>Reset</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="has-background-warning">
+                            Yellow
+                        </div>
+                        <div class="has-text-black">
+                            Current score: 3
+                            <div class="buttons field is-grouped">
+                                <button class="button is-light" id="yellow-plus" onclick="" aria-label="Increment score">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                </button>
+                                <button class="button is-light" id="yellow-minus" onclick="" aria-label="Decrement score">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-minus"></i>
+                                    </span>
+                                </button>
+                                <button class="button is-light" id="yellow" onclick="">
+                                    <span>Reset</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="lib/decomp.js"></script>
+<script type="text/javascript" src="lib/pathseg.js"></script>
+<script src="lib/matter.min.js"></script>
+<script src="scripts/robot.js"></script>
+<script src="scripts/dualbot.js"></script>
+<script src="scripts/tribot.js"></script>
+<script src="scripts/soccersim.js"></script>
+<script src="lib/acorn_interpreter.js"></script>
+<script src="scripts/interpreter.js"></script>
+<script src="scripts/simcontrols.js"></script>
+<script src="scripts/sim-setup.js"></script>
+<script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
+</html>
+        
