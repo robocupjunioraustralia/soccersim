@@ -42,3 +42,12 @@ html {
 #soccersim #timer {
   font-size: 3em;
 }
+
+#soccersim .modal-button-small {
+  border-radius: 4px;
+}
+
+#soccersim .file-name {
+  background-color: #ffffff;
+  color: #363636;
+}

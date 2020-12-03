@@ -369,18 +369,18 @@
         }
     };
 
-    // Toggles the dropdown menu for selecting robot type
-    robotControls.dropOnClick = function(index){
-        document.getElementsByClassName('dropdown')[index].classList.toggle('is-active');
-    };
+    // // Toggles the dropdown menu for selecting robot type
+    // robotControls.dropOnClick = function(index){
+    //     document.getElementsByClassName('dropdown')[index].classList.toggle('is-active');
+    // };
 
-    // Closes dropdown menu when clicking away from it
-    robotControls.dropOnBlur = function(index){
-        let dropdown = document.getElementsByClassName('dropdown')[index];
-        if (dropdown.classList.contains('is-active')){
-            dropdown.classList.toggle('is-active');
-        }
-    };
+    // // Closes dropdown menu when clicking away from it
+    // robotControls.dropOnBlur = function(index){
+    //     let dropdown = document.getElementsByClassName('dropdown')[index];
+    //     if (dropdown.classList.contains('is-active')){
+    //         dropdown.classList.toggle('is-active');
+    //     }
+    // };
 
     window.robotControls = robotControls;
     window.blocklyControls = blocklyControls;

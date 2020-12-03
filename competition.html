@@ -65,11 +65,11 @@
                     </span>
                     <span>Match setup</span>
                 </button>
-                <button class="button is-light" id="score-setup" onclick="openModal('score-setup-modal')">
+                <button class="button is-light" id="score-setup" onclick="openModal('scoring-setup-modal')">
                     <span class="icon is-small">
                         <i class="fas fa-tools"></i>
                     </span>
-                    <span>Score setup</span>
+                    <span>Scoring setup</span>
                 </button>
             </div>
         </div>
@@ -91,206 +91,138 @@
                         <div class="has-text-centered has-background-primary has-text-white py-3 mb-3">Blue Team</div>
                         <div class="has-background-light has-text-black px-3 py-3">
                             <!-- Robot 1 -->
-                            <div class="mb-1">Robot 1</div>
-                            <button class="button is-small">Load File</button>
+                            <div class="my-1">Robot 1</div>
+                            <div class="file has-name is-small mb-1 mr-1">
+                                <label class="file-label">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="robot1">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                        </span>
+                                        <span class="file-label">
+                                            Load File
+                                        </span>
+                                    </span>
+                                    <span class="file-name">No File Uploaded</span>
+                                </label>
+                            </div>
 
                             <!-- Drop down menu for selecting types of robots -->
-                            <div class="dropdown">
-                                <div class="dropdown-trigger">
-                                    <button id="blue-robot1-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="blue-robot1-dropdown-menu" onclick="robotControls.dropOnClick(0)"
-                                        onblur="robotControls.dropOnBlur(0)">
-                                        <!-- Drop down initial text -->
-                                        <span>Robot Type</span>
-                                        <!-- Drop down point down icon -->
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="blue-robot1-dropdown-menu" role="menu">
-                                    <div class="dropdown-content">
-                                        <a onmousedown="robotControls.switchType('DualBot')"
-                                            class="dropdown-item">
-                                            DualBot
-                                        </a>
-                                        <a onmousedown="robotControls.switchType('TriBot')"
-                                            class="dropdown-item">
-                                            TriBot
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="blue-robot1-type" class="select is-small">
+                                <select>
+                                    <option selected disabled>Robot Type</option>
+                                    <option value="DualBot">DualBot</option>
+                                    <option value="TriBot">TriBot</option>
+                                </select>
                             </div>
+
                             <!-- Robot 2 -->
                             <div class="my-1">Robot 2</div>
-                            <button class="button is-small">Load File</button>
+                            <div class="file has-name is-small mb-1 mr-1">
+                                <label class="file-label">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="robot2">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                        </span>
+                                        <span class="file-label">
+                                            Load File
+                                        </span>
+                                    </span>
+                                    <span class="file-name">No File Uploaded</span>
+                                </label>
+                            </div>
 
                             <!-- Drop down menu for selecting types of robots -->
-                            <div class="dropdown">
-                                <div class="dropdown-trigger">
-                                    <button id="blue-robot2-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="blue-robot2-dropdown-menu" onclick="robotControls.dropOnClick(1)"
-                                        onblur="robotControls.dropOnBlur(1)">
-                                        <!-- Drop down initial text -->
-                                        <span>Robot Type</span>
-                                        <!-- Drop down point down icon -->
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="blue-robot2-dropdown-menu" role="menu">
-                                    <div class="dropdown-content">
-                                        <a onmousedown="robotControls.switchType('DualBot')"
-                                            class="dropdown-item">
-                                            DualBot
-                                        </a>
-                                        <a onmousedown="robotControls.switchType('TriBot')"
-                                            class="dropdown-item">
-                                            TriBot
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="blue-robot2-type" class="select is-small">
+                                <select>
+                                    <option selected disabled>Robot Type</option>
+                                    <option value="DualBot">DualBot</option>
+                                    <option value="TriBot">TriBot</option>
+                                </select>
                             </div>
                             
                             <!-- General -->
                             <div class="my-1">General</div>
 
                             <!-- Drop down menu for selecting kickoff robot -->
-                            <div class="dropdown is-up">
-                                <div class="dropdown-trigger">
-                                    <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick(2)"
-                                        onblur="robotControls.dropOnBlur(2)">
-                                        <!-- Drop down initial text -->
-                                        <span>Kickoff Robot</span>
-                                        <!-- Drop down point down icon -->
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                    <div class="dropdown-content">
-                                        <a onmousedown=""
-                                            class="dropdown-item">
-                                            Robot 1
-                                        </a>
-                                        <a onmousedown=""
-                                            class="dropdown-item">
-                                            Robot 2
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="blue-kickoff-robot" class="select is-small">
+                                <select>
+                                    <option selected disabled>Kickoff Robot</option>
+                                    <option value="Robot 1">Robot 1</option>
+                                    <option value="Robot 2">Robot 2</option>
+                                </select>
                             </div>
-                            <button class="button is-small">Set as kickoff team</button>
+                            <button class="button is-small modal-button-small">Set as kickoff team</button>
                         </div>
                     </div>
                     <div class="column">
                         <div class="has-text-centered has-background-warning has-text-black py-3 mb-3">Yellow Team</div>
                         <div class="has-background-light has-text-black px-3 py-3">
                             <!-- Robot 1 -->
-                            <div class="mb-1">Robot 1</div>
-                            <button class="button is-small">Load File</button>
+                            <div class="my-1">Robot 1</div>
+                            <div class="file has-name is-small mb-1 mr-1">
+                                <label class="file-label">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="robot1">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                        </span>
+                                        <span class="file-label">
+                                            Load File
+                                        </span>
+                                    </span>
+                                    <span class="file-name">No File Uploaded</span>
+                                </label>
+                            </div>
 
                             <!-- Drop down menu for selecting types of robots -->
-                            <div class="dropdown">
-                                <div class="dropdown-trigger">
-                                    <button id="yellow-robot1-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="yellow-robot1-dropdown-menu" onclick="robotControls.dropOnClick(3)"
-                                        onblur="robotControls.dropOnBlur(3)">
-                                        <!-- Drop down initial text -->
-                                        <span>Robot Type</span>
-                                        <!-- Drop down point down icon -->
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="yellow-robot1-dropdown-menu" role="menu">
-                                    <div class="dropdown-content">
-                                        <a onmousedown="robotControls.switchType('DualBot')"
-                                            class="dropdown-item">
-                                            DualBot
-                                        </a>
-                                        <a onmousedown="robotControls.switchType('TriBot')"
-                                            class="dropdown-item">
-                                            TriBot
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="yellow-robot1-type" class="select is-small">
+                                <select>
+                                    <option selected disabled>Robot Type</option>
+                                    <option value="DualBot">DualBot</option>
+                                    <option value="TriBot">TriBot</option>
+                                </select>
                             </div>
 
                             <!-- Robot 2 -->
                             <div class="my-1">Robot 2</div>
-                            <button class="button is-small">Load File</button>
+                            <div class="file has-name is-small mb-1 mr-1">
+                                <label class="file-label">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="robot2">
+                                    <span class="file-cta">
+                                        <span class="file-icon">
+                                        <i class="fas fa-upload"></i>
+                                        </span>
+                                        <span class="file-label">
+                                            Load File
+                                        </span>
+                                    </span>
+                                    <span class="file-name">No File Uploaded</span>
+                                </label>
+                            </div>
 
                             <!-- Drop down menu for selecting types of robots -->
-                            <div class="dropdown">
-                                <div class="dropdown-trigger">
-                                    <button id="yellow-robot2-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick(4)"
-                                        onblur="robotControls.dropOnBlur(4)">
-                                        <!-- Drop down initial text -->
-                                        <span>Robot Type</span>
-                                        <!-- Drop down point down icon -->
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="yellow-robot2-dropdown-menu" role="menu">
-                                    <div class="dropdown-content">
-                                        <a onmousedown="robotControls.switchType('DualBot')"
-                                            class="dropdown-item">
-                                            DualBot
-                                        </a>
-                                        <a onmousedown="robotControls.switchType('TriBot')"
-                                            class="dropdown-item">
-                                            TriBot
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="yellow-robot2-type" class="select is-small">
+                                <select>
+                                    <option selected disabled>Robot Type</option>
+                                    <option value="DualBot">DualBot</option>
+                                    <option value="TriBot">TriBot</option>
+                                </select>
                             </div>
-                            
                             
                             <!-- General -->
                             <div class="my-1">General</div>
 
                             <!-- Drop down menu for selecting kickoff robot -->
-                            <div class="dropdown is-up">
-                                <div class="dropdown-trigger">
-                                    <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick(5)"
-                                        onblur="robotControls.dropOnBlur(5)">
-                                        <!-- Drop down initial text -->
-                                        <span>Kickoff Robot</span>
-                                        <!-- Drop down point down icon -->
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                                <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                    <div class="dropdown-content">
-                                        <a onmousedown=""
-                                            class="dropdown-item">
-                                            Robot 1
-                                        </a>
-                                        <a onmousedown=""
-                                            class="dropdown-item">
-                                            Robot 2
-                                        </a>
-                                    </div>
-                                </div>
+                            <div id="yellow-kickoff-robot" class="select is-small">
+                                <select>
+                                    <option selected disabled>Kickoff Robot</option>
+                                    <option value="Robot 1">Robot 1</option>
+                                    <option value="Robot 2">Robot 2</option>
+                                </select>
                             </div>
-                            <button class="button is-small">Set as kickoff team</button>
+                            <button class="button is-small modal-button-small">Set as kickoff team</button>
                         </div>
                     </div>
                 </div>
@@ -300,32 +232,31 @@
             </footer>
         </div>
     </div>
-    <div id="score-setup-modal" class="modal">
+    <div id="scoring-setup-modal" class="modal">
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Score Setup</p>
+                <p class="modal-card-title">Scoring Setup</p>
                 <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
-                <!-- Content ... -->
                 <div class="columns">
                     <div class="column">
                         <div class="has-text-centered has-background-primary has-text-white py-3 mb-3">Blue Team</div>
                         <div class="has-text-black has-background-light px-3 py-3">
                             <div class="mb-1">Current score: 1</div>
                             <div class="buttons field is-grouped">
-                                <button class="button" id="yellow-plus" onclick="" aria-label="Increment score">
+                                <button class="button is-small modal-button-small" id="blue-plus" onclick="" aria-label="Increment score">
                                     <span class="icon is-small">
                                         <i class="fas fa-plus"></i>
                                     </span>
                                 </button>
-                                <button class="button" id="yellow-minus" onclick="" aria-label="Decrement score">
+                                <button class="button is-small modal-button-small" id="blue-minus" onclick="" aria-label="Decrement score">
                                     <span class="icon is-small">
                                         <i class="fas fa-minus"></i>
                                     </span>
                                 </button>
-                                <button class="button" id="yellow" onclick="">
+                                <button class="button is-small modal-button-small" id="blue-reset" onclick="">
                                     <span>Reset</span>
                                 </button>
                             </div>
@@ -336,17 +267,17 @@
                         <div class="has-text-black has-background-light px-3 py-3">
                             <div class="mb-1">Current score: 3</div>
                             <div class="buttons field is-grouped">
-                                <button class="button " id="yellow-plus" onclick="" aria-label="Increment score">
+                                <button class="button is-small modal-button-small" id="yellow-plus" onclick="" aria-label="Increment score">
                                     <span class="icon is-small">
                                         <i class="fas fa-plus"></i>
                                     </span>
                                 </button>
-                                <button class="button " id="yellow-minus" onclick="" aria-label="Decrement score">
+                                <button class="button is-small modal-button-small" id="yellow-minus" onclick="" aria-label="Decrement score">
                                     <span class="icon is-small">
                                         <i class="fas fa-minus"></i>
                                     </span>
                                 </button>
-                                <button class="button " id="yellow" onclick="">
+                                <button class="button is-small modal-button-small" id="yellow-reset" onclick="">
                                     <span>Reset</span>
                                 </button>
                             </div>
