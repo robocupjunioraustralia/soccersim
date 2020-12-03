@@ -61,7 +61,7 @@
                 </button>
                 <button class="button is-light" id="match-setup" onclick="openModal('match-setup-modal')">
                     <span class="icon is-small">
-                        <i class="fas fa-cog"></i>
+                        <i class="fas fa-cogs"></i>
                     </span>
                     <span>Match setup</span>
                 </button>
@@ -97,9 +97,9 @@
                             <!-- Drop down menu for selecting types of robots -->
                             <div class="dropdown">
                                 <div class="dropdown-trigger">
-                                    <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
-                                        onblur="robotControls.dropOnBlur()">
+                                    <button id="blue-robot1-type-button" class="button is-small" aria-haspopup="true"
+                                        aria-controls="blue-robot1-dropdown-menu" onclick="robotControls.dropOnClick(0)"
+                                        onblur="robotControls.dropOnBlur(0)">
                                         <!-- Drop down initial text -->
                                         <span>Robot Type</span>
                                         <!-- Drop down point down icon -->
@@ -109,7 +109,7 @@
                                     </button>
                                 </div>
                                 <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-menu" id="blue-robot1-dropdown-menu" role="menu">
                                     <div class="dropdown-content">
                                         <a onmousedown="robotControls.switchType('DualBot')"
                                             class="dropdown-item">
@@ -129,9 +129,9 @@
                             <!-- Drop down menu for selecting types of robots -->
                             <div class="dropdown">
                                 <div class="dropdown-trigger">
-                                    <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
-                                        onblur="robotControls.dropOnBlur()">
+                                    <button id="blue-robot2-type-button" class="button is-small" aria-haspopup="true"
+                                        aria-controls="blue-robot2-dropdown-menu" onclick="robotControls.dropOnClick(1)"
+                                        onblur="robotControls.dropOnBlur(1)">
                                         <!-- Drop down initial text -->
                                         <span>Robot Type</span>
                                         <!-- Drop down point down icon -->
@@ -141,7 +141,7 @@
                                     </button>
                                 </div>
                                 <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-menu" id="blue-robot2-dropdown-menu" role="menu">
                                     <div class="dropdown-content">
                                         <a onmousedown="robotControls.switchType('DualBot')"
                                             class="dropdown-item">
@@ -159,11 +159,11 @@
                             <div class="my-1">General</div>
 
                             <!-- Drop down menu for selecting kickoff robot -->
-                            <div class="dropdown">
+                            <div class="dropdown is-up">
                                 <div class="dropdown-trigger">
                                     <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="function doSomething(){}"
-                                        onblur="robotControls.dropOnBlur()">
+                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick(2)"
+                                        onblur="robotControls.dropOnBlur(2)">
                                         <!-- Drop down initial text -->
                                         <span>Kickoff Robot</span>
                                         <!-- Drop down point down icon -->
@@ -175,13 +175,13 @@
                                 <!-- Drop down contents -->
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
-                                        <a onmousedown="robotControls.switchType('DualBot')"
+                                        <a onmousedown=""
                                             class="dropdown-item">
-                                            DualBot
+                                            Robot 1
                                         </a>
-                                        <a onmousedown="robotControls.switchType('TriBot')"
+                                        <a onmousedown=""
                                             class="dropdown-item">
-                                            TriBot
+                                            Robot 2
                                         </a>
                                     </div>
                                 </div>
@@ -199,9 +199,9 @@
                             <!-- Drop down menu for selecting types of robots -->
                             <div class="dropdown">
                                 <div class="dropdown-trigger">
-                                    <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
-                                        onblur="robotControls.dropOnBlur()">
+                                    <button id="yellow-robot1-type-button" class="button is-small" aria-haspopup="true"
+                                        aria-controls="yellow-robot1-dropdown-menu" onclick="robotControls.dropOnClick(3)"
+                                        onblur="robotControls.dropOnBlur(3)">
                                         <!-- Drop down initial text -->
                                         <span>Robot Type</span>
                                         <!-- Drop down point down icon -->
@@ -211,7 +211,7 @@
                                     </button>
                                 </div>
                                 <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-menu" id="yellow-robot1-dropdown-menu" role="menu">
                                     <div class="dropdown-content">
                                         <a onmousedown="robotControls.switchType('DualBot')"
                                             class="dropdown-item">
@@ -232,9 +232,9 @@
                             <!-- Drop down menu for selecting types of robots -->
                             <div class="dropdown">
                                 <div class="dropdown-trigger">
-                                    <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick()"
-                                        onblur="robotControls.dropOnBlur()">
+                                    <button id="yellow-robot2-type-button" class="button is-small" aria-haspopup="true"
+                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick(4)"
+                                        onblur="robotControls.dropOnBlur(4)">
                                         <!-- Drop down initial text -->
                                         <span>Robot Type</span>
                                         <!-- Drop down point down icon -->
@@ -244,7 +244,7 @@
                                     </button>
                                 </div>
                                 <!-- Drop down contents -->
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-menu" id="yellow-robot2-dropdown-menu" role="menu">
                                     <div class="dropdown-content">
                                         <a onmousedown="robotControls.switchType('DualBot')"
                                             class="dropdown-item">
@@ -263,11 +263,11 @@
                             <div class="my-1">General</div>
 
                             <!-- Drop down menu for selecting kickoff robot -->
-                            <div class="dropdown">
+                            <div class="dropdown is-up">
                                 <div class="dropdown-trigger">
                                     <button id="robot-type-button" class="button is-small" aria-haspopup="true"
-                                        aria-controls="dropdown-menu" onclick="function doSomething(){}"
-                                        onblur="robotControls.dropOnBlur()">
+                                        aria-controls="dropdown-menu" onclick="robotControls.dropOnClick(5)"
+                                        onblur="robotControls.dropOnBlur(5)">
                                         <!-- Drop down initial text -->
                                         <span>Kickoff Robot</span>
                                         <!-- Drop down point down icon -->
@@ -279,13 +279,13 @@
                                 <!-- Drop down contents -->
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
-                                        <a onmousedown="robotControls.switchType('DualBot')"
+                                        <a onmousedown=""
                                             class="dropdown-item">
-                                            DualBot
+                                            Robot 1
                                         </a>
-                                        <a onmousedown="robotControls.switchType('TriBot')"
+                                        <a onmousedown=""
                                             class="dropdown-item">
-                                            TriBot
+                                            Robot 2
                                         </a>
                                     </div>
                                 </div>

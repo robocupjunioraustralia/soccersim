@@ -370,13 +370,13 @@
     };
 
     // Toggles the dropdown menu for selecting robot type
-    robotControls.dropOnClick = function(){
-        document.querySelector('.dropdown').classList.toggle('is-active');
+    robotControls.dropOnClick = function(index){
+        document.getElementsByClassName('dropdown')[index].classList.toggle('is-active');
     };
 
     // Closes dropdown menu when clicking away from it
-    robotControls.dropOnBlur = function(){
-        let dropdown = document.querySelector('.dropdown');
+    robotControls.dropOnBlur = function(index){
+        let dropdown = document.getElementsByClassName('dropdown')[index];
         if (dropdown.classList.contains('is-active')){
             dropdown.classList.toggle('is-active');
         }
