@@ -172,6 +172,7 @@
         // Switch to the other robot
         let robot1TabSelector = document.getElementById('switch-robot-1');
         let robot2TabSelector = document.getElementById('switch-robot-2');
+        let typeButton = document.getElementById('robot-type-button');
         blocklyControls.selected = robot;
         
         let selectorClasses = ['is-info', 'is-selected'];
@@ -183,6 +184,7 @@
             robot1TabSelector.classList.remove(...selectorClasses);
             robot2TabSelector.classList.add(...selectorClasses);
         }
+        typeButton.value = robotControls.robots[robot].type;
 
         // Load saved program
         blocklyControls.loadProgram();
@@ -201,6 +203,7 @@
         // Switch to the other robot
         let robot1TabSelector = document.getElementById('switch-robot-1');
         let robot2TabSelector = document.getElementById('switch-robot-2');
+        let typeButton = document.getElementById('robot-type-button');
         jsControls.selected = robot;
         
         let selectorClasses = ['is-info', 'is-selected'];
@@ -212,6 +215,7 @@
             robot1TabSelector.classList.remove(...selectorClasses);
             robot2TabSelector.classList.add(...selectorClasses);
         }
+        typeButton.value = robotControls.robots[robot].type;
 
         // Load saved program
         jsControls.loadProgram();
