@@ -74,4 +74,27 @@
 
     updateMainUIScores();
   });
+
+  competition.updateBlueTeamDetails = function() {
+    let newBlueTeamName = document.getElementById('blue-team-name').value;
+    document.getElementById('blue-team').textContent = newBlueTeamName;
+    document.getElementById('blue-team-name-modal').textContent = newBlueTeamName;
+  };
+
+  let blueName= document.getElementById('blue-set-team-name');
+  blueName.addEventListener('click', function() {
+    competition.updateBlueTeamDetails();
+  });
+
+  competition.updateYellowTeamDetails = function() {
+    let newYellowTeamName = document.getElementById('yellow-team-name').value;
+    document.getElementById('yellow-team').textContent = newYellowTeamName;
+    document.getElementById('yellow-team-name-modal').textContent = newYellowTeamName;
+  };
+
+  let yellowName= document.getElementById('yellow-set-team-name');
+  yellowName.addEventListener('click', function() {
+    competition.updateYellowTeamDetails();
+  });
+
 })();

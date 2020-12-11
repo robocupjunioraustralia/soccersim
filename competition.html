@@ -33,50 +33,48 @@
             </div>
         </div>
     </div>
-    <div class="container">
-        <div class="columns is-centered">
-            <div id="blue-score" class="column has-text-centered scores">
-                0
+    <div class="columns is-centered">
+        <div id="blue-score" class="column has-text-centered scores">
+            0
+        </div>
+        <div class="column matterjs-column">
+            <div id="matterjs"></div>
+            <div id="notifications"></div>
+            <div id="sim-run-buttons" class="buttons field is-grouped">
+                <button class="button is-dark" disabled id="pause-round" onclick="">
+                    <span class="icon is-small">
+                        <i class="fas fa-pause"></i>
+                    </span>
+                    <span>Pause round</span>
+                </button>
+                <button class="button is-success" id="start-round" onclick="simControls.getCodeJS()">
+                    <span class="icon is-small">
+                        <i class="fas fa-play"></i>
+                    </span>
+                    <span>Start round</span>
+                </button>
+                <button class="button is-danger" disabled id="stop-round" onclick="intptr.stopSim();simControls.stopSim()">
+                    <span class="icon is-small">
+                        <i class="fas fa-stop"></i>
+                    </span>
+                    <span>Stop round</span>
+                </button>
+                <button class="button is-light" id="match-setup" onclick="openModal('match-setup-modal')">
+                    <span class="icon is-small">
+                        <i class="fas fa-cogs"></i>
+                    </span>
+                    <span>Match setup</span>
+                </button>
+                <button class="button is-light" id="scoring-setup" onclick="openModal('scoring-setup-modal')">
+                    <span class="icon is-small">
+                        <i class="fas fa-tools"></i>
+                    </span>
+                    <span>Scoring setup</span>
+                </button>
             </div>
-            <div class="column matterjs-column">
-                <div id="matterjs"></div>
-                <div id="notifications"></div>
-                <div id="sim-run-buttons" class="buttons field is-grouped">
-                    <button class="button is-dark" disabled id="pause-round" onclick="">
-                        <span class="icon is-small">
-                            <i class="fas fa-pause"></i>
-                        </span>
-                        <span>Pause round</span>
-                    </button>
-                    <button class="button is-success" id="start-round" onclick="simControls.getCodeJS()">
-                        <span class="icon is-small">
-                            <i class="fas fa-play"></i>
-                        </span>
-                        <span>Start round</span>
-                    </button>
-                    <button class="button is-danger" disabled id="stop-round" onclick="intptr.stopSim();simControls.stopSim()">
-                        <span class="icon is-small">
-                            <i class="fas fa-stop"></i>
-                        </span>
-                        <span>Stop round</span>
-                    </button>
-                    <button class="button is-light" id="match-setup" onclick="openModal('match-setup-modal')">
-                        <span class="icon is-small">
-                            <i class="fas fa-cogs"></i>
-                        </span>
-                        <span>Match setup</span>
-                    </button>
-                    <button class="button is-light" id="scoring-setup" onclick="openModal('scoring-setup-modal')">
-                        <span class="icon is-small">
-                            <i class="fas fa-tools"></i>
-                        </span>
-                        <span>Scoring setup</span>
-                    </button>
-                </div>
-            </div>
-            <div id="yellow-score" class="column has-text-centered scores">
-                0
-            </div>
+        </div>
+        <div id="yellow-score" class="column has-text-centered scores">
+            0
         </div>
     </div>
     <div id="match-setup-modal" class="modal">
@@ -90,8 +88,29 @@
                 <button class="button mb-4 has-background-white-ter">Coin Flip</button>
                 <div class="columns">
                     <div class="column">
-                        <div class="has-text-centered has-background-primary has-text-white py-3 mb-3">Blue Team</div>
+                        <div id="blue-team-name-modal" class="has-text-centered has-background-primary has-text-white py-3 mb-3">Blue Team</div>
                         <div class="has-background-light has-text-black px-3 py-3">
+                            <div class="my-1">Team</div>
+                            <div class="is-size-7">
+                                <label for="blue-team-name">Team Name</label>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <input id="blue-team-name" class="input is-info is-small" type="text" placeholder="Blue Team">
+                                    <button id="blue-set-team-name" class="button is-small modal-button-small mt-1">Set team name</button>
+                                </div>
+                            </div>
+
+                            <div class="is-size-7">
+                                <label for="blue-team-school">School</label>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <input id="blue-team-school" class="input is-info is-small" type="text" placeholder="School Name">
+                                    <button id="blue-set-school" class="button is-small modal-button-small mt-1">Set school</button>
+                                </div>
+                            </div>
+
                             <!-- Robot 1 -->
                             <div class="my-1">Robot 1</div>
                             <div class="file has-name is-small mb-1 mr-1">
@@ -159,8 +178,29 @@
                         </div>
                     </div>
                     <div class="column">
-                        <div class="has-text-centered has-background-warning has-text-black py-3 mb-3">Yellow Team</div>
+                        <div id="yellow-team-name-modal" class="has-text-centered has-background-warning has-text-black py-3 mb-3">Yellow Team</div>
                         <div class="has-background-light has-text-black px-3 py-3">
+                            <div class="my-1">Team</div>
+                            <div class="is-size-7">
+                                <label for="yellow-team-name">Team Name</label>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <input id="yellow-team-name" class="input is-info is-small" type="text" placeholder="Yellow Team">
+                                    <button id="yellow-set-team-name" class="button is-small modal-button-small mt-1">Set team name</button>
+                                </div>
+                            </div>
+                            
+                            <div class="is-size-7">
+                                <label for="yellow-team-school">School</label>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <input id="yellow-team-school" class="input is-info is-small" type="text" placeholder="School Name">
+                                    <button id="yellow-set-school" class="button is-small modal-button-small mt-1">Set school</button>
+                                </div>
+                            </div>
+
                             <!-- Robot 1 -->
                             <div class="my-1">Robot 1</div>
                             <div class="file has-name is-small mb-1 mr-1">
