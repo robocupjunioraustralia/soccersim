@@ -19,7 +19,7 @@ html {
 }
 
 #soccersim #level {
-  margin: 0 1em;
+  margin: 0 1em 1em;
   background: rgb(32,131,136);
   background: linear-gradient(90deg, rgba(32,131,136,1) 0%, rgba(83,136,86,0.29735644257703087) 8%, rgba(96,137,73,0) 20%, rgba(139,142,31,0) 50%, rgba(139,142,31,0) 80%, rgba(139,142,31,0.30015756302521013) 92%, rgba(139,142,31,1) 100%)
 }

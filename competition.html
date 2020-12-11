@@ -33,48 +33,50 @@
             </div>
         </div>
     </div>
-    <div class="columns is-centered">
-        <div id="blue-score" class="column is-one-fifth has-text-centered scores">
-            1
-        </div>
-        <div class="column matterjs-column">
-            <div id="matterjs"></div>
-            <div id="notifications"></div>
-            <div id="sim-run-buttons" class="buttons field is-grouped">
-                <button class="button is-dark" disabled id="pause-round" onclick="">
-                    <span class="icon is-small">
-                        <i class="fas fa-pause"></i>
-                    </span>
-                    <span>Pause round</span>
-                </button>
-                <button class="button is-success" id="start-round" onclick="simControls.getCodeJS()">
-                    <span class="icon is-small">
-                        <i class="fas fa-play"></i>
-                    </span>
-                    <span>Start round</span>
-                </button>
-                <button class="button is-danger" disabled id="stop-round" onclick="intptr.stopSim();simControls.stopSim()">
-                    <span class="icon is-small">
-                        <i class="fas fa-stop"></i>
-                    </span>
-                    <span>Stop round</span>
-                </button>
-                <button class="button is-light" id="match-setup" onclick="openModal('match-setup-modal')">
-                    <span class="icon is-small">
-                        <i class="fas fa-cogs"></i>
-                    </span>
-                    <span>Match setup</span>
-                </button>
-                <button class="button is-light" id="score-setup" onclick="openModal('scoring-setup-modal')">
-                    <span class="icon is-small">
-                        <i class="fas fa-tools"></i>
-                    </span>
-                    <span>Scoring setup</span>
-                </button>
+    <div class="container">
+        <div class="columns is-centered">
+            <div id="blue-score" class="column is-one-fifth has-text-centered scores">
+                0
             </div>
-        </div>
-        <div id="yellow-score" class="column is-one-fifth has-text-centered scores">
-            3
+            <div class="column matterjs-column">
+                <div id="matterjs"></div>
+                <div id="notifications"></div>
+                <div id="sim-run-buttons" class="buttons field is-grouped">
+                    <button class="button is-dark" disabled id="pause-round" onclick="">
+                        <span class="icon is-small">
+                            <i class="fas fa-pause"></i>
+                        </span>
+                        <span>Pause round</span>
+                    </button>
+                    <button class="button is-success" id="start-round" onclick="simControls.getCodeJS()">
+                        <span class="icon is-small">
+                            <i class="fas fa-play"></i>
+                        </span>
+                        <span>Start round</span>
+                    </button>
+                    <button class="button is-danger" disabled id="stop-round" onclick="intptr.stopSim();simControls.stopSim()">
+                        <span class="icon is-small">
+                            <i class="fas fa-stop"></i>
+                        </span>
+                        <span>Stop round</span>
+                    </button>
+                    <button class="button is-light" id="match-setup" onclick="openModal('match-setup-modal')">
+                        <span class="icon is-small">
+                            <i class="fas fa-cogs"></i>
+                        </span>
+                        <span>Match setup</span>
+                    </button>
+                    <button class="button is-light" id="scoring-setup" onclick="openModal('scoring-setup-modal')">
+                        <span class="icon is-small">
+                            <i class="fas fa-tools"></i>
+                        </span>
+                        <span>Scoring setup</span>
+                    </button>
+                </div>
+            </div>
+            <div id="yellow-score" class="column is-one-fifth has-text-centered scores">
+                0
+            </div>
         </div>
     </div>
     <div id="match-setup-modal" class="modal">
@@ -244,7 +246,7 @@
                     <div class="column">
                         <div class="has-text-centered has-background-primary has-text-white py-3 mb-3">Blue Team</div>
                         <div class="has-text-black has-background-light px-3 py-3">
-                            <div class="mb-1">Current score: 1</div>
+                            <div class="mb-1">Current score: <span id="blue-modal-score">0</span></div>
                             <div class="buttons field is-grouped">
                                 <button class="button is-small modal-button-small" id="blue-plus" onclick="" aria-label="Increment score">
                                     <span class="icon is-small">
@@ -265,7 +267,7 @@
                     <div class="column">
                         <div class="has-background-warning has-text-centered has-text-black py-3 mb-3">Yellow Team</div>
                         <div class="has-text-black has-background-light px-3 py-3">
-                            <div class="mb-1">Current score: 3</div>
+                            <div class="mb-1">Current score: <span id="yellow-modal-score">0</span></div>
                             <div class="buttons field is-grouped">
                                 <button class="button is-small modal-button-small" id="yellow-plus" onclick="" aria-label="Increment score">
                                     <span class="icon is-small">
@@ -286,7 +288,7 @@
                 </div>
             </section>
             <footer class="modal-card-foot">
-                <button class="button is-success">Save changes</button>
+                <button id="scoring-save" class="button is-success">Save changes</button>
                 <button class="button">Cancel</button>
             </footer>
         </div>
@@ -304,6 +306,7 @@
 <script src="scripts/simcontrols.js"></script>
 <script src="scripts/sim-setup.js"></script>
 <script src="scripts/modal.js"></script>
+<script src="scripts/competition.js"></script>
 <script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
 <script>
     sim.render.canvas.height = 546;
