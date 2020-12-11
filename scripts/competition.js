@@ -12,6 +12,11 @@
 
   let blueScore = document.getElementById("blue-score");
   let yellowScore = document.getElementById("yellow-score");
+
+  competition.updateMainUIScores = function() {
+    blueScore.textContent = competition.scores.blue;
+    yellowScore.textContent = competition.scores.yellow;
+  };
   
   let blueModalScore = document.getElementById("blue-modal-score");
   let yellowModalScore = document.getElementById("yellow-modal-score");
@@ -21,8 +26,7 @@
     competition.tempScores.blue = competition.scores.blue;
     competition.tempScores.yellow = competition.scores.yellow;
 
-    blueScore.textContent = competition.scores.blue;
-    yellowScore.textContent = competition.scores.yellow;
+    updateMainUIScores();
     blueModalScore.textContent = competition.scores.blue;
     yellowModalScore.textContent = competition.scores.yellow;
   });
@@ -68,7 +72,6 @@
     competition.scores.blue = competition.tempScores.blue;
     competition.scores.yellow = competition.tempScores.yellow;
 
-    blueScore.textContent = competition.scores.blue;
-    yellowScore.textContent = competition.scores.yellow;
+    updateMainUIScores();
   });
 })();
