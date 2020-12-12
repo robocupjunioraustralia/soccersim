@@ -70,7 +70,8 @@
             Runner.run(this.runner, this.engine);
 
             // Field markings and objects array
-            let fieldObjects = this.createFieldObjects();
+            let field = this.createFieldObjects(),
+                fieldObjects = field.main;
             // Ball array
             let balls = [this.ball];
             // Borders array
@@ -120,6 +121,14 @@
                     self.robots[i].updateForce();
                 }
             });
+
+            // Setup attributes for goal detection
+            this.yellowGoal = field.goals.yellow;
+            this.blueGoal = field.goals.blue;
+            this.goalAreas = field.areas;
+            this.goalFlag = false;
+            // Add goal detection
+            this.detectGoals(console.log);
         }
 
         // Create all elements of the playing field
@@ -153,28 +162,92 @@
             left = Bodies.rectangle(0.25*this.fieldWidth, 0.16*this.fieldHeight, 7, 0.14*this.fieldHeight, {isSensor: true, render: {fillStyle : black}});
             let bottomPenalty = Body.create({parts: [top,left,right], isSensor: true, isStatic: true});
 
-            // Goal posts
-            top = Bodies.rectangle(this.fieldWidth/2, 0.93 * this.fieldHeight, 0.25*this.fieldWidth, 4, {render: {fillStyle : black}});
+            // Goal side posts
             right = Bodies.rectangle(0.62*this.fieldWidth, 0.91*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
             left = Bodies.rectangle(0.38*this.fieldWidth, 0.91*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
-            let topGoalPost = Body.create({parts: [top,left,right], isStatic: true});
+            let topGoalPost = Body.create({parts: [left,right], isStatic: true});
 
-            bottom = Bodies.rectangle(this.fieldWidth/2, 0.07 * this.fieldHeight, 0.25*this.fieldWidth, 4, {render: {fillStyle : black}});
             right = Bodies.rectangle(0.62*this.fieldWidth, 0.09*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
             left = Bodies.rectangle(0.38*this.fieldWidth, 0.09*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
-            let bottomGoalPost = Body.create({parts: [bottom,left,right], isStatic: true});
+            let bottomGoalPost = Body.create({parts: [left,right], isStatic: true});
+
+            // Goal back posts
+            let blueGoal = Bodies.rectangle(this.fieldWidth/2, 0.07 * this.fieldHeight, 0.25*this.fieldWidth, 4, {isStatic:true, render: {fillStyle : black}});
+            let yellowGoal = Bodies.rectangle(this.fieldWidth/2, 0.93 * this.fieldHeight, 0.25*this.fieldWidth, 4, {isStatic:true, render: {fillStyle : black}});
 
             // Goal areas
-            let yellowArea = Bodies.rectangle(this.fieldWidth/2, 0.92 * this.fieldHeight, 0.24*this.fieldWidth, 15, {isStatic: true, isSensor: true, render: {fillStyle : yellow}});
-            let blueArea = Bodies.rectangle(this.fieldWidth/2, 0.08 * this.fieldHeight, 0.24*this.fieldWidth, 15, {isStatic: true, isSensor: true, render: {fillStyle : blue}});
+            let yellowArea = Bodies.rectangle(this.fieldWidth/2, 0.92 * this.fieldHeight, 0.24*this.fieldWidth, 14, {isStatic: true, isSensor:true,render: {fillStyle : yellow}});
+            let blueArea = Bodies.rectangle(this.fieldWidth/2, 0.08 * this.fieldHeight, 0.24*this.fieldWidth, 14, {isStatic: true, isSensor: true, render: {fillStyle : blue}});
 
             // Black dots
             let dotOne = Bodies.circle(this.fieldWidth/2, this.fieldHeight/2, 4, {isStatic: true, isSensor: true, render: {fillStyle : black}}),
                 dotTwo = Bodies.circle(0.33*this.fieldWidth, this.fieldHeight/2, 4, {isStatic: true, isSensor: true, render: {fillStyle : black}}),
                 dotThree = Bodies.circle(0.66*this.fieldWidth, this.fieldHeight/2, 4, {isStatic: true, isSensor: true, render: {fillStyle : black}});
             
-            let fieldObjects = [field, topPenalty, bottomPenalty, blueArea, yellowArea, markings, topGoalPost, bottomGoalPost, dotOne, dotTwo, dotThree];
-            return fieldObjects;
+            let fieldObjects = [field, topPenalty, bottomPenalty, yellowArea, blueArea, yellowGoal, blueGoal, markings, topGoalPost, bottomGoalPost, dotOne, dotTwo, dotThree];
+            return {
+                main: fieldObjects, 
+                goals: {
+                    yellow: yellowGoal, 
+                    blue: blueGoal
+                }, 
+                areas: {
+                    yellow: yellowArea, 
+                    blue: blueArea
+                }
+            };
+        }
+
+
+        // Goal detection wrapper
+        detectGoals(callback){
+            let self = this;
+            let goalAreas = self.goalAreas;
+            // If in a goal area or hit back of goal
+            Events.on(this.engine, 'collisionStart', function(event) {
+                let pairs = event.pairs;
+                for (let i = 0, j = pairs.length; i != j; ++i) {
+                    let pair = pairs[i];
+                    // Check colliding object contains the ball
+                    if (pair.bodyA === self.ball || pair.bodyB === self.ball){
+                        // Check if goal flag is already set
+                        if (self.goalFlag == false){
+                            if (pair.bodyA === goalAreas.yellow || pair.bodyB === goalAreas.yellow) {
+                                callback("goal flag = true");
+                                self.goalFlag = true;
+                            } else if (pair.bodyA === goalAreas.blue || pair.bodyB === goalAreas.blue) {
+                                callback("goal flag = true");
+                                self.goalFlag = true;
+                            }
+                        // If goal flag is set, check if hitting back of a goal
+                        } else {
+                            if (pair.bodyA === self.blueGoal || pair.bodyB === self.blueGoal) {
+                                callback("bluegoal");
+                            } else if (pair.bodyA === self.yellowGoal || pair.bodyB === self.yellowGoal) {
+                                callback("yellowgoal");
+                            }
+                        }
+                    }
+                }
+            });
+
+            // If moved out of goal area, reset flag
+            Events.on(this.engine, 'collisionEnd', function(event) {
+                let pairs = event.pairs;
+                for (let i = 0, j = pairs.length; i != j; ++i) {
+                    let pair = pairs[i];
+                    // Check collision object contains ball
+                    if (pair.bodyA === self.ball || pair.bodyB === self.ball){
+                        if (pair.bodyA === goalAreas.yellow || pair.bodyB === goalAreas.yellow) {
+                            callback("goal flag = false");
+                            self.goalFlag = false;
+                        } else if (pair.bodyA === goalAreas.blue || pair.bodyB === goalAreas.blue) {
+                            callback("goal flag = false");
+                            self.goalFlag = false;
+                        }
+                    }
+                }
+            });
         }
 
         // Removes a bot and returns its original position
