@@ -81,7 +81,12 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
             RIGHT: 3
         },
         timerInterval: null,
-        timeLeft: 3
+        timeLeft: 5 * 60,
+        kickingOff: 'yellow',
+        kickOffBot: {
+            blue: 0,
+            yellow: 3
+        }
     };
 
     let blueScore = document.getElementById("blue-score");
@@ -145,9 +150,45 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
     scoringSave.addEventListener('click', function() {
         competition.scores.blue = competition.tempScores.blue;
         competition.scores.yellow = competition.tempScores.yellow;
+        competition.updateMainUIScores();
+    });
+
+    let coinFlipButton = document.getElementById('coin-flip');
+    coinFlipButton.addEventListener('click', function() {
+        if (Math.random() >= 0.5) {
+            competition.kickingOff = 'yellow';
+            document.getElementById('coin-flip-results').textContent = 'Yellow kicking off';
+        } else {
+            competition.kickingOff = 'blue';
+            document.getElementById('coin-flip-results').textContent = 'Blue kicking off';
+        }
+        competition.setKickOff(competition.kickingOff);
+        competition.scores.blue = competition.tempScores.blue;
+        competition.scores.yellow = competition.tempScores.yellow;
 
         competition.updateMainUIScores();
     });
+
+    // Kickoff robot setup
+    let blueKickoffSelect = document.getElementById('blue-kickoff-robot');
+    scoringSave.addEventListener('change', function() {
+        competition.kickOffBot.blue = parseInt(this.value);
+    });
+    let yellowKickoffSelect = document.getElementById('yellow-kickoff-robot');
+    scoringSave.addEventListener('change', function() {
+        competition.kickOffBot.yellow = parseInt(this.value);
+    });
+
+    competition.setKickOff = function(team) {
+        for (let robot of robots) {
+            robot.kicking = false;
+        }
+        if (team === 'blue') {
+            competition.robots[competition.kickOffBot.blue].kicking = true;
+        } else if (team === 'yellow') {
+            competition.robots[competition.kickOffBot.yellow].kicking = true;
+        }
+    };
 
     competition.updateBlueTeamDetails = function() {
         let newBlueTeamName = document.getElementById('blue-team-name').value;
@@ -205,7 +246,7 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
     function decreaseTimer() {
         competition.timeLeft = competition.timeLeft - 0.25;
         let minutes = Math.floor(competition.timeLeft / 60).toString().padStart(2, '0');
-        let seconds = (Math.round(competition.timeLeft) % 60).toString().padStart(2, '0');
+        let seconds = (Math.floor(competition.timeLeft) % 60).toString().padStart(2, '0');
 
         if (competition.timeLeft <= 0) {
             competition.stopSim();
@@ -258,17 +299,19 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
     };
 
     // Handle goal detection (stop simulator automatically)
-    competition.handleGoalDetection = function(side) {
+    competition.handleGoalDetection = function(team) {
         // Goal!
         if (competition.goalDetected) return;
         competition.goalDetected = true;
-        if (side === 'yellow') {
+        if (team === 'yellow') {
             competition.scores.yellow++;
             document.getElementById('level').classList.add('yellow-goal');
+            competition.setKickOff('blue');
         }
-        else if (side === 'blue') {
+        else if (team === 'blue') {
             competition.scores.blue++;
             document.getElementById('level').classList.add('blue-goal');
+            competition.setKickOff('yellow');
         }
         document.getElementById('timer').textContent = 'GOAL!';
         competition.updateMainUIScores();
@@ -282,6 +325,8 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
             case competition.loc.LEFT:   Matter.Body.setPosition(ball, {x: 0.33*fieldWidth, y: fieldHeight/2}); break;
             case competition.loc.RIGHT:  Matter.Body.setPosition(ball, {x: 0.66*fieldWidth, y: fieldHeight/2}); break;
         }
+        Matter.Body.applyForce(ball, ball.position, {x: 0, y: 0});
+        Matter.Body.setVelocity(ball, {x: 0, y: 0});
 
     };
 

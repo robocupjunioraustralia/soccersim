@@ -85,7 +85,8 @@
                 <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
-                <button class="button mb-4 has-background-white-ter">Coin Flip</button>
+                <button class="button mb-4 has-background-white-ter" id="coin-flip">Coin Flip</button>
+                <span id="coin-flip-results"></span>
                 <div class="columns">
                     <div class="column">
                         <div id="blue-team-name-modal" class="has-text-centered has-background-primary has-text-white py-3 mb-3">Blue Team</div>
@@ -170,11 +171,10 @@
                             <div id="blue-kickoff-robot" class="select is-small">
                                 <select>
                                     <option selected disabled>Kickoff Robot</option>
-                                    <option value="Robot 1">Robot 1</option>
-                                    <option value="Robot 2">Robot 2</option>
+                                    <option value="0">Robot 1</option>
+                                    <option value="1">Robot 2</option>
                                 </select>
                             </div>
-                            <button class="button is-small modal-button-small">Set as kickoff team</button>
                         </div>
                     </div>
                     <div class="column">
@@ -260,8 +260,8 @@
                             <div id="yellow-kickoff-robot" class="select is-small">
                                 <select>
                                     <option selected disabled>Kickoff Robot</option>
-                                    <option value="Robot 1">Robot 1</option>
-                                    <option value="Robot 2">Robot 2</option>
+                                    <option value="2">Robot 1</option>
+                                    <option value="3">Robot 2</option>
                                 </select>
                             </div>
                             <button class="button is-small modal-button-small">Set as kickoff team</button>

@@ -218,6 +218,13 @@
                 i++;
             }
         }
+
+        // Set kicker position if kicking
+        for (let robot of robots) {
+            if (robot.kicking) {
+                robot.setPos(positionMap['forward'].x, positionMap['forward'].y);
+            }
+        }
         
         // Keep track of timing, in order to keep the robots moving consistently
         // regardless of computer specs

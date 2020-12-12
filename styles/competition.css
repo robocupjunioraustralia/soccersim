@@ -6,6 +6,9 @@ html {
   color: #ffffff;
   font-family: 'Rubik', sans-serif;
 }
+#soccersim .modal {
+  color: #000;
+}
 
 #soccersim .navbar-brand {
   flex: 1;
@@ -20,7 +23,7 @@ html {
 
 #soccersim #level {
   position:relative;
-  margin: 0 1em 1em;
+  margin: 0 1em 3em;
   overflow:hidden;
   background: rgb(32,131,136);
   background: linear-gradient(90deg, rgba(32,131,136,1) 0%, rgba(83,136,86,0.29735644257703087) 8%, rgba(96,137,73,0) 20%, rgba(139,142,31,0) 50%, rgba(139,142,31,0) 80%, rgba(139,142,31,0.30015756302521013) 92%, rgba(139,142,31,1) 100%)
@@ -42,9 +45,11 @@ html {
   transition: transform 0.5s;
   z-index: -1;
 }
+
 #soccersim #level.blue-goal::before {
   transform: translateX(33.33%);
 }
+
 #soccersim #level.yellow-goal::before {
   transform: translateX(-33.33%);
 }
@@ -75,4 +80,8 @@ html {
 #soccersim .file-name {
   background-color: #ffffff;
   color: #363636;
+}
+
+#soccersim #matterjs {
+  cursor: grab;
 }
