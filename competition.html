@@ -41,19 +41,19 @@
             <div id="matterjs"></div>
             <div id="notifications"></div>
             <div id="sim-run-buttons" class="buttons field is-grouped">
-                <button class="button is-dark" disabled id="pause-round" onclick="">
+<!--                 <button class="button is-dark" disabled id="pause-round" onclick="">
                     <span class="icon is-small">
                         <i class="fas fa-pause"></i>
                     </span>
                     <span>Pause round</span>
-                </button>
-                <button class="button is-success" id="start-round" onclick="simControls.getCodeJS()">
+                </button> -->
+                <button class="button is-success" id="run-robots" onclick="competition.startSim()">
                     <span class="icon is-small">
                         <i class="fas fa-play"></i>
                     </span>
                     <span>Start round</span>
                 </button>
-                <button class="button is-danger" disabled id="stop-round" onclick="intptr.stopSim();simControls.stopSim()">
+                <button class="button is-danger" disabled id="stop-robots" onclick="competition.stopSim()">
                     <span class="icon is-small">
                         <i class="fas fa-stop"></i>
                     </span>
@@ -115,7 +115,7 @@
                             <div class="my-1">Robot 1</div>
                             <div class="file has-name is-small mb-1 mr-1">
                                 <label class="file-label">
-                                    <input class="file-input" accept=".js,.xml" type="file" name="robot1">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="blue1">
                                     <span class="file-cta">
                                         <span class="file-icon">
                                         <i class="fas fa-upload"></i>
@@ -141,7 +141,7 @@
                             <div class="my-1">Robot 2</div>
                             <div class="file has-name is-small mb-1 mr-1">
                                 <label class="file-label">
-                                    <input class="file-input" accept=".js,.xml" type="file" name="robot2">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="blue2">
                                     <span class="file-cta">
                                         <span class="file-icon">
                                         <i class="fas fa-upload"></i>
@@ -205,7 +205,7 @@
                             <div class="my-1">Robot 1</div>
                             <div class="file has-name is-small mb-1 mr-1">
                                 <label class="file-label">
-                                    <input class="file-input" accept=".js,.xml" type="file" name="robot1">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="yellow1">
                                     <span class="file-cta">
                                         <span class="file-icon">
                                         <i class="fas fa-upload"></i>
@@ -231,7 +231,7 @@
                             <div class="my-1">Robot 2</div>
                             <div class="file has-name is-small mb-1 mr-1">
                                 <label class="file-label">
-                                    <input class="file-input" accept=".js,.xml" type="file" name="robot2">
+                                    <input class="file-input" accept=".js,.xml" type="file" name="yellow2">
                                     <span class="file-cta">
                                         <span class="file-icon">
                                         <i class="fas fa-upload"></i>
@@ -344,45 +344,8 @@
 <script src="lib/acorn_interpreter.js"></script>
 <script src="scripts/interpreter.js"></script>
 <script src="scripts/simcontrols.js"></script>
-<script src="scripts/sim-setup.js"></script>
+<!-- <script src="scripts/sim-setup.js"></script> covered by competition.js -->
 <script src="scripts/modal.js"></script>
 <script src="scripts/competition.js"></script>
 <script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
-<script>
-    sim.render.canvas.height = 546;
-    sim.render.canvas.width = 729;
-
-    // Matter.Composite.rotate(sim.world, 90 * Math.PI/180, Matter..create(sim.fieldWidth/2, sim.fieldHeight/2));
-    Matter.Events.on(sim.runner, "afterUpdate", () => {
-        // Rotate the canvas context and fit it in the correct box
-        sim.render.context.translate(sim.render.context.canvas.width * 0.5, sim.render.context.canvas.height * 0.5);
-        sim.render.context.rotate(Math.PI * 0.5);
-        sim.render.context.translate(-sim.render.context.canvas.width * 0.5, -sim.render.context.canvas.height * 0.5);
-        sim.render.context.translate(91.5, -91.5);
-    });
-</script>
-<script>
-    // Override mouse position such that it works with a rotated canvas context
-    Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
-        var elementBounds = element.getBoundingClientRect(),
-            rootNode = (document.documentElement || document.body.parentNode || document.body),
-            scrollX = (window.pageXOffset !== undefined) ? window.pageXOffset : rootNode.scrollLeft,
-            scrollY = (window.pageYOffset !== undefined) ? window.pageYOffset : rootNode.scrollTop,
-            touches = event.changedTouches,
-            x, y;
-
-        if (touches) {
-            x = touches[0].pageX - elementBounds.left - scrollY;
-            y = touches[0].pageY - elementBounds.top - scrollX;
-        } else {
-            x = event.pageX - elementBounds.left - scrollY;
-            y = event.pageY - elementBounds.top - scrollX;
-        }
-        let res = {
-            x: (y / (element.clientHeight / (element.height || element.clientHeight) * pixelRatio))/546 * 729,
-            y: (729 - x / (element.clientWidth / (element.width || element.clientWidth) * pixelRatio))/729 * 546
-        };
-        return res;
-    };
-</script>
 </html>
