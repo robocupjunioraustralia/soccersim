@@ -81,8 +81,11 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
             RIGHT: 3
         },
         timerInterval: null,
-        timeLeft: 5 * 60,
+        timeLeft: 10 * 60,
+        halfTime: 5 * 60,
+        secondHalf: false,
         kickingOff: 'yellow',
+        secondHalfKickOff: 'blue',
         kickOffBot: {
             blue: 0,
             yellow: 3
@@ -157,9 +160,11 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
     coinFlipButton.addEventListener('click', function() {
         if (Math.random() >= 0.5) {
             competition.kickingOff = 'yellow';
+            competition.secondHalfKickOff = 'blue';
             document.getElementById('coin-flip-results').textContent = 'Yellow kicking off';
         } else {
             competition.kickingOff = 'blue';
+            competition.secondHalfKickOff = 'yellow';
             document.getElementById('coin-flip-results').textContent = 'Blue kicking off';
         }
         competition.setKickOff(competition.kickingOff);
@@ -243,17 +248,29 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         }, false);
     });
 
-    function decreaseTimer() {
-        competition.timeLeft = competition.timeLeft - 0.25;
+    function showTime() {
         let minutes = Math.floor(competition.timeLeft / 60).toString().padStart(2, '0');
         let seconds = (Math.floor(competition.timeLeft) % 60).toString().padStart(2, '0');
+        document.getElementById('timer').textContent = minutes + ':' + seconds;
+    }
 
-        if (competition.timeLeft <= 0) {
+    function decreaseTimer() {
+        competition.timeLeft = competition.timeLeft - 0.25;
+
+        if (competition.timeLeft <= competition.halfTime && !competition.secondHalf) {
+            // Half time
+            competition.secondHalf = true;
+            competition.stopSim();
+            competition.goalDetected = true;
+            competition.setKickOff(competition.secondHalfKickOff);
+            document.getElementById('timer').textContent = 'HALF TIME';
+        } else if (competition.timeLeft <= 0) {
+            // Game over
             competition.stopSim();
             competition.goalDetected = true;
             document.getElementById('timer').textContent = 'GAME OVER';
         } else {
-            document.getElementById('timer').textContent = minutes + ':' + seconds;
+            showTime();
         }
     }
 
@@ -316,7 +333,7 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         document.getElementById('timer').textContent = 'GOAL!';
         competition.updateMainUIScores();
         competition.stopSim();
-        setTimeout(competition.startSim, 1000);
+        setTimeout(competition.startSim, 3000);
     };
 
     competition.moveBall = function(location, ball) {
@@ -338,7 +355,7 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
     });
 
     sim.detectGoals(competition.handleGoalDetection);
-        
+    showTime();        
     window.competition = competition;
 
 })();
