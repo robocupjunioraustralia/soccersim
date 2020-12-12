@@ -83,6 +83,7 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         blueScore.textContent = competition.scores.blue;
         yellowScore.textContent = competition.scores.yellow;
     };
+    competition.updateMainUIScores();
     
     let blueModalScore = document.getElementById("blue-modal-score");
     let yellowModalScore = document.getElementById("yellow-modal-score");
@@ -92,7 +93,6 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         competition.tempScores.blue = competition.scores.blue;
         competition.tempScores.yellow = competition.scores.yellow;
 
-        competition.updateMainUIScores();
         blueModalScore.textContent = competition.scores.blue;
         yellowModalScore.textContent = competition.scores.yellow;
     });
