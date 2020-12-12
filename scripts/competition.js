@@ -73,7 +73,15 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
             blue: 0
         },
         robots: [blue1, blue2, yellow1, yellow2],
-        codes: ['','','','']
+        codes: ['','','',''],
+        goalDetected: false,
+        loc: {
+            LEFT: 1,
+            CENTRE: 2,
+            RIGHT: 3
+        },
+        timerInterval: null,
+        timeLeft: 3
     };
 
     let blueScore = document.getElementById("blue-score");
@@ -194,8 +202,23 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         }, false);
     });
 
+    function decreaseTimer() {
+        competition.timeLeft = competition.timeLeft - 0.25;
+        let minutes = Math.floor(competition.timeLeft / 60).toString().padStart(2, '0');
+        let seconds = (Math.round(competition.timeLeft) % 60).toString().padStart(2, '0');
+
+        if (competition.timeLeft <= 0) {
+            competition.stopSim();
+            competition.goalDetected = true;
+            document.getElementById('timer').textContent = 'GAME OVER';
+        } else {
+            document.getElementById('timer').textContent = minutes + ':' + seconds;
+        }
+    }
+
     // Start simulator
     competition.startSim = function() {
+        competition.moveBall(competition.loc.CENTRE, ball);
         document.getElementById('notifications').innerHTML = '';
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
@@ -209,6 +232,14 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         stopButton.removeAttribute('disabled');
 
         runButton.classList.remove('is-loading');
+        competition.goalDetected = false;
+
+        // UI stuff
+        document.getElementById('level').classList.remove('yellow-goal');
+        document.getElementById('level').classList.remove('blue-goal');
+
+        // restart the round
+        competition.timerInterval = setInterval(decreaseTimer, 250);
         intptr.startSim(competition.robots, competition.codes, robotControls.ball);
     };
 
@@ -223,7 +254,45 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         stopButton.setAttribute('disabled', '');
         runButton.removeAttribute('disabled');
         intptr.stopSim();
+        clearInterval(competition.timerInterval);
     };
+
+    // Handle goal detection (stop simulator automatically)
+    competition.handleGoalDetection = function(side) {
+        // Goal!
+        if (competition.goalDetected) return;
+        competition.goalDetected = true;
+        if (side === 'yellow') {
+            competition.scores.yellow++;
+            document.getElementById('level').classList.add('yellow-goal');
+        }
+        else if (side === 'blue') {
+            competition.scores.blue++;
+            document.getElementById('level').classList.add('blue-goal');
+        }
+        document.getElementById('timer').textContent = 'GOAL!';
+        competition.updateMainUIScores();
+        competition.stopSim();
+        setTimeout(competition.startSim, 1000);
+    };
+
+    competition.moveBall = function(location, ball) {
+        switch (location) {
+            case competition.loc.CENTRE: Matter.Body.setPosition(ball, {x: fieldWidth/2, y: fieldHeight/2}); break;
+            case competition.loc.LEFT:   Matter.Body.setPosition(ball, {x: 0.33*fieldWidth, y: fieldHeight/2}); break;
+            case competition.loc.RIGHT:  Matter.Body.setPosition(ball, {x: 0.66*fieldWidth, y: fieldHeight/2}); break;
+        }
+
+    };
+
+    document.addEventListener('keydown', function(event) {
+        // keycode 49 is 1
+        if (event.keyCode >= 49 && event.keyCode <= 51) {
+            competition.moveBall(event.keyCode - 48, ball);
+        }
+    });
+
+    sim.detectGoals(competition.handleGoalDetection);
         
     window.competition = competition;
 

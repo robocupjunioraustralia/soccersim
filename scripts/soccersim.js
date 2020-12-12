@@ -127,8 +127,6 @@
             this.blueGoal = field.goals.blue;
             this.goalAreas = field.areas;
             this.goalFlag = false;
-            // Add goal detection
-            this.detectGoals(console.log);
         }
 
         // Create all elements of the playing field
@@ -198,7 +196,6 @@
             };
         }
 
-
         // Goal detection wrapper
         detectGoals(callback){
             let self = this;
@@ -213,18 +210,16 @@
                         // Check if goal flag is already set
                         if (self.goalFlag == false){
                             if (pair.bodyA === goalAreas.yellow || pair.bodyB === goalAreas.yellow) {
-                                callback("goal flag = true");
                                 self.goalFlag = true;
                             } else if (pair.bodyA === goalAreas.blue || pair.bodyB === goalAreas.blue) {
-                                callback("goal flag = true");
                                 self.goalFlag = true;
                             }
                         // If goal flag is set, check if hitting back of a goal
                         } else {
                             if (pair.bodyA === self.blueGoal || pair.bodyB === self.blueGoal) {
-                                callback("bluegoal");
+                                callback('blue');
                             } else if (pair.bodyA === self.yellowGoal || pair.bodyB === self.yellowGoal) {
-                                callback("yellowgoal");
+                                callback('yellow');
                             }
                         }
                     }
@@ -239,10 +234,8 @@
                     // Check collision object contains ball
                     if (pair.bodyA === self.ball || pair.bodyB === self.ball){
                         if (pair.bodyA === goalAreas.yellow || pair.bodyB === goalAreas.yellow) {
-                            callback("goal flag = false");
                             self.goalFlag = false;
                         } else if (pair.bodyA === goalAreas.blue || pair.bodyB === goalAreas.blue) {
-                            callback("goal flag = false");
                             self.goalFlag = false;
                         }
                     }
