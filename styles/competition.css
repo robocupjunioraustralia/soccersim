@@ -54,9 +54,23 @@ html {
   transform: translateX(-33.33%);
 }
 
-#soccersim #blue-team, #soccersim #yellow-team {
+#soccersim #level .level-item {
   margin: 0 1em;
-  font-size: 1.1em;
+}
+#soccersim #blue-team, #soccersim #yellow-team {
+  font-size: 1.3em;
+}
+#soccersim .level-left {
+  text-align:left;
+}
+
+#soccersim .level-right {
+  text-align:right;
+}
+
+#soccersim #level .school-name {
+  font-size: 0.8rem;
+  display:block;
 }
 
 #soccersim .scores {
