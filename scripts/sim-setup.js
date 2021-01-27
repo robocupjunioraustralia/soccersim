@@ -14,13 +14,11 @@ let ball = Bodies.circle(fieldWidth/2, fieldHeight/2, 10, {
 });
 
 // Define robots on the field
-let blue1 = new DualBot('blue', -75, 130, fieldWidth, fieldHeight);
-let blue2 = new DualBot('blue', 75, 130, fieldWidth, fieldHeight);
+let blue1 = new DualBot('blue', -50, 125, fieldWidth, fieldHeight);
+let blue2 = new DualBot('blue', 50, 125, fieldWidth, fieldHeight);
 let robots = [blue1, blue2];
 robotControls.setRobots(robots);
 robotControls.setBall(ball);
 var sim = new SoccerSim(document.getElementById('matterjs'), robots, ball, fieldWidth, fieldHeight);
-blue1.setPos(-50, 125);
-blue2.setPos(50, 125);
 // Engine.run(sim.engine);
 // Render.run(sim.render);
