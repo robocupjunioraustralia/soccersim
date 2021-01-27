@@ -368,7 +368,7 @@
             // Removes old bot and get its pos
             let old = sim.removeBot(robotObj);
             // Add new bot and get obj, add to robotControls
-            let add = sim.addBot(type, old);
+            let add = sim.addBot(type, old, 'blue');
             robotControls.robots[robot] = add;
         }
     };

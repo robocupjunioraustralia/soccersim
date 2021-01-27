@@ -254,12 +254,20 @@
         }
 
         // Adds a bot to a specific position
-        addBot(robot, pos){
+        addBot(robot, pos, team){
             let add = null;
-            if (robot === 'DualBot'){
-                add = new DualBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
-            } else if (robot === 'TriBot'){
-                add = new TriBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
+            if (team === 'blue'){
+                if (robot === 'DualBot'){
+                    add = new DualBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
+                } else if (robot === 'TriBot'){
+                    add = new TriBot('blue', pos.x, pos.y, fieldWidth, fieldHeight);
+                }
+            } else if (team === 'yellow'){
+                if (robot === 'DualBot'){
+                    add = new DualBot('yellow', pos.x, pos.y, fieldWidth, fieldHeight);
+                } else if (robot === 'TriBot'){
+                    add = new TriBot('yellow', pos.x, pos.y, fieldWidth, fieldHeight);
+                }
             }
             this.robots.push(add);
             World.add(this.world, add.body);

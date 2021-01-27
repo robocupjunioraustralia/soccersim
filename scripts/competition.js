@@ -12,18 +12,14 @@ let ball = Bodies.circle(fieldWidth/2, fieldHeight/2, 10, {
 });
 
 // Define robots on the field
-let blue1 = new DualBot('blue', -75, 130, fieldWidth, fieldHeight);
-let blue2 = new DualBot('blue', 75, 130, fieldWidth, fieldHeight);
-let yellow1 = new DualBot('yellow', -75, 130, fieldWidth, fieldHeight);
-let yellow2 = new DualBot('yellow', 75, 130, fieldWidth, fieldHeight);
+let blue1 = new DualBot('blue', -50, 125, fieldWidth, fieldHeight);
+let blue2 = new DualBot('blue', 50, 125, fieldWidth, fieldHeight);
+let yellow1 = new DualBot('yellow', -50, 125, fieldWidth, fieldHeight);
+let yellow2 = new DualBot('yellow', 50, 125, fieldWidth, fieldHeight);
 let robots = [blue1, blue2, yellow1, yellow2];
 robotControls.setRobots(robots);
 robotControls.setBall(ball);
 var sim = new SoccerSim(document.getElementById('matterjs'), robots, ball, fieldWidth, fieldHeight);
-blue1.setPos(-50, 125);
-blue2.setPos(50, 125);
-yellow1.setPos(-50, 125);
-yellow2.setPos(50, 125);
 
 sim.render.canvas.height = 546;
 sim.render.canvas.width = 729;
@@ -199,10 +195,12 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         let newBlueTeamName = document.getElementById('blue-team-name').value;
         document.getElementById('blue-team').textContent = newBlueTeamName;
         document.getElementById('blue-team-name-modal').textContent = newBlueTeamName;
+        let newBlueSchoolName = document.getElementById('blue-team-school').value;
+        document.getElementById('blue-school').textContent = newBlueSchoolName;
     };
 
-    let blueName= document.getElementById('blue-set-team-name');
-    blueName.addEventListener('click', function() {
+    let blueDetails= document.getElementById('blue-set-details');
+    blueDetails.addEventListener('click', function() {
         competition.updateBlueTeamDetails();
     });
 
@@ -210,11 +208,62 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         let newYellowTeamName = document.getElementById('yellow-team-name').value;
         document.getElementById('yellow-team').textContent = newYellowTeamName;
         document.getElementById('yellow-team-name-modal').textContent = newYellowTeamName;
+        let newYellowSchoolName = document.getElementById('yellow-team-school').value;
+        document.getElementById('yellow-school').textContent = newYellowSchoolName;
     };
 
-    let yellowName = document.getElementById('yellow-set-team-name');
-    yellowName.addEventListener('click', function() {
+    let yellowDetails = document.getElementById('yellow-set-details');
+    yellowDetails.addEventListener('click', function() {
         competition.updateYellowTeamDetails();
+    });
+
+    // Handle switching of robot type
+    let blueRobot1Type = document.getElementById('blue-robot1-type');
+    blueRobot1Type.addEventListener('change', function(event) {
+        let type = event.target.value;
+        // Removes old bot and get its pos
+        let old = sim.removeBot(blue1);
+        // Add new bot and get obj, add to robotControls
+        let add = sim.addBot(type, old, 'blue');
+        robotControls.robots[blue1] = add;
+        blue1 = add;
+        competition.robots[0] = add;
+    });
+
+    let blueRobot2Type = document.getElementById('blue-robot2-type');
+    blueRobot2Type.addEventListener('change', function(event) {
+        let type = event.target.value;
+        // Removes old bot and get its pos
+        let old = sim.removeBot(blue2);
+        // Add new bot and get obj, add to robotControls
+        let add = sim.addBot(type, old, 'blue');
+        robotControls.robots[blue2] = add;
+        blue2 = add;
+        competition.robots[1] = add;
+    });
+
+    let yellowRobot1Type = document.getElementById('yellow-robot1-type');
+    yellowRobot1Type.addEventListener('change', function(event) {
+        let type = event.target.value;
+        // Removes old bot and get its pos
+        let old = sim.removeBot(yellow1);
+        // Add new bot and get obj, add to robotControls
+        let add = sim.addBot(type, old, 'yellow');
+        robotControls.robots[yellow1] = add;
+        yellow1 = add;
+        competition.robots[2] = add;
+    });
+
+    let yellowRobot2Type = document.getElementById('yellow-robot2-type');
+    yellowRobot2Type.addEventListener('change', function(event) {
+        let type = event.target.value;
+        // Removes old bot and get its pos
+        let old = sim.removeBot(yellow2);
+        // Add new bot and get obj, add to robotControls
+        let add = sim.addBot(type, old, 'yellow');
+        robotControls.robots[yellow2] = add;
+        yellow2 = add;
+        competition.robots[3] = add;
     });
 
     // Handle loading of robot codes
@@ -230,6 +279,12 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
                 let js = evt.target.result;
                 competition.codes[codeId] = js;
             };
+            switch(codeId) {
+                case 0: document.getElementById('blue1-file-name').textContent = files[0].name; break;
+                case 1: document.getElementById('blue2-file-name').textContent = files[0].name; break;
+                case 2: document.getElementById('yellow1-file-name').textContent = files[0].name; break;
+                case 3: document.getElementById('yellow2-file-name').textContent = files[0].name; break;
+            }
         }
     };
 
