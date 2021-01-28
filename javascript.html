@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="styles/soccer.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.58.1/codemirror.min.css" integrity="sha512-xIf9AdJauwKIVtrVRZ0i4nHP61Ogx9fSRAkCLecmE2dL/U8ioWpDvFCAy4dcfecN72HHB9+7FfQj3aiO68aaaw==" crossorigin="anonymous" />
     <script src="codemirror/mode/javascript.js"></script>
-    <style>
-        
-    </style>
 </head>
 <body id="soccersim">
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
@@ -83,30 +80,12 @@
                         onclick="jsControls.switchProgram('robot2')">Robot 2 Program</div>
                 </div>
                 <!-- Drop down menu for selecting types of robots -->
-                <div class="dropdown">
-                    <div class="dropdown-trigger">
-                        <button id="robot-type-button" class="button" aria-haspopup="true" aria-controls="dropdown-menu"
-                        onclick="robotControls.dropOnClick()"
-                        onblur="robotControls.dropOnBlur()">
-                            <!-- Drop down initial text -->
-                            <span>Robot Type</span>
-                            <!-- Drop down point down icon -->
-                            <span class="icon is-small">
-                                <i class="fas fa-angle-down" aria-hidden="true"></i>
-                            </span>
-                        </button>
-                    </div>
-                    <!-- Drop down contents -->
-                    <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                        <div class="dropdown-content">
-                            <a onmousedown="robotControls.switchType('DualBot')" class="dropdown-item">
-                                DualBot
-                            </a>
-                            <a onmousedown="robotControls.switchType('TriBot')" class="dropdown-item">
-                                TriBot
-                            </a>
-                        </div>
-                    </div>
+                <div class="select">
+                    <select id="robot-type-button" onchange="robotControls.switchType(this.value)">
+                        <option selected disabled>Robot Type</option>
+                        <option value="DualBot">DualBot</option>
+                        <option value="TriBot">TriBot</option>
+                    </select>
                 </div>
                 <!-- Robot code save/load buttons -->
                 <div id="save-buttons" class="buttons">
@@ -174,6 +153,7 @@
 <script src="scripts/simcontrols.js"></script>
 <script src="scripts/javascript.js"></script>
 <script src="scripts/sim-setup.js"></script>
+<script src="scripts/modal.js"></script>
 <script src="https://kit.fontawesome.com/9462e296f5.js" crossorigin="anonymous"></script>
 </html>
         

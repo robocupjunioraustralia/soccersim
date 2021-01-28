@@ -17,6 +17,7 @@ function start() {
     toolbox: toolbox
   });
   // Create main workspace.
+  if (document.getElementById('blocklyEditor1')) {
   workspace = Blockly.inject('blocklyEditor1',
       {
         comments: true,
@@ -59,7 +60,8 @@ function start() {
           },
         renderer: 'pxt'
       });
-  addToolboxButtonCallbacks();
+    addToolboxButtonCallbacks();
+  }
   // Restore previously displayed text.
   // if (sessionStorage) {
   //   var text = sessionStorage.getItem('textarea');

@@ -1,0 +1,101 @@
+html {
+  background-color: #263620;
+}
+
+#soccersim {
+  color: #ffffff;
+  font-family: 'Rubik', sans-serif;
+}
+#soccersim .modal {
+  color: #000;
+}
+
+#soccersim .navbar-brand {
+  flex: 1;
+  justify-content: center;
+  background-color: #263620;
+}
+
+#soccersim #matterjs {
+  display: flex;
+  justify-content: center;
+}
+
+#soccersim #level {
+  position:relative;
+  margin: 0 1em 3em;
+  overflow:hidden;
+  background: rgb(32,131,136);
+  background: linear-gradient(90deg, rgba(32,131,136,1) 0%, rgba(83,136,86,0.29735644257703087) 8%, rgba(96,137,73,0) 20%, rgba(139,142,31,0) 50%, rgba(139,142,31,0) 80%, rgba(139,142,31,0.30015756302521013) 92%, rgba(139,142,31,1) 100%)
+}
+
+#soccersim #level::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 300%;
+  height: 100%;
+  background: linear-gradient(
+    to left,
+    #909400,
+    transparent,
+    #009da5
+  );
+  transition: transform 0.5s;
+  z-index: -1;
+}
+
+#soccersim #level.blue-goal::before {
+  transform: translateX(33.33%);
+}
+
+#soccersim #level.yellow-goal::before {
+  transform: translateX(-33.33%);
+}
+
+#soccersim #level .level-item {
+  margin: 0 1em;
+}
+#soccersim #blue-team, #soccersim #yellow-team {
+  font-size: 1.3em;
+}
+#soccersim .level-left {
+  text-align:left;
+}
+
+#soccersim .level-right {
+  text-align:right;
+}
+
+#soccersim #level .school-name {
+  font-size: 0.8rem;
+  display:block;
+}
+
+#soccersim .scores {
+  font-size: 5em;
+}
+
+#soccersim #sim-run-buttons {
+  margin: 0.8em 0 0;
+  display: flex;
+  justify-content: center;
+}
+
+#soccersim #timer {
+  font-size: 3em;
+}
+
+#soccersim .modal-button-small {
+  border-radius: 4px;
+}
+
+#soccersim .file-name {
+  background-color: #ffffff;
+  color: #363636;
+}
+
+#soccersim #matterjs {
+  cursor: grab;
+}
