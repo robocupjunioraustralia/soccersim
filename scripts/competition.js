@@ -434,8 +434,34 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         }
     });
 
+    competition.showExample = function() {
+        openModal('preview-modal');
+        let exampleblue = 'function forward(i){setMotorSpeed("motorA",i),setMotorSpeed("motorB",i),s=1}function align(i){setMotorSpeed("motorA",5*i),setMotorSpeed("motorB",5*-i)}function dual(i,t){setMotorSpeed("motorA",i+5*t),setMotorSpeed("motorB",i-5*t)}setInitialPosition("centre");for(var i=0;i<30;++i)forward(100);for(var initial_angle=getBallAngle()/180*Math.PI,initial_loops=0,original_dist=getBallDistance();;){var dist=getBallDistance();if(dual(60,6*getBallAngle()),dist<100){for(var ii=0;ii<220;++ii)forward(30);for(ii=0;ii<120;++ii)forward(15);initial_loops+=50;for(var x=560,y=original_dist+40,third_side=Math.sqrt(y*y+x*x-2*x*y*Math.cos(initial_angle)),alpha=Math.asin(x*Math.sin(initial_angle)/third_side),compass=(alpha-initial_angle)/Math.PI*180,alignment=-compass-getCompassHeading(),iii=0;dual(100,.5*(alignment=-compass-getCompassHeading())),iii+=1,!(250<getBallDistance()););}initial_loops+=1}';
+        let exampleblue2 = 'function forward(o){setMotorSpeed("motorA",o),setMotorSpeed("motorB",o),s=1}function align(o){setMotorSpeed("motorA",5*o),setMotorSpeed("motorB",5*-o)}function dual(o,t){setMotorSpeed("motorA",o+5*t),setMotorSpeed("motorB",o-5*t)}setInitialPosition("left");for(var i=0;i<300;++i)forward(0);for(i=0;i<200;++i)dual(-35,0);for(;;){var dist=getBallDistance();if(align(getBallAngle()),dist<150){for(i=0;i<50;++i)forward(100);for(i=0;i<1e3;)dual(100,(dist=getBallDistance())<30?-getCompassHeading():getBallAngle()),i++;for(i=0;i<500;++i)forward(-20)}}';
+        let exampleyellow = 'function drive(t,o){var e=Math.sin((o+60)*Math.PI/180)*t,r=Math.sin((o-60)*Math.PI/180)*t,o=Math.sin((o+180)*Math.PI/180)*t,t=100/Math.max(e,r,o);e*=t,r*=t,o*=t,s=1,setMotorSpeed("motorA",e),setMotorSpeed("motorB",r),setMotorSpeed("motorC",o)}function rotate(t,o){setMotorSpeed("motorA",t*o),setMotorSpeed("motorB",t*o),setMotorSpeed("motorC",t*o)}for(;;)5<getCompassHeading()?rotate(30,-1):getCompassHeading()<-5?rotate(30,1):drive(100,1.4*getBallAngle());';
+        competition.codes = [exampleblue, exampleblue2, exampleyellow, exampleyellow];
+        // Convert yellow bots to TriBot
+        let type = 'TriBot';
+        let old = sim.removeBot(yellow1);
+        let add = sim.addBot(type, old, 'yellow');
+        robotControls.robots[yellow1] = add;
+        yellow1 = add;
+
+        competition.robots[2] = add;
+        old = sim.removeBot(yellow2);
+        add = sim.addBot(type, old, 'yellow');
+        robotControls.robots[yellow2] = add;
+        yellow2 = add;
+        competition.robots[3] = add;
+    };
+
     sim.detectGoals(competition.handleGoalDetection);
-    showTime();        
+    showTime();
+    const rawParams = window.location.search;
+    const params = new URLSearchParams(rawParams);
+    if (params.has('example')) {
+        competition.showExample();
+    }
     window.competition = competition;
 
 })();

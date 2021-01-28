@@ -52,6 +52,5 @@ document.addEventListener('keydown', function (event) {
     var e = event || window.event;
     if (e.keyCode === 27) {
         closeModals();
-        closeDropdowns();
     }
 });
