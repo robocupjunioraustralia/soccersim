@@ -3,6 +3,33 @@
 <head>
     <meta charset="utf-8">
     <title>SoccerSim</title>
+    <script src="pxt-blockly/blockly_compressed.js"></script>
+    <script src="pxt-blockly/generators/javascript.js"></script>
+    <script src="pxt-blockly/generators/javascript/logic.js"></script>
+    <script src="pxt-blockly/generators/javascript/loops.js"></script>
+    <script src="pxt-blockly/generators/javascript/math.js"></script>
+    <script src="pxt-blockly/generators/javascript/text.js"></script>
+    <script src="pxt-blockly/generators/javascript/lists.js"></script>
+    <script src="pxt-blockly/generators/javascript/colour.js"></script>
+    <script src="pxt-blockly/generators/javascript/variables.js"></script>
+    <script src="pxt-blockly/generators/javascript/variables_dynamic.js"></script>
+    <script src="pxt-blockly/generators/javascript/procedures.js"></script>
+    <script src="pxt-blockly/generators/javascript/motors.js"></script>
+    <script src="pxt-blockly/generators/javascript/sensors.js"></script>
+    <script src="pxt-blockly/msg/messages.js"></script>
+    <script src="pxt-blockly/blocks/extensions.js"></script>
+    <script src="pxt-blockly/blocks/logic.js"></script>
+    <script src="pxt-blockly/blocks/loops.js"></script>
+    <script src="pxt-blockly/blocks/math.js"></script>
+    <script src="pxt-blockly/blocks/text.js"></script>
+    <script src="pxt-blockly/blocks/lists.js"></script>
+    <script src="pxt-blockly/blocks/colour.js"></script>
+    <script src="pxt-blockly/blocks/variables.js"></script>
+    <script src="pxt-blockly/blocks/variables_dynamic.js"></script>
+    <script src="pxt-blockly/blocks/procedures.js"></script>
+    <script src="pxt-blockly/blocks/pxt_blockly_functions.js"></script>
+    <script src="pxt-blockly/blocks/motors.js"></script>
+    <script src="pxt-blockly/blocks/sensors.js"></script>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
     <link rel="stylesheet" href="styles/competition.css" />
@@ -10,7 +37,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
 </head>
-<body id="soccersim">
+<body onload="start()" id="soccersim">
     <nav class="navbar" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="index.html" alt="RCJA SoccerSim">
@@ -337,10 +364,191 @@
             </footer>
         </div>
     </div>
+    <div id="helperEditor" style="display:none"></div>
+<xml xmlns="https://developers.google.com/blockly/xml" id="toolbox-rcja" style="display: none">
+    <category name="Motors" categorystyle="motors_category">
+        <label text="Motors" web-class="blocklyFlyoutHeading"></label>
+        <block type="motor_stop"></block>
+        <block type="motor_set_speed">
+            <value name="speed_input">
+                <shadow type="math_number_minmax">
+                    <mutation min="-100" max="100">0</mutation>
+                </shadow>
+            </value>
+        </block>
+        <block type="motor_get_speed"></block>
+    </category>
+    <category name="Movement" categorystyle="movements_category">
+        <label text="Coming soon!" web-class="blocklyFlyoutHeading"></label>
+    </category>
+    <category name="Display" categorystyle="display_category">
+        <label text="Coming soon!" web-class="blocklyFlyoutHeading"></label>
+    </category>
+    <category name="Events" categorystyle="events_category">
+        <label text="Events" web-class="blocklyFlyoutHeading"></label>
+        <block type="initial_position_set">
+        </block>
+    </category>
+    <category name="Control" categorystyle="control_category">
+        <label text="Control" web-class="blocklyFlyoutHeading"></label>
+        <block type="controls_repeat_ext">
+            <value name="TIMES">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_whileUntil"></block>
+        <block type="controls_if">
+            <value name="IF0">
+                <shadow type="logic_boolean">
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_if">
+            <mutation else="1"></mutation>
+            <value name="IF0">
+                <shadow type="logic_boolean">
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_whileForever"></block>
+        <block type="controls_for">
+            <value name="VAR">
+                <shadow type="variables_get_reporter">
+                    <field name="VAR">index</field>
+                </shadow>
+            </value>
+            <value name="FROM">
+                <shadow type="math_arithmetic">
+                    <value name="A">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                    <value name="B">
+                        <shadow type="math_number">
+                            <field name="NUM">1</field>
+                        </shadow>
+                    </value>
+                </shadow>
+            </value>
+            <value name="TO">
+                <shadow type="math_number">
+                    <field name="NUM">10</field>
+                </shadow>
+            </value>
+            <value name="BY">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="controls_flow_statements"></block>
+    </category>
+    <category name="Sensors" categorystyle="sensors_category">
+        <label text="Sensors" web-class="blocklyFlyoutHeading"></label>
+        <block type="ball_get_angle"></block>
+        <block type="ball_get_distance"></block>
+        <block type="compass_get_heading"></block>
+    </category>
+    <category name="Operators" categorystyle="operators_category">
+        <label text="Operators" web-class="blocklyFlyoutHeading"></label>
+        <label text="Comparisons" web-line="1.0"></label>
+        <block type="logic_compare">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+            <value name="OP">
+                <field name="="></field>
+            </value>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="logic_compare">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+            <field name="OP">NEQ</field>
+            <field name="OP">LT</field>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="logic_operation"></block>
+        <block type="logic_operation">
+            <field name="OP">OR</field>
+        </block>
+        <block type="logic_negate"></block>
+        <block type="logic_boolean"></block>
+        <block type="math_number" gap="32">
+            <field name="NUM">32</field>
+        </block>
+        <block type="math_arithmetic">
+            <value name="A">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="B">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_single">
+            <value name="NUM">
+                <shadow type="math_number">
+                    <field name="NUM">9</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_trig">
+            <value name="NUM">
+                <shadow type="math_number">
+                    <field name="NUM">45</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_constant"></block>
+        <block type="math_number_property">
+            <value name="NUMBER_TO_CHECK">
+                <shadow type="math_number">
+                    <field name="NUM">0</field>
+                </shadow>
+            </value>
+        </block>
+        <block type="math_random_int">
+            <value name="FROM">
+                <shadow type="math_number">
+                    <field name="NUM">1</field>
+                </shadow>
+            </value>
+            <value name="TO">
+                <shadow type="math_number">
+                    <field name="NUM">100</field>
+                </shadow>
+            </value>
+        </block>
+    </category>
+    <sep></sep>
+    <category name="Variables" categorystyle="variable_category" custom="VARIABLE_DYNAMIC"></category>
+    <category name="Functions" categorystyle="procedure_category" custom="PROCEDURE"></category>
+</xml>
 </body>
 <script type="text/javascript" src="lib/decomp.js"></script>
 <script type="text/javascript" src="lib/pathseg.js"></script>
 <script src="lib/matter.min.js"></script>
+<script src="scripts/blockly-editor.js"></script>
 <script src="scripts/robot.js"></script>
 <script src="scripts/dualbot.js"></script>
 <script src="scripts/tribot.js"></script>

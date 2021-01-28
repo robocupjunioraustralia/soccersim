@@ -276,21 +276,38 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
             let reader = new FileReader();
             reader.readAsText(file, "UTF-8");
             reader.onload = function (evt) {
-                let js = evt.target.result;
-                competition.codes[codeId] = js;
+                let code = evt.target.result;
+
+                // Parse to JS if Blockly code
+                if (file.name.match(/\.xml$/g)) {
+                    Blockly.JavaScript.workspaceToCode(hiddenWorkspace);
+                    if (!code) {
+                        code = '<xml xmlns="https://developers.google.com/blockly/xml"/>';
+                    }
+                    try {
+                        hiddenWorkspace.clear();
+                        let dom = Blockly.Xml.textToDom(code);
+                        Blockly.Xml.domToWorkspace(dom, hiddenWorkspace);
+                        code = Blockly.JavaScript.workspaceToCode(hiddenWorkspace);
+                    } catch (e) {
+                        console.error(e);
+                        code = '';
+                    }
+                }
+
+                competition.codes[codeId] = code;
             };
             switch(codeId) {
-                case 0: document.getElementById('blue1-file-name').textContent = files[0].name; break;
-                case 1: document.getElementById('blue2-file-name').textContent = files[0].name; break;
-                case 2: document.getElementById('yellow1-file-name').textContent = files[0].name; break;
-                case 3: document.getElementById('yellow2-file-name').textContent = files[0].name; break;
+                case 0: document.getElementById('blue1-file-name').textContent = file.name; break;
+                case 1: document.getElementById('blue2-file-name').textContent = file.name; break;
+                case 2: document.getElementById('yellow1-file-name').textContent = file.name; break;
+                case 3: document.getElementById('yellow2-file-name').textContent = file.name; break;
             }
         }
     };
 
     document.querySelectorAll(".file-input").forEach(function(el) {
         el.addEventListener("change", (e) => {
-            console.log(e.target.getAttribute('name'));
             let codeId = 4;
             switch(e.target.getAttribute('name')) {
                 case 'blue1':   codeId = 0; break;
@@ -391,6 +408,12 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
         setTimeout(competition.startSim, 3000);
     };
 
+    /**
+     * Automatically move ball to a particular location
+     * Prevents the ball from rolling after position is set
+     * @param  {Number} location from competition.loc
+     * @param  {Matter.Body} ball
+     */
     competition.moveBall = function(location, ball) {
         switch (location) {
             case competition.loc.CENTRE: Matter.Body.setPosition(ball, {x: fieldWidth/2, y: fieldHeight/2}); break;
@@ -402,6 +425,8 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
 
     };
 
+    // Event handler for pressing 1, 2, 3 to reposition the ball
+    // @see competition.moveBall
     document.addEventListener('keydown', function(event) {
         // keycode 49 is 1
         if (event.keyCode >= 49 && event.keyCode <= 51) {
