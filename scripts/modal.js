@@ -36,9 +36,14 @@ if ($modalCloses.length > 0) {
 }
 
 function openModal(target) {
-    var $target = document.getElementById(target);
-    rootEl.classList.add('is-clipped');
-    $target.classList.add('is-active');
+    try {
+        var $target = document.getElementById(target);
+        console.log($target);
+        rootEl.classList.add('is-clipped');
+        $target.classList.add('is-active');
+    } catch (e) {
+        
+    }
 }
 
 function closeModals() {
