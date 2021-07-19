@@ -1,6 +1,21 @@
 /* Layout */
+body {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+#soccersim .navbar-menu,
+#soccersim .navbar-brand,
+#soccersim .navbar-start {
+    background: #263620;
+}
 #soccersim .columns {
-    padding: 20px;
+    padding: 0;
+    margin: 0;
+}
+#soccersim .columns .column {
+    padding: 0;
+    margin: 0;
 }
 
 #soccersim #robot-select span,
@@ -11,13 +26,13 @@
 /* Blockly layout */
 #soccersim #blocklyEditor1,
 #helperEditor {
-    height: calc(85vh - 52px);
+    height: calc(100vh - 112px);
     width: 100%;
     display: block;
 }
 
 #soccersim .CodeMirror {
-    height: calc(85vh - 52px);
+    height: calc(100vh - 112px);
     width: 100%;
     display: block;
 }
@@ -30,23 +45,24 @@
 }
 
 /* Left upper tabs */
-#soccersim #editor-buttons {
-    display: flex;
-    justify-content: space-between;
-    vertical-align: top;
+#soccersim .buttons,
+#soccersim .buttons .button {
+    margin-bottom: 0;
 }
 
-#soccersim #save-buttons {
-    margin-bottom: .5rem;
+#soccersim #editor-buttons {
+    display: flex;
+    padding: 8px;
+    justify-content: space-between;
 }
 
 #soccersim #save-buttons .button,
 #soccersim #load-file {
-    margin-bottom: 1rem;
     margin-right: .5rem;
 }
 
 #soccersim #sim-run-buttons {
+    padding: 8px;
     justify-content: center;
 }
 
@@ -63,7 +79,22 @@
 }
 
 /* Layout breakpoint */
-@media screen and (max-width: 1530px) {
+@media screen and (max-width: 1460px) {
+    #soccersim #editor-buttons {
+        overflow-x: scroll;
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+    #soccersim #editor-buttons .buttons {
+        flex-wrap: nowrap;
+    }
+    .matterjs-column,
+    .column.is-three-fifths {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 960px) {
     #soccersim .columns {
         display: block;
     }
