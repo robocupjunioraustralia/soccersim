@@ -20,5 +20,11 @@ let robots = [blue1, blue2];
 robotControls.setRobots(robots);
 robotControls.setBall(ball);
 var sim = new SoccerSim(document.getElementById('matterjs'), robots, ball, fieldWidth, fieldHeight);
+const rulers = new Rulers(
+    {
+        'ruler-vertical': document.getElementById('ruler-vertical'),
+        'ruler-horizontal': document.getElementById('ruler-horizontal'),
+    }
+);
 // Engine.run(sim.engine);
 // Render.run(sim.render);

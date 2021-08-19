@@ -1,0 +1,97 @@
+/* Styling for the ruler */
+/* Source: https://stackoverflow.com/questions/28805132/how-to-create-vertical-ruler-in-css-html */
+ol.ruler-vertical,
+li.ruler-vertical {
+    list-style-type: none;
+}
+ol.ruler-vertical {
+    height: 729px;
+    padding-left: 0.5em;
+    counter-reset: marker -100;
+}
+li.ruler-vertical {
+    height: 100px;
+    border-top: 2px solid #aaa;
+    box-sizing: border-box;
+    width: 0.5em;
+    counter-increment: marker 100;
+    position: relative;
+    border-left: 2px solid #aaa;
+}
+li.ruler-vertical:last-child {
+    height: 29px;
+    border-bottom: 2px solid #aaa;
+}
+ol.ruler-vertical::after {
+    color: #aaa;
+    position: relative;
+    /* content: "729"; */
+    text-align: center;
+    line-height: 1em;
+    height: 1em;
+    bottom: 0.75em;
+    left: 0.75em;
+}
+li.ruler-vertical:first-child::after,
+li.ruler-vertical:nth-child(1n)::after {
+    color: #aaa;
+    position: absolute;
+    top: -0.5em;
+    left: 100%;
+    height: 1em;
+    line-height: 1em;
+    width: 2em;
+    text-align: left;
+    padding-left: 0.5em;
+    content: counter(marker);
+}
+
+/* Horizontal ruler */
+ol.ruler-horizontal,
+li.ruler-horizontal {
+    list-style-type: none;
+}
+ol.ruler-horizontal {
+    position: relative;
+    top: -0.5em;
+    left: -0.5em;
+    width: 546px;
+    counter-reset: marker -100;
+}
+li.ruler-horizontal {
+    display: inline-block;
+    width: 100px;
+    border-top: 2px solid #aaa;
+    box-sizing: border-box;
+    height: 0.5em;
+    counter-increment: marker 100;
+    position: relative;
+    border-left: 2px solid #aaa;
+}
+li.ruler-horizontal:last-child {
+    width: 46px;
+    border-right: 2px solid #aaa;
+}
+ol.ruler-horizontal::after {
+    color: #aaa;
+    position: relative;
+    /* content: "546"; */
+    text-align: center;
+    line-height: 1em;
+    height: 1em;
+    bottom: 0.75em;
+    left: 0.75em;
+}
+li.ruler-horizontal:first-child::after,
+li.ruler-horizontal:nth-child(1n)::after {
+    color: #aaa;
+    position: absolute;
+    top: 1em;
+    left: -20%;
+    height: 1em;
+    line-height: 1em;
+    width: 2em;
+    text-align: center;
+    padding-left: 0.5em;
+    content: counter(marker);
+}
