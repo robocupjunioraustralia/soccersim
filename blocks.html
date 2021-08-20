@@ -33,6 +33,7 @@
     
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css" />
     <link rel="stylesheet" href="styles/soccer.css" />
+    <link rel="stylesheet" href="styles/rulers.css" />
 </head>
 
 <body onload="start()" id="soccersim">
@@ -155,7 +156,11 @@
                     <span>Stop all</span>
                 </div>
             </div>
-            <div id="matterjs"></div>
+            <div class="is-flex" style="justify-content: center; flex-direction: row;">
+                <div id="matterjs"></div>
+                <div id="ruler-vertical"></div>
+            </div>
+            <div id="ruler-horizontal" class="is-flex" style="justify-content: center;"></div>
             <div id="notifications"></div>
         </div>
     </div>
@@ -351,6 +356,7 @@
 <script src="scripts/dualbot.js"></script>
 <script src="scripts/tribot.js"></script>
 <script src="scripts/soccersim.js"></script>
+<script src="scripts/rulers.js"></script>
 <script src="lib/acorn_interpreter.js"></script>
 <script src="scripts/interpreter.js"></script>
 <script src="scripts/simcontrols.js"></script>
