@@ -13,10 +13,10 @@ function getAll(selector) {
     return ret;
 }
 
-if (!localStorage.getItem('soccersim-shownchanges')) {
-    localStorage.setItem('soccersim-shownchanges', true);
-    openModal('notification-modal');
-}
+// if (!localStorage.getItem('soccersim-shownchanges')) {
+//     localStorage.setItem('soccersim-shownchanges', true);
+//     openModal('notification-modal');
+// }
 
 if ($modalButtons.length > 0) {
     $modalButtons.forEach(function ($el) {
