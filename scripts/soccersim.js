@@ -17,13 +17,14 @@
         Svg = Matter.Svg;
     
     // Global variables
-    var degToRad = Math.PI/180,
+    const degToRad = Math.PI/180,
         radToDeg = 180/Math.PI,
-        yellow = '#ffff00',
-        blue = '#0000ff',
+        yellow = '#EFCF00',
+        blue = '#00C1FF',
         white = '#ffffff',
         black = '#000000',
-        angleLimit = 0.01;
+        angleLimit = 0.01,
+        FIELDCOLOR = '#5BA53E';
     
     class SoccerSim {
 
@@ -139,39 +140,39 @@
                     category: 2,
                     mask: 0,
                 },
-                render: { fillStyle: '#366f0b'}
+                render: { fillStyle: FIELDCOLOR}
             });
 
             // Create markings body
-            let top = Bodies.rectangle(this.fieldWidth/2, 0.1 * this.fieldHeight, 0.74*this.fieldWidth, 14, {isSensor: true, render: {fillStyle : white}}),
-            bottom = Bodies.rectangle(this.fieldWidth/2, 0.9 * this.fieldHeight, 0.74*this.fieldWidth, 14, {isSensor: true, render: {fillStyle : white}}),
-                right = Bodies.rectangle(0.86*this.fieldWidth, this.fieldHeight/2, 14, 0.81*this.fieldHeight, {isSensor: true, render: {fillStyle : white}}),
-                left = Bodies.rectangle(0.14*this.fieldWidth, this.fieldHeight/2, 14, 0.81*this.fieldHeight, {isSensor: true, render: {fillStyle : white}}),
+            let top = Bodies.rectangle(this.fieldWidth/2, 0.1 * this.fieldHeight, 0.74*this.fieldWidth, 14, {isSensor: true, render: {fillStyle : white}, chamfer: {radius: 7}}),
+            bottom = Bodies.rectangle(this.fieldWidth/2, 0.9 * this.fieldHeight, 0.74*this.fieldWidth, 14, {isSensor: true, render: {fillStyle : white}, chamfer: {radius: 7}}),
+                right = Bodies.rectangle(0.86*this.fieldWidth, this.fieldHeight/2, 14, 0.81*this.fieldHeight, {isSensor: true, render: {fillStyle : white}, chamfer: {radius: 7}}),
+                left = Bodies.rectangle(0.14*this.fieldWidth, this.fieldHeight/2, 14, 0.81*this.fieldHeight, {isSensor: true, render: {fillStyle : white}, chamfer: {radius: 7}}),
                 markings = Body.create({parts: [top,bottom,left,right], isSensor: true, isStatic: true});
             
             // Penalty areas
-            bottom = Bodies.rectangle(this.fieldWidth/2, 0.77 * this.fieldHeight, 0.5*this.fieldWidth, 7, {isSensor: true, render: {fillStyle : black}});
-            right = Bodies.rectangle(0.75*this.fieldWidth, 0.84*this.fieldHeight, 7, 0.14*this.fieldHeight, {isSensor: true, render: {fillStyle : black}});
-            left = Bodies.rectangle(0.25*this.fieldWidth, 0.84*this.fieldHeight, 7, 0.14*this.fieldHeight, {isSensor: true, render: {fillStyle : black}});
+            bottom = Bodies.rectangle(this.fieldWidth/2, 0.77 * this.fieldHeight, 0.51*this.fieldWidth, 7, {isSensor: true, render: {fillStyle : black}, chamfer: {radius: 3}});
+            right = Bodies.rectangle(0.75*this.fieldWidth, 0.835*this.fieldHeight, 7, 0.135*this.fieldHeight, {isSensor: true, render: {fillStyle : black}, chamfer: {radius: 3}});
+            left = Bodies.rectangle(0.25*this.fieldWidth, 0.835*this.fieldHeight, 7, 0.135*this.fieldHeight, {isSensor: true, render: {fillStyle : black}, chamfer: {radius: 3}});
             let topPenalty = Body.create({parts: [bottom,left,right], isSensor: true, isStatic: true});
 
-            top = Bodies.rectangle(this.fieldWidth/2, 0.23 * this.fieldHeight, 0.5*this.fieldWidth, 7, {isSensor: true, render: {fillStyle : black}});
-            right = Bodies.rectangle(0.75*this.fieldWidth, 0.16*this.fieldHeight, 7, 0.14*this.fieldHeight, {isSensor: true, render: {fillStyle : black}});
-            left = Bodies.rectangle(0.25*this.fieldWidth, 0.16*this.fieldHeight, 7, 0.14*this.fieldHeight, {isSensor: true, render: {fillStyle : black}});
+            top = Bodies.rectangle(this.fieldWidth/2, 0.23 * this.fieldHeight, 0.51*this.fieldWidth, 7, {isSensor: true, render: {fillStyle : black}, chamfer: {radius: 3}});
+            right = Bodies.rectangle(0.75*this.fieldWidth, 0.165*this.fieldHeight, 7, 0.135*this.fieldHeight, {isSensor: true, render: {fillStyle : black}, chamfer: {radius: 3}});
+            left = Bodies.rectangle(0.25*this.fieldWidth, 0.165*this.fieldHeight, 7, 0.135*this.fieldHeight, {isSensor: true, render: {fillStyle : black}, chamfer: {radius: 3}});
             let bottomPenalty = Body.create({parts: [top,left,right], isSensor: true, isStatic: true});
 
             // Goal side posts
-            right = Bodies.rectangle(0.62*this.fieldWidth, 0.91*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
-            left = Bodies.rectangle(0.38*this.fieldWidth, 0.91*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
+            right = Bodies.rectangle(0.62*this.fieldWidth, 0.91*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}, chamfer: {radius: 2}});
+            left = Bodies.rectangle(0.38*this.fieldWidth, 0.91*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}, chamfer: {radius: 2}});
             let topGoalPost = Body.create({parts: [left,right], isStatic: true});
 
-            right = Bodies.rectangle(0.62*this.fieldWidth, 0.09*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
-            left = Bodies.rectangle(0.38*this.fieldWidth, 0.09*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}});
+            right = Bodies.rectangle(0.62*this.fieldWidth, 0.09*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}, chamfer: {radius: 2}});
+            left = Bodies.rectangle(0.38*this.fieldWidth, 0.09*this.fieldHeight, 4, 0.04*this.fieldHeight, {render: {fillStyle : black}, chamfer: {radius: 2}});
             let bottomGoalPost = Body.create({parts: [left,right], isStatic: true});
 
             // Goal back posts
-            let blueGoal = Bodies.rectangle(this.fieldWidth/2, 0.07 * this.fieldHeight, 0.25*this.fieldWidth, 4, {isStatic:true, render: {fillStyle : black}});
-            let yellowGoal = Bodies.rectangle(this.fieldWidth/2, 0.93 * this.fieldHeight, 0.25*this.fieldWidth, 4, {isStatic:true, render: {fillStyle : black}});
+            let blueGoal = Bodies.rectangle(this.fieldWidth/2, 0.07 * this.fieldHeight, 0.2475*this.fieldWidth, 4, {isStatic:true, render: {fillStyle : black}, chamfer: {radius: 2}});
+            let yellowGoal = Bodies.rectangle(this.fieldWidth/2, 0.93 * this.fieldHeight, 0.2475*this.fieldWidth, 4, {isStatic:true, render: {fillStyle : black}, chamfer: {radius: 2}});
 
             // Goal areas
             let yellowArea = Bodies.rectangle(this.fieldWidth/2, 0.92 * this.fieldHeight, 0.24*this.fieldWidth, 14, {isStatic: true, isSensor:true,render: {fillStyle : yellow}});
