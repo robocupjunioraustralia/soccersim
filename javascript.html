@@ -24,9 +24,9 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                        <a class="button is-success" onclick="openModal('notification-modal')">
+                        <button class="button is-success" onclick="openModal('notification-modal')">
                             What's new
-                        </a>
+                        </button>
                         <a class="button is-dark" href="https://rcjnsw.github.io/soccersim-docs/" target="_blank">Docs</a>
                     </div>
                 </div>
@@ -75,10 +75,10 @@
         <div class="column is-three-fifths">
             <div id="editor-buttons">
                 <div id="robot-select-buttons" class="buttons has-addons">
-                    <div class="button is-info is-selected" id="switch-robot-1" 
-                        onclick="jsControls.switchProgram('robot1')">Robot 1 Program</div>
-                    <div class="button" id="switch-robot-2"
-                        onclick="jsControls.switchProgram('robot2')">Robot 2 Program</div>
+                    <button class="button is-info is-selected" id="switch-robot-1" 
+                        onclick="jsControls.switchProgram('robot1')">Robot 1 Program</button>
+                    <button class="button" id="switch-robot-2"
+                        onclick="jsControls.switchProgram('robot2')">Robot 2 Program</button>
                 </div>
                 <!-- Drop down menu for selecting types of robots -->
                 <div class="select">
@@ -90,8 +90,8 @@
                 </div>
                 <!-- Robot code save/load buttons -->
                 <div id="save-buttons" class="buttons">
-                    <div class="button" onclick="jsControls.clearWorkspace()">Clear</div>
-                    <!-- <div class="button is-primary" onclick="jsControls.saveProgram()">Save</div> -->
+                    <button class="button" onclick="jsControls.clearWorkspace()">Clear</button>
+                    <!-- <button class="button is-primary" onclick="jsControls.saveProgram()">Save</button> -->
                     <div class="file is-primary" id="load-file">
                         <label class="file-label">
                             <input class="file-input" type="file" name="resume" id="uploaded-file">
@@ -105,12 +105,12 @@
                             </span>
                         </label>
                     </div>
-                    <div class="button is-primary" onclick="jsControls.downloadAsFile()">
+                    <button class="button is-primary" onclick="jsControls.downloadAsFile()">
                         <span class="icon is-small">
                             <i class="fas fa-download"></i>
                         </span>
                         <span>Download</span>
-                    </div>
+                    </button>
                 </div>
             </div>
             <div>
@@ -119,18 +119,18 @@
         </div>
         <div class="column matterjs-column">
             <div id="sim-run-buttons" class="buttons">
-                <div class="button is-success" id="run-robots" onclick="simControls.getCodeJS()">
+                <button class="button is-success" id="run-robots" onclick="simControls.getCodeJS()">
                     <span class="icon is-small">
                         <i class="fas fa-play"></i>
                     </span>
                     <span>Run all</span>
-                </div>
-                <div class="button is-danger" disabled id="stop-robots" onclick="intptr.stopSim();simControls.stopSim()">
+                </button>
+                <button class="button is-danger" disabled id="stop-robots" onclick="intptr.stopSim();simControls.stopSim()">
                     <span class="icon is-small">
                         <i class="fas fa-stop"></i>
                     </span>
                     <span>Stop all</span>
-                </div>
+                </button>
             </div>
             <div class="is-flex" style="justify-content: center; flex-direction: row;">
                 <div id="matterjs"></div>
