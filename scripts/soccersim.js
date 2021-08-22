@@ -149,50 +149,71 @@
             });
 
             // Create markings body
-            const boundaryOptions = {isSensor: true, render: {fillStyle : white}, chamfer: {radius: 7}};
-            let top = Bodies.rectangle(this.fieldWidth/2, 0.1 * this.fieldHeight, 0.74*this.fieldWidth, BOUNDARYTHICKNESS, boundaryOptions);
-            let bottom = Bodies.rectangle(this.fieldWidth/2, 0.9 * this.fieldHeight, 0.74*this.fieldWidth, BOUNDARYTHICKNESS, boundaryOptions);
-            let right = Bodies.rectangle(0.86*this.fieldWidth, this.fieldHeight/2, BOUNDARYTHICKNESS, 0.81*this.fieldHeight, boundaryOptions);
-            let left = Bodies.rectangle(0.14*this.fieldWidth, this.fieldHeight/2, BOUNDARYTHICKNESS, 0.81*this.fieldHeight, boundaryOptions);
-            let markings = Body.create({parts: [top,bottom,left,right], isSensor: true, isStatic: true});
+            const markings = function() {
+                const boundaryOptions = {isSensor: true, render: {fillStyle : white}};
+                const topBoundary = Bodies.rectangle(fieldWidth/2, 0.1 * fieldHeight, 0.74*fieldWidth, BOUNDARYTHICKNESS, {...boundaryOptions, chamfer: {radius: 7}});
+                const bottomBoundary = Bodies.rectangle(fieldWidth/2, 0.9 * fieldHeight, 0.74*fieldWidth, BOUNDARYTHICKNESS, {...boundaryOptions, chamfer: {radius: 7}});
+                const rightBoundary = Bodies.rectangle(0.86*fieldWidth, fieldHeight/2, BOUNDARYTHICKNESS, 0.81*fieldHeight, {...boundaryOptions, chamfer: {radius: 7}});
+                const leftBoundary = Bodies.rectangle(0.14*fieldWidth, fieldHeight/2, BOUNDARYTHICKNESS, 0.81*fieldHeight, {...boundaryOptions, chamfer: {radius: 7}});
+                return Body.create({parts: [topBoundary,bottomBoundary,leftBoundary,rightBoundary], isSensor: true, isStatic: true});
+            }();
+            
             
             // Penalty areas
-            const penaltyOptions = {isSensor: true, render: {fillStyle : black}, chamfer: {radius: 3}};
-            bottom = Bodies.rectangle(this.fieldWidth/2, 0.77 * this.fieldHeight, 0.51*this.fieldWidth, PENALTYTHICKNESS, penaltyOptions);
-            right = Bodies.rectangle(0.75*this.fieldWidth, 0.835*this.fieldHeight, PENALTYTHICKNESS, 0.135*this.fieldHeight, penaltyOptions);
-            left = Bodies.rectangle(0.25*this.fieldWidth, 0.835*this.fieldHeight, PENALTYTHICKNESS, 0.135*this.fieldHeight, penaltyOptions);
-            let topPenalty = Body.create({parts: [bottom,left,right], isSensor: true, isStatic: true});
-
-            top = Bodies.rectangle(this.fieldWidth/2, 0.23 * this.fieldHeight, 0.51*this.fieldWidth, PENALTYTHICKNESS, penaltyOptions);
-            right = Bodies.rectangle(0.75*this.fieldWidth, 0.165*this.fieldHeight, PENALTYTHICKNESS, 0.135*this.fieldHeight, penaltyOptions);
-            left = Bodies.rectangle(0.25*this.fieldWidth, 0.165*this.fieldHeight, PENALTYTHICKNESS, 0.135*this.fieldHeight, penaltyOptions);
-            let bottomPenalty = Body.create({parts: [top,left,right], isSensor: true, isStatic: true});
+            const {topPenalty, bottomPenalty} = function() {
+                const penaltyOptions = {isSensor: true, render: {fillStyle : black}};
+                const topPenaltyBottom = Bodies.rectangle(fieldWidth/2, 0.77 * fieldHeight, 0.51*fieldWidth, PENALTYTHICKNESS, {...penaltyOptions, chamfer: {radius: 3}});
+                const topPenaltyRight = Bodies.rectangle(0.75*fieldWidth, 0.835*fieldHeight, PENALTYTHICKNESS, 0.135*fieldHeight, {...penaltyOptions, chamfer: {radius: 3}});
+                const topPenaltyLeft = Bodies.rectangle(0.25*fieldWidth, 0.835*fieldHeight, PENALTYTHICKNESS, 0.135*fieldHeight, {...penaltyOptions, chamfer: {radius: 3}});
+    
+                const bottomPenaltyTop = Bodies.rectangle(fieldWidth/2, 0.23 * fieldHeight, 0.51*fieldWidth, PENALTYTHICKNESS, {...penaltyOptions, chamfer: {radius: 3}});
+                const bottomPenaltyRight = Bodies.rectangle(0.75*fieldWidth, 0.165*fieldHeight, PENALTYTHICKNESS, 0.135*fieldHeight, {...penaltyOptions, chamfer: {radius: 3}});
+                const bottomPenaltyLeft = Bodies.rectangle(0.25*fieldWidth, 0.165*fieldHeight, PENALTYTHICKNESS, 0.135*fieldHeight, {...penaltyOptions, chamfer: {radius: 3}});
+                
+                const penaltyBodyOptions = {isSensor: true, isStatic: true};
+                const topPenalty = Body.create({parts: [topPenaltyBottom,topPenaltyLeft,topPenaltyRight], ...penaltyBodyOptions});
+                const bottomPenalty = Body.create({parts: [bottomPenaltyTop,bottomPenaltyLeft,bottomPenaltyRight], ...penaltyBodyOptions});
+                return {topPenalty, bottomPenalty};
+            }();
+            
 
             // Goal side posts
-            const goalPostOptions = {render: {fillStyle : black}};
-            right = Bodies.rectangle(0.62*this.fieldWidth, 0.91*this.fieldHeight, GOALTHICKNESS, 0.04*this.fieldHeight, goalPostOptions);
-            left = Bodies.rectangle(0.38*this.fieldWidth, 0.91*this.fieldHeight, GOALTHICKNESS, 0.04*this.fieldHeight, goalPostOptions);
-            let topGoalPost = Body.create({parts: [left,right], isStatic: true});
-
-            right = Bodies.rectangle(0.62*this.fieldWidth, 0.09*this.fieldHeight, GOALTHICKNESS, 0.04*this.fieldHeight, goalPostOptions);
-            left = Bodies.rectangle(0.38*this.fieldWidth, 0.09*this.fieldHeight, GOALTHICKNESS, 0.04*this.fieldHeight, goalPostOptions);
-            let bottomGoalPost = Body.create({parts: [left,right], isStatic: true});
+            const {topGoalPost, bottomGoalPost} = function() {
+                const goalPostOptions = {render: {fillStyle : black}};
+                const rightTopGoalPost = Bodies.rectangle(0.62*fieldWidth, 0.91*fieldHeight, GOALTHICKNESS, 0.04*fieldHeight, goalPostOptions);
+                const leftTopGoalPost = Bodies.rectangle(0.38*fieldWidth, 0.91*fieldHeight, GOALTHICKNESS, 0.04*fieldHeight, goalPostOptions);
+                const topGoalPost = Body.create({parts: [leftTopGoalPost,rightTopGoalPost], isStatic: true});
+    
+                const rightBottomGoalPost = Bodies.rectangle(0.62*fieldWidth, 0.09*fieldHeight, GOALTHICKNESS, 0.04*fieldHeight, goalPostOptions);
+                const leftBottomGoalPost = Bodies.rectangle(0.38*fieldWidth, 0.09*fieldHeight, GOALTHICKNESS, 0.04*fieldHeight, goalPostOptions);
+                const bottomGoalPost = Body.create({parts: [leftBottomGoalPost,rightBottomGoalPost], isStatic: true});
+                return {topGoalPost, bottomGoalPost};
+            }();
 
             // Goal back posts
-            const goalBackOptions = {isStatic:true, render: {fillStyle : black}};
-            let blueGoal = Bodies.rectangle(this.fieldWidth/2, 0.07 * this.fieldHeight, 0.25*this.fieldWidth, GOALTHICKNESS, goalBackOptions);
-            let yellowGoal = Bodies.rectangle(this.fieldWidth/2, 0.93 * this.fieldHeight, 0.25*this.fieldWidth, GOALTHICKNESS, goalBackOptions);
+            const {blueGoal, yellowGoal} = function() {
+                const goalBackOptions = {isStatic:true, render: {fillStyle : black}};
+                const blueGoal = Bodies.rectangle(fieldWidth/2, 0.07 * fieldHeight, 0.248*fieldWidth, GOALTHICKNESS, goalBackOptions);
+                const yellowGoal = Bodies.rectangle(fieldWidth/2, 0.93 * fieldHeight, 0.248*fieldWidth, GOALTHICKNESS, goalBackOptions);
+                return {blueGoal, yellowGoal};
+            }();
 
             // Goal areas
-            const goalAreaOptions = {isStatic: true, isSensor:true,render: {fillStyle : yellow}};
-            let yellowArea = Bodies.rectangle(this.fieldWidth/2, 0.92 * this.fieldHeight, 0.24*this.fieldWidth, GOALAREAHEIGHT, goalAreaOptions);
-            let blueArea = Bodies.rectangle(this.fieldWidth/2, 0.08 * this.fieldHeight, 0.24*this.fieldWidth, GOALAREAHEIGHT, goalAreaOptions);
+            const {blueArea, yellowArea} = function() {
+                const goalAreaOptions = {isStatic: true, isSensor:true};
+                const yellowArea = Bodies.rectangle(fieldWidth/2, 0.92 * fieldHeight, 0.24*fieldWidth, GOALAREAHEIGHT, {...goalAreaOptions, render: {fillStyle : yellow}});
+                const blueArea = Bodies.rectangle(fieldWidth/2, 0.08 * fieldHeight, 0.24*fieldWidth, GOALAREAHEIGHT, {...goalAreaOptions, render: {fillStyle : blue}});
+                return {blueArea, yellowArea};
+            }();
 
             // Black dots
-            const neutralPointOptions = {isStatic: true, isSensor: true, render: {fillStyle : black}};
-            let dotOne = Bodies.circle(this.fieldWidth/2, this.fieldHeight/2, NEUTRALPOINTSIZE, neutralPointOptions);
-            let dotTwo = Bodies.circle(0.33*this.fieldWidth, this.fieldHeight/2, NEUTRALPOINTSIZE, neutralPointOptions);
-            let dotThree = Bodies.circle(0.66*this.fieldWidth, this.fieldHeight/2, NEUTRALPOINTSIZE, neutralPointOptions);
+            const {dotOne, dotTwo, dotThree} = function() {
+                const neutralPointOptions = {isStatic: true, isSensor: true, render: {fillStyle : black}};
+                const dotOne = Bodies.circle(fieldWidth/2, fieldHeight/2, NEUTRALPOINTSIZE, neutralPointOptions);
+                const dotTwo = Bodies.circle(0.33*fieldWidth, fieldHeight/2, NEUTRALPOINTSIZE, neutralPointOptions);
+                const dotThree = Bodies.circle(0.66*fieldWidth, fieldHeight/2, NEUTRALPOINTSIZE, neutralPointOptions);
+                return {dotOne, dotTwo, dotThree};
+            }();
             
             const fieldObjects = [
                 field,
