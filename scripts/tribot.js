@@ -71,7 +71,7 @@
                 motorColour = this.white;
             } else {
                 bodyColour = this.yellow;
-                motorColour = this.black;
+                motorColour = this.white;
             }
 
             // Parse the SVG to create vertices

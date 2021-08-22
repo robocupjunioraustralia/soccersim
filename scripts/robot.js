@@ -30,8 +30,8 @@
             this.fieldHeight = fieldHeight;
 
             // Colours
-            this.yellow = '#ffff00';
-            this.blue = '#0000ff';
+            this.yellow = '#EFCF00';
+            this.blue = '#00C1FF';
             this.white = '#ffffff';
             this.black = '#000000';
         }

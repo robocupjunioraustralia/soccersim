@@ -51,7 +51,7 @@
                 motorColour = this.white;
             } else {
                 bodyColour = this.yellow;
-                motorColour = this.black;
+                motorColour = this.white;
             }
         
             // Create an empty composite, the dribbler catch posts and centre body
