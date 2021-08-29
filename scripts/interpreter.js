@@ -155,7 +155,10 @@
         interpreters: [],
         startInterpreters: [],
         stopAll: false,
-        robotsRunning: 0
+        robotsRunning: 0,
+        badTickRateCount: 0,
+        tickRateCount: 0,
+        maybeShowTickWarning: true
     };
 
     /**
@@ -215,6 +218,9 @@
         intptr.robotsRunning = 0;
         intptr.interpreters = [];
         intptr.startInterpreters = [];
+        intptr.maybeShowTickWarning = true;
+        intptr.badTickRateCount = 0;
+        intptr.tickRateCount = 0;
         let interpreters = intptr.generateInterpreters(robots, codes, ball);
 
         var step;
@@ -237,7 +243,7 @@
         // Set kicker position if kicking
         for (let robot of robots) {
             if (robot.kicking) {
-                robot.setPos(positionMap['forward'].x, positionMap['forward'].y);
+                robot.setPos(positionMap.forward.x, positionMap.forward.y);
             }
         }
         
@@ -246,6 +252,9 @@
         let prev = [];
         let tickrate = 1000/60; // 60 fps for interpreting code
         // Tick rate is divided between all robots
+        let badTickRateCount = 0;
+        let startingCounts = 0;
+        let maybeShowTickWarning = true;
 
         function nextStep(interpreter, r) {
             prev[r] = performance.now();
@@ -261,7 +270,7 @@
             } catch (e) {
                 errorHandler.addError(`Running error (Robot ${r + 1}): ${e.toString()}`, 'danger');
             }
-            // console.log(i); // i must be less than 2000 for the competition - TODO
+            intptr.measurePerformance(i);
             i = 0;
             if (interpreter.step() && !intptr.stopAll) {
                 window.setTimeout(() => {
@@ -282,6 +291,39 @@
             let interpreter = interpreters[r];
             prev[r] = performance.now(); // set the first tick of the robot
             nextStep(interpreter, r);
+        }
+    };
+
+    /**
+     * Shows an error if performance is bad.
+     * @param  {[type]} steps The number of steps taken in the tick
+     */
+    intptr.measurePerformance = function(steps) {
+        if (intptr.tickRateCount < 100) {
+            if (steps < 500) {
+                intptr.badTickRateCount++;
+            }
+            intptr.tickRateCount++;
+        } else {
+            if (intptr.tickRateCount === 100) {
+                if (intptr.badTickRateCount > 10) {
+                    console.log(`[Performance]: incomplete ticks: ${intptr.badTickRateCount} of ${intptr.tickRateCount} ticks`);
+                } else {
+                    console.debug(`[Performance]: incomplete ticks: ${intptr.badTickRateCount} of ${intptr.tickRateCount} ticks`);
+                }
+
+            }
+            if (intptr.tickRateCount > 400) {
+                // reset counts
+                intptr.badTickRateCount = 0;
+                intptr.tickRateCount = 0;
+            } else {
+                intptr.tickRateCount++;
+            }
+            if (intptr.badTickRateCount / intptr.tickRateCount > 0.1 && intptr.maybeShowTickWarning) {
+                errorHandler.addError('Warning: your browser is slower than usual. The robots may currently be moving or reacting slower than speeds in the competition.', 'warning');
+                intptr.maybeShowTickWarning = false; // only show warning once
+            }
         }
     };
 
