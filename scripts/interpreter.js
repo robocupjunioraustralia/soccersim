@@ -186,10 +186,17 @@
         for (let i = 0; i < robots.length; i++) {
             let robotFuncs = new RobotFunctions(intptr.robots[i], ball, i);
             let startFuncs = new DummyRobotFunctions(intptr.robots[i], ball, i);
-            let interpreter = new Interpreter(codes[i], intptr.generateInitFunc(robotFuncs));
-            let startInterpreter = new Interpreter(codes[i], intptr.generateInitFunc(startFuncs));
-            intptr.interpreters.push(interpreter);
-            intptr.startInterpreters.push(startInterpreter);
+            try {
+                let interpreter = new Interpreter(codes[i], intptr.generateInitFunc(robotFuncs));
+                let startInterpreter = new Interpreter(codes[i], intptr.generateInitFunc(startFuncs));
+                intptr.interpreters.push(interpreter);
+                intptr.startInterpreters.push(startInterpreter);
+            } catch (e) {
+                errorHandler.addError(`Error (Robot ${i + 1}): ${e.toString()}`, 'danger');
+                // push placeholders anyway
+                intptr.interpreters.push(null);
+                intptr.startInterpreters.push(null);
+            }
         }
         return intptr.interpreters;
     };
@@ -210,12 +217,20 @@
         intptr.startInterpreters = [];
         let interpreters = intptr.generateInterpreters(robots, codes, ball);
 
+        var step;
         // Set the starting positions for all robots
-        for (let interpreter of intptr.startInterpreters) {
+        for (let r = 0; r < robots.length; r++) {
             let i = 0;
-            while (!intptr.stopAll && i < 1000) {
-                interpreter.step();
-                i++;
+            if (!intptr.interpreters[r]) continue;
+            try {
+                while (!intptr.stopAll && i < 1000) {
+                    step = intptr.interpreters[r].step();
+                    i++;
+                }
+            } catch (e) {
+                if (step) {
+                    errorHandler.addError(`Startup error (Robot ${r + 1}): ${e.toString()}`, 'danger');
+                }
             }
         }
 
@@ -235,11 +250,16 @@
         function nextStep(interpreter, r) {
             prev[r] = performance.now();
             let i = 0;
-            while (!intptr.stopAll && (prev[r] + tickrate / intptr.robotsRunning) > performance.now()) {
-                if (++i > 498) { // only perform 500 steps per tick
-                    continue;
+            if (!interpreter) return;
+            try {
+                while (!intptr.stopAll && (prev[r] + tickrate / intptr.robotsRunning) > performance.now()) {
+                    if (++i > 498) { // only perform 500 steps per tick
+                        continue;
+                    }
+                    step = interpreter.step();
                 }
-                interpreter.step();
+            } catch (e) {
+                errorHandler.addError(`Running error (Robot ${r + 1}): ${e.toString()}`, 'danger');
             }
             // console.log(i); // i must be less than 2000 for the competition - TODO
             i = 0;
@@ -258,7 +278,7 @@
             }
         }
 
-        for (let r in interpreters) {
+        for (let r = 0; r < robots.length; r++) {
             let interpreter = interpreters[r];
             prev[r] = performance.now(); // set the first tick of the robot
             nextStep(interpreter, r);
