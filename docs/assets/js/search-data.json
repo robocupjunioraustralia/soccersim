@@ -1,0 +1,92 @@
+{"0": {
+    "doc": "Blocks",
+    "title": "Blocks",
+    "content": "Blocks are a Scratch-like interface using MakeCode. You can build your program with Blocks to control the soccer robot and move it around! . ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/blocks",
+    "relUrl": "/blocks"
+  },"1": {
+    "doc": "Getting started",
+    "title": "Getting started with JavaScript",
+    "content": "Let’s code your first simulation robot in SoccerSim! First, open up https://rcjnsw.github.io/soccersim/javascript. On the left, you have an editor, where you can program JavaScript code. On the right, you have the simulation. JavaScript is pretty similar to C or Python - it just has a slightly different syntax. The following links may be helpful: . | Codecademy: Learn JavaScript - A very beginner friendly way where students can solve problems and learn JS | JavaScript Fundamentals - a thorough introductory guide to programming in JavaScript on the browser | MDN: JavaScripts basics crash course - useful for students who have done some text programming before | . ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js/getting-started/#getting-started-with-javascript",
+    "relUrl": "/js/getting-started/#getting-started-with-javascript"
+  },"2": {
+    "doc": "Getting started",
+    "title": "Your first SoccerSim program",
+    "content": "The best way to start is to try get the robot moving! The following code will get your robot moving forward: . while (1) { setMotorSpeed('motorA', 50); setMotorSpeed('motorB', 50); } . Then hit the green Run all button! You should see the robot move forward. You can click and drag on the robot to move it back. To rotate the robot, click and drag on the robot’s wheels. To stop the robot, click the red ‘Stop all’ button. For all robot commands, see the JavaScript reference guide. ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js/getting-started/#your-first-soccersim-program",
+    "relUrl": "/js/getting-started/#your-first-soccersim-program"
+  },"3": {
+    "doc": "Getting started",
+    "title": "Getting started",
+    "content": " ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js/getting-started/",
+    "relUrl": "/js/getting-started/"
+  },"4": {
+    "doc": "Getting started",
+    "title": "Getting started with Blocks",
+    "content": "Let’s code your first simulation robot in SoccerSim! First, open up https://rcjnsw.github.io/soccersim/blocks. On the left, you have a Scratch-like drag and drop area, where you can click and drag on blocks and place them into the workspace. On the right, you have the simulation. ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/blocks/getting-started/#getting-started-with-blocks",
+    "relUrl": "/blocks/getting-started/#getting-started-with-blocks"
+  },"5": {
+    "doc": "Getting started",
+    "title": "Your first SoccerSim program",
+    "content": "You can write Blocks programs for each of the blue robots, and use different blocks to loop forever, check the ball angle, or move the motors. The most common and useful blocks are: . | Motors: Here you’ll find ways to set the motor speed! | Control: You’ll find a ‘repeat forever’ block to keep your program running, ‘if’ blocks for testing. | Operators: To make comparisons with ‘if’ blocks, you will find ‘equals’, ‘greater than’ and most other blocks here. | Sensors: for your ball direction (in degrees), ball distance (in pixels) and robot heading (in degrees) | . The best way to start is to try get the robot moving! Place a ‘repeat forever’ block into the workspace, and then two ‘set motor speed’ blocks - one for motor A (left) and motor B (right). Change the speeds to 50. Then hit the green Run all button! You should see the robot move forward. You can click and drag on the robot to move it back. To rotate the robot, click and drag on the robot’s wheels. To stop the robot, click the red ‘Stop all’ button. ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/blocks/getting-started/#your-first-soccersim-program",
+    "relUrl": "/blocks/getting-started/#your-first-soccersim-program"
+  },"6": {
+    "doc": "Getting started",
+    "title": "Getting started",
+    "content": " ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/blocks/getting-started/",
+    "relUrl": "/blocks/getting-started/"
+  },"7": {
+    "doc": "Home",
+    "title": "RCJA SoccerSim",
+    "content": "SoccerSim is a new soccer simulaton platform by RoboCup Junior Australia that brings RoboCup soccer into an online simulation platform. Hone your strategy and soccer skills by programming on-screen robots to detect and follow the ball. Here you’ll find instructions and tips on how to program using SoccerSim. ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/#rcja-soccersim",
+    "relUrl": "/#rcja-soccersim"
+  },"8": {
+    "doc": "Home",
+    "title": "Get started",
+    "content": "Blocks JavaScript . ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/#get-started",
+    "relUrl": "/#get-started"
+  },"9": {
+    "doc": "Home",
+    "title": "Home",
+    "content": " ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/",
+    "relUrl": "/"
+  },"10": {
+    "doc": "JavaScript",
+    "title": "JavaScript",
+    "content": "JavaScript is a modern language used to power web applications and lightweight software. While it’s not commonly used in Robotics, it is simple to use and is pretty powerful! You can write your program with JavaScript to control the soccer robot and move it around. ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js",
+    "relUrl": "/js"
+  },"11": {
+    "doc": "Reference",
+    "title": "Reference",
+    "content": "This is a raw reference guide for functions available in the SoccerSim. ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js/reference/",
+    "relUrl": "/js/reference/"
+  },"12": {
+    "doc": "Reference",
+    "title": "Table of contents",
+    "content": ". | Reference . | | Robot . | setMotorSpeed | stopMotor | getMotorSpeed | . | Sensors . | getBallAngle | getBallDistance | getCompassHeading | setInitialPosition | . | . | . ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js/reference/#table-of-contents",
+    "relUrl": "/js/reference/#table-of-contents"
+  },"13": {
+    "doc": "Reference",
+    "title": "Robot",
+    "content": "setMotorSpeed . setMotorSpeed(motor, speed) Sets the motor speed, for a particular motor. | motor (String) motor name, e.g. 'motorA' | speed (Number) number between -100 and 100, a positive value drives the motor forwards. | . // Spin the robot around setMotorSpeed('motorA', 30); setMotorSpeed('motorB', -30); . stopMotor . stopMotor(motor) Stops a particular motor. | motor (String) motor name, e.g. 'motorA' | . // Stops both motors stopMotor('motorA'); stopMotor('motorB'); . getMotorSpeed . getMotorSpeed(motor) Returns the current speed of the motor. | motor (String) motor name, e.g. 'motorA' | . if (getMotorSpeed('motorA') &gt; 10) { // Speed is over 10 } . ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js/reference/#robot",
+    "relUrl": "/js/reference/#robot"
+  },"14": {
+    "doc": "Reference",
+    "title": "Sensors",
+    "content": "getBallAngle . getBallAngle() Returns the current ball angle -180 &lt;= angle &lt; 180, relative to robot. If the ball is directly in front of the robot, the value is 0. Negative if on the left, positive on the right. The angle is calculated from the centre of the robot to the centre of the ball. if (getBallAngle() &gt; 0) { // Ball is on the right relative to the robot } . getBallDistance . getBallDistance() Returns the current ball distance relative to the robot, in pixels. The distance is calculated from the centre of the robot to the centre of the ball. if (getBallDistance() &lt; 60) { // Ball is really close to the robot } . getCompassHeading . getCompassHeading() Returns the current robot compass heading -180 &lt;= angle &lt; 180, relative to the robot. If the robot is facing directly forwards, the value is 0. Negative if facing the left, positive on the right. if (getCompassHeading() &gt; 20) { // Robot is facing to the right } . setInitialPosition . setInitialPosition(position) Sets the initial position. Run this at or near the start of your program. | position (String) position string. One of: far-left, left, centre, right, far-right | . The position is in increments of 50 pixels from the centre. E.g. far-left is 100 pixels from the centre. // Places the robot on the far left. setInitialPosition('far-left'); . ",
+    "url": "https://tools.robocupjunior.org.au/soccersim/docs/js/reference/#sensors",
+    "relUrl": "/js/reference/#sensors"
+  }
+}
