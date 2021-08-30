@@ -229,7 +229,7 @@
         let codes = [];
         
         // Show loading
-        document.getElementById('notifications').innerHTML = '';
+        errorHandler.clear();
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
         let typeButton = document.getElementById('robot-type-button');
@@ -252,7 +252,7 @@
             try {
                 codes.push(Blockly.JavaScript.workspaceToCode(hiddenWorkspace));
             } catch (error) {
-                simControls.showError(error.toString());
+                errorHandler.addError(`Error: ${error.toString()}`, 'danger');
                 stopButton.setAttribute('disabled', '');
                 runButton.removeAttribute('disabled');
                 console.log(error);
@@ -267,7 +267,7 @@
         let codes = [];
         
         // Show loading
-        document.getElementById('notifications').innerHTML = '';
+        errorHandler.clear();
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
 
@@ -305,23 +305,6 @@
         stopButton.setAttribute('disabled', '');
         runButton.removeAttribute('disabled');
         typeButton.removeAttribute('disabled');
-    };
-
-    simControls.showError = function(message) {
-        const errorBox = document.createElement('div');
-        errorBox.classList.add('notification', 'is-danger', 'is-light');
-        errorBox.innerHTML = 'There was an problem when running your program. Please <a' + 
-        ' href="https://github.com/kcnotes/soccersim/issues" target="_blank">submit an issue on GitHub</a>.<br/>' + 
-        message;
-        
-        const closeIcon = document.createElement('button');
-        closeIcon.classList.add('delete');
-        closeIcon.addEventListener('click', function() {
-            errorBox.remove();
-        });
-        errorBox.appendChild(closeIcon);
-        
-        document.getElementById('notifications').appendChild(errorBox);
     };
 
     simControls.init = function() {

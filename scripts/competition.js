@@ -349,7 +349,7 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
     // Start simulator
     competition.startSim = function() {
         competition.moveBall(competition.loc.CENTRE, ball);
-        document.getElementById('notifications').innerHTML = '';
+        errorHandler.clear();
         let runButton = document.getElementById('run-robots');
         let stopButton = document.getElementById('stop-robots');
 

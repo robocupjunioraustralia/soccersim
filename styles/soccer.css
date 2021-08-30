@@ -136,3 +136,11 @@ line.blocklyFlyoutLine {
 #notification-modal {
     z-index: 1000;
 }
+
+#notifications {
+    text-align: left;
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    max-width: 500px;
+}
