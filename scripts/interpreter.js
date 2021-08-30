@@ -158,7 +158,7 @@
         robotsRunning: 0,
         badTickRateCount: 0,
         tickRateCount: 0,
-        maybeShowTickWarning: true
+        showTickWarningOnce: true
     };
 
     /**
@@ -218,7 +218,7 @@
         intptr.robotsRunning = 0;
         intptr.interpreters = [];
         intptr.startInterpreters = [];
-        intptr.maybeShowTickWarning = true;
+        intptr.showTickWarningOnce = true;
         intptr.badTickRateCount = 0;
         intptr.tickRateCount = 0;
         let interpreters = intptr.generateInterpreters(robots, codes, ball);
@@ -254,7 +254,6 @@
         // Tick rate is divided between all robots
         let badTickRateCount = 0;
         let startingCounts = 0;
-        let maybeShowTickWarning = true;
 
         function nextStep(interpreter, r) {
             prev[r] = performance.now();
@@ -320,9 +319,9 @@
             } else {
                 intptr.tickRateCount++;
             }
-            if (intptr.badTickRateCount / intptr.tickRateCount > 0.1 && intptr.maybeShowTickWarning) {
+            if (intptr.badTickRateCount / intptr.tickRateCount > 0.1 && intptr.showTickWarningOnce) {
                 errorHandler.addError('Warning: your browser is slower than usual. The robots may currently be moving or reacting slower than speeds in the competition.', 'warning');
-                intptr.maybeShowTickWarning = false; // only show warning once
+                intptr.showTickWarningOnce = false; // only show warning once
             }
         }
     };
