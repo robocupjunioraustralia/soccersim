@@ -11,7 +11,8 @@
         'getBallAngle',
         'getBallDistance',
         'getCompassHeading',
-        'setInitialPosition'
+        'setInitialPosition',
+        'setAsKickoffRobot'
     ];
 
     const defencePositions = [
@@ -20,12 +21,6 @@
         'centre',
         'right',
         'far-right'
-    ];
-
-    const kickerPositions = [
-        ...defencePositions,
-        'forward',
-        'mid-forward'
     ];
 
     const positionMap = {
@@ -37,8 +32,6 @@
         'forward':     {x:    0, y: 300},
         'mid-forward': {x:    0, y: 250}
     };
-
-    console.log(defencePositions, kickerPositions);
 
     class RobotFunctions {
         constructor(robot, ball, id) {
@@ -108,7 +101,7 @@
             return this.robot.getBearing()*180/Math.PI;
         }
         setInitialPosition(position) {}
-        setKickerPosition(position) {}
+        setAsKickoffRobot() {}
     }
 
     // DummyRobotFunctions is used to set the initial and kicker positions.
@@ -144,9 +137,9 @@
                 this.robot.setPos(positionMap[position].x, positionMap[position].y);
             }
         }
-        setKickerPosition(position) {
-            if (kickerPositions.contains(position)) {
-                this.kickerPosition = position;
+        setAsKickoffRobot() {
+            if (competition) {
+                competition.kickOffBot[this.robot.team] = parseInt(this.id);
             }
         }
     }
@@ -227,10 +220,10 @@
         // Set the starting positions for all robots
         for (let r = 0; r < robots.length; r++) {
             let i = 0;
-            if (!intptr.interpreters[r]) continue;
+            if (!intptr.startInterpreters[r]) continue;
             try {
                 while (!intptr.stopAll && i < 1000) {
-                    step = intptr.interpreters[r].step();
+                    step = intptr.startInterpreters[r].step();
                     i++;
                 }
             } catch (e) {
@@ -243,6 +236,7 @@
         // Set kicker position if kicking
         for (let robot of robots) {
             if (robot.kicking) {
+                console.log(robot, 'is kicking');
                 robot.setPos(positionMap.forward.x, positionMap.forward.y);
             }
         }
@@ -251,9 +245,6 @@
         // regardless of computer specs
         let prev = [];
         let tickrate = 1000/60; // 60 fps for interpreting code
-        // Tick rate is divided between all robots
-        let badTickRateCount = 0;
-        let startingCounts = 0;
 
         function nextStep(interpreter, r) {
             prev[r] = performance.now();

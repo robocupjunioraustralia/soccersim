@@ -57,6 +57,15 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "colour": 190,
     "tooltip": "Sets the starting position of your robot",
     "helpUrl": ""
+  }, {
+    "type": "kickoff_robot_set",
+    "message0": "Set this robot as the kickoff robot",
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 190,
+    "tooltip": "Sets this robot as the kickoff robot",
+    "helpUrl": ""
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
