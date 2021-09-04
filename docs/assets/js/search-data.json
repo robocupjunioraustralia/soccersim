@@ -1,88 +1,154 @@
 {"0": {
+    "doc": "Ball distance",
+    "title": "Using the ball distance block",
+    "content": "The ‘ball distance’ block (Sensors) is used to get a measurement of distance between the centre of the robot, and the centre of the ball, in pixels. You can use the rulers on the right and bottom to gauge how far the robot is from the ball. ",
+    "url": "/soccersim/docs/blocks/ball-distance/#using-the-ball-distance-block",
+    "relUrl": "/blocks/ball-distance/#using-the-ball-distance-block"
+  },"1": {
+    "doc": "Ball distance",
+    "title": "Move until a distance",
+    "content": "Let’s write a program that will go towards the ball, until it is less than 100 pixels from the ball. To do this: . | We need an ‘if’ block (Control) - because the robot needs to make a decision. | We also need a ‘comparison’ block (Operators) - because we need to check that the ball distance is greater than 100. | If the robot is far away, then the robot should move forwards. | Otherwise, the robot should stop. | . Let’s start with the if. Here, we drag the if and comparison, and we want the condition to be that the ball distance is greater than 100. Now we just need to add the motor movement. The robot should move forward in the first case, and stop moving in the second case. ",
+    "url": "/soccersim/docs/blocks/ball-distance/#move-until-a-distance",
+    "relUrl": "/blocks/ball-distance/#move-until-a-distance"
+  },"2": {
+    "doc": "Ball distance",
+    "title": "Ball distance",
+    "content": " ",
+    "url": "/soccersim/docs/blocks/ball-distance/",
+    "relUrl": "/blocks/ball-distance/"
+  },"3": {
+    "doc": "Ball angle",
+    "title": "Using the ball angle block",
+    "content": "The ‘ball angle’ block (Sensors) is used to get a measurement of angle, between -180 and +180. If the ball is on the left of the robot, the number is negative. If the ball is on the right, the ball is positive. ",
+    "url": "/soccersim/docs/blocks/ball-angle/#using-the-ball-angle-block",
+    "relUrl": "/blocks/ball-angle/#using-the-ball-angle-block"
+  },"4": {
+    "doc": "Ball angle",
+    "title": "Rotate to face the ball",
+    "content": "Let’s write a program that will rotate the robot to face the ball. | We need an ‘if’ block (Control) - because the robot needs to make a decision. | We also need a ‘comparison’ block (Operators) - because we need to check that the ball distance is greater than 100. | . We have three conditions: . | If the ball is to the left (ball angle &lt; -20), then the robot should rotate left. | Otherwise, if the ball is to the right (ball angle &gt; 20), then the robot should rotate right. | Otherwise, the robot should stop. | . We’re using -20 and 20 degrees because the robot can’t stop instantly. Let’s start with the if. Here, we drag the if and comparison blocks, and we can also press the + to get the ‘else if’ section. Now we just need to add the motor movement. | Rotate left means the left wheel needs to go backwards (negative) and the right wheel goes forwards (positive). | The opposite for rotating right. | . ",
+    "url": "/soccersim/docs/blocks/ball-angle/#rotate-to-face-the-ball",
+    "relUrl": "/blocks/ball-angle/#rotate-to-face-the-ball"
+  },"5": {
+    "doc": "Ball angle",
+    "title": "Ball angle",
+    "content": " ",
+    "url": "/soccersim/docs/blocks/ball-angle/",
+    "relUrl": "/blocks/ball-angle/"
+  },"6": {
     "doc": "Blocks",
     "title": "Blocks",
     "content": "Blocks are a Scratch-like interface using MakeCode. You can build your program with Blocks to control the soccer robot and move it around! . ",
-    "url": "/soccersim/docs/blocks",
-    "relUrl": "/blocks"
-  },"1": {
+    "url": "/soccersim/docs/blocks/",
+    "relUrl": "/blocks/"
+  },"7": {
     "doc": "Getting started",
     "title": "Getting started with JavaScript",
     "content": "Let’s code your first simulation robot in SoccerSim! First, open up the JavaScript editor. On the left, you have an editor, where you can program JavaScript code. On the right, you have the simulation. JavaScript is pretty similar to C or Python - it just has a slightly different syntax. The following links may be helpful: . | Codecademy: Learn JavaScript - A very beginner friendly way where students can solve problems and learn JS | JavaScript Fundamentals - a thorough introductory guide to programming in JavaScript on the browser | MDN: JavaScripts basics crash course - useful for students who have done some text programming before | . ",
     "url": "/soccersim/docs/js/getting-started/#getting-started-with-javascript",
     "relUrl": "/js/getting-started/#getting-started-with-javascript"
-  },"2": {
+  },"8": {
     "doc": "Getting started",
     "title": "Your first SoccerSim program",
     "content": "The best way to start is to try get the robot moving! The following code will get your robot moving forward: . while (1) { setMotorSpeed('motorA', 50); setMotorSpeed('motorB', 50); } . Then hit the green Run all button! You should see the robot move forward. You can click and drag on the robot to move it back. To rotate the robot, click and drag on the robot’s wheels. To stop the robot, click the red ‘Stop all’ button. For all robot commands, see the JavaScript reference guide. ",
     "url": "/soccersim/docs/js/getting-started/#your-first-soccersim-program",
     "relUrl": "/js/getting-started/#your-first-soccersim-program"
-  },"3": {
+  },"9": {
     "doc": "Getting started",
     "title": "Getting started",
     "content": " ",
     "url": "/soccersim/docs/js/getting-started/",
     "relUrl": "/js/getting-started/"
-  },"4": {
+  },"10": {
     "doc": "Getting started",
     "title": "Getting started with Blocks",
     "content": "Let’s code your first simulation robot in SoccerSim! First, open up the Blocks editor. On the left, you have a Scratch-like drag and drop area, where you can click and drag on blocks and place them into the workspace. On the right, you have the simulation. ",
     "url": "/soccersim/docs/blocks/getting-started/#getting-started-with-blocks",
     "relUrl": "/blocks/getting-started/#getting-started-with-blocks"
-  },"5": {
+  },"11": {
     "doc": "Getting started",
     "title": "Your first SoccerSim program",
-    "content": "You can write Blocks programs for each of the blue robots, and use different blocks to loop forever, check the ball angle, or move the motors. The most common and useful blocks are: . | Motors: Here you’ll find ways to set the motor speed! | Control: You’ll find a ‘repeat forever’ block to keep your program running, ‘if’ blocks for testing. | Operators: To make comparisons with ‘if’ blocks, you will find ‘equals’, ‘greater than’ and most other blocks here. | Sensors: for your ball direction (in degrees), ball distance (in pixels) and robot heading (in degrees) | . The best way to start is to try get the robot moving! Place a ‘repeat forever’ block into the workspace, and then two ‘set motor speed’ blocks - one for motor A (left) and motor B (right). Change the speeds to 50. Then hit the green Run all button! You should see the robot move forward. You can click and drag on the robot to move it back. To rotate the robot, click and drag on the robot’s wheels. To stop the robot, click the red ‘Stop all’ button. ",
+    "content": "You can write Blocks programs for each of the blue robots, and use different blocks to loop forever, check the ball angle, or move the motors. The most common and useful blocks are: . | Motors: Here you’ll find ways to set the motor speed! | Control: You’ll find a ‘repeat forever’ block to keep your program running, ‘if’ blocks for testing. | Operators: To make comparisons with ‘if’ blocks, you will find ‘equals’, ‘greater than’ and most other blocks here. | Sensors: for your ball direction (in degrees), ball distance (in pixels) and robot heading (in degrees) | . The best way to start is to try get the robot moving! . First, place a ‘repeat forever’ block (Control) into the workspace. This means that our robot is always going to repeatedly move and react to the ball. We also should set the starting position for the robot, meaning we should use a ‘set starting position’ block (Events) at the very beginning of our program. ",
     "url": "/soccersim/docs/blocks/getting-started/#your-first-soccersim-program",
     "relUrl": "/blocks/getting-started/#your-first-soccersim-program"
-  },"6": {
+  },"12": {
+    "doc": "Getting started",
+    "title": "Moving forward",
+    "content": "Let’s make our robot move forward. Add two ‘set motor speed’ blocks (Motors) - one for motor A (left) and motor B (right). Change the speeds to 50. Then hit the green Run all button! You should see the robot move forward. You can click and drag on the robot to move it back. To rotate the robot, click and drag on the robot’s wheels. To stop the robot, click the red ‘Stop all’ button. ",
+    "url": "/soccersim/docs/blocks/getting-started/#moving-forward",
+    "relUrl": "/blocks/getting-started/#moving-forward"
+  },"13": {
+    "doc": "Getting started",
+    "title": "Rotating",
+    "content": "If we want to rotate on the spot, we can easily set one of the motors to be a negative value. The motor speeds can be between -100 and 100. If we set the left wheel to -50, and the right wheel to 50, then it will rotate anti-clockwise. ",
+    "url": "/soccersim/docs/blocks/getting-started/#rotating",
+    "relUrl": "/blocks/getting-started/#rotating"
+  },"14": {
     "doc": "Getting started",
     "title": "Getting started",
     "content": " ",
     "url": "/soccersim/docs/blocks/getting-started/",
     "relUrl": "/blocks/getting-started/"
-  },"7": {
+  },"15": {
     "doc": "Home",
     "title": "RCJA SoccerSim",
     "content": "SoccerSim is a new soccer simulaton platform by RoboCup Junior Australia that brings RoboCup soccer into an online simulation platform. Hone your strategy and soccer skills by programming on-screen robots to detect and follow the ball. Here you’ll find instructions and tips on how to program using SoccerSim. ",
     "url": "/soccersim/docs/#rcja-soccersim",
     "relUrl": "/#rcja-soccersim"
-  },"8": {
+  },"16": {
     "doc": "Home",
     "title": "Get started",
-    "content": "Blocks JavaScript . ",
+    "content": "Blocks JavaScript . We also have a YouTube playlist summarising some of the content in these docs. SoccerSim YouTube playlist . ",
     "url": "/soccersim/docs/#get-started",
     "relUrl": "/#get-started"
-  },"9": {
+  },"17": {
     "doc": "Home",
     "title": "Home",
     "content": " ",
     "url": "/soccersim/docs/",
     "relUrl": "/"
-  },"10": {
+  },"18": {
+    "doc": "Programming interface",
+    "title": "Programming interface",
+    "content": "The Blocks and JavaScript programming page is very similar. The editor is on the left and the simulator is on the right. ",
+    "url": "/soccersim/docs/interface/",
+    "relUrl": "/interface/"
+  },"19": {
+    "doc": "Programming interface",
+    "title": "Editor",
+    "content": ". The editor has menu items on the top. | Robot 1 Program / Robot 2 Program: Lets you switch between the code for each robot. | Robot Type: Lets you choose the robot type for this particular program. Each program can use a different type of robot. | Clear: Blanks the Blocks or JavaScript code. | Load: Uploads code into the editor. You can upload .xml or .js files from your computer. | Download: Downloads the code from the editor. This will let you save files into your Download folder. | . Saving files . Important Always download your code before closing the browser. The editor does not automatically save your code. You should always download and load your code between coding sessions. The editor will save your code locally when you run the simulator. However, you should not rely on this for saving your code, as it can disappear if you clear your browser cache. It also won’t transfer the code between computers or browsers. ",
+    "url": "/soccersim/docs/interface/#editor",
+    "relUrl": "/interface/#editor"
+  },"20": {
+    "doc": "Programming interface",
+    "title": "Simulator",
+    "content": ". The simulator can be started by clicking on ‘Run all’, and can be stopped by clicking on ‘Stop all’. If there are any errors with your code, the simulator will show an error message on the bottom right of the screen. The rulers on the left and bottom of the simulator represent pixels and can be used for measurements of ball distance. ",
+    "url": "/soccersim/docs/interface/#simulator",
+    "relUrl": "/interface/#simulator"
+  },"21": {
     "doc": "JavaScript",
     "title": "JavaScript",
     "content": "JavaScript is a modern language used to power web applications and lightweight software. While it’s not commonly used in Robotics, it is simple to use and is pretty powerful! You can write your program with JavaScript to control the soccer robot and move it around. ",
-    "url": "/soccersim/docs/js",
-    "relUrl": "/js"
-  },"11": {
+    "url": "/soccersim/docs/js/",
+    "relUrl": "/js/"
+  },"22": {
     "doc": "Reference",
     "title": "Reference",
     "content": "This is a raw reference guide for functions available in the SoccerSim. ",
     "url": "/soccersim/docs/js/reference/",
     "relUrl": "/js/reference/"
-  },"12": {
+  },"23": {
     "doc": "Reference",
     "title": "Table of contents",
     "content": ". | Reference . | | Robot . | setMotorSpeed | stopMotor | getMotorSpeed | . | Sensors . | getBallAngle | getBallDistance | getCompassHeading | setInitialPosition | . | . | . ",
     "url": "/soccersim/docs/js/reference/#table-of-contents",
     "relUrl": "/js/reference/#table-of-contents"
-  },"13": {
+  },"24": {
     "doc": "Reference",
     "title": "Robot",
     "content": "setMotorSpeed . setMotorSpeed(motor, speed) Sets the motor speed, for a particular motor. | motor (String) motor name, e.g. 'motorA' | speed (Number) number between -100 and 100, a positive value drives the motor forwards. | . // Spin the robot around setMotorSpeed('motorA', 30); setMotorSpeed('motorB', -30); . stopMotor . stopMotor(motor) Stops a particular motor. | motor (String) motor name, e.g. 'motorA' | . // Stops both motors stopMotor('motorA'); stopMotor('motorB'); . getMotorSpeed . getMotorSpeed(motor) Returns the current speed of the motor. | motor (String) motor name, e.g. 'motorA' | . if (getMotorSpeed('motorA') &gt; 10) { // Speed is over 10 } . ",
     "url": "/soccersim/docs/js/reference/#robot",
     "relUrl": "/js/reference/#robot"
-  },"14": {
+  },"25": {
     "doc": "Reference",
     "title": "Sensors",
     "content": "getBallAngle . getBallAngle() Returns the current ball angle -180 &lt;= angle &lt; 180, relative to robot. If the ball is directly in front of the robot, the value is 0. Negative if on the left, positive on the right. The angle is calculated from the centre of the robot to the centre of the ball. if (getBallAngle() &gt; 0) { // Ball is on the right relative to the robot } . getBallDistance . getBallDistance() Returns the current ball distance relative to the robot, in pixels. The distance is calculated from the centre of the robot to the centre of the ball. if (getBallDistance() &lt; 60) { // Ball is really close to the robot } . getCompassHeading . getCompassHeading() Returns the current robot compass heading -180 &lt;= angle &lt; 180, relative to the robot. If the robot is facing directly forwards, the value is 0. Negative if facing the left, positive on the right. if (getCompassHeading() &gt; 20) { // Robot is facing to the right } . setInitialPosition . setInitialPosition(position) Sets the initial position. Run this at or near the start of your program. | position (String) position string. One of: far-left, left, centre, right, far-right | . The position is in increments of 50 pixels from the centre. E.g. far-left is 100 pixels from the centre. // Places the robot on the far left. setInitialPosition('far-left'); . ",
