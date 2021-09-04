@@ -218,7 +218,7 @@
 
         var step;
         // Set the starting positions for all robots
-        for (let r = 0; r < robots.length; r++) {
+        for (let r = robots.length - 1; r >= 0; r--) {
             let i = 0;
             if (!intptr.startInterpreters[r]) continue;
             try {
@@ -236,7 +236,6 @@
         // Set kicker position if kicking
         for (let robot of robots) {
             if (robot.kicking) {
-                console.log(robot, 'is kicking');
                 robot.setPos(positionMap.forward.x, positionMap.forward.y);
             }
         }
