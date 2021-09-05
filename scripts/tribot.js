@@ -413,6 +413,7 @@
             this.body = robot;
             this.prevAngle = this.getAngle();
             this.setupMotors(motorOffset);
+            this.pos = this.getPos();
 
             // Rotate entire composite shape if blue team
             if (team == 'blue'){
@@ -431,16 +432,16 @@
         // Set speed of the one motor
         setMotorSpeed(motorNum, speed){
             if (motorNum < this.numMotors){
-                this.motorSpeeds[motorNum] = speed;
+                const clone = [...this.motorSpeeds];
+                clone[motorNum] = speed;
+                this.motorSpeeds = clone;
             }
             this.calculateForce();
         }
         
         // Set speed of all motors
         setMotorSpeedAll(speed0, speed1, speed2){
-            this.motorSpeeds[0] = speed0;
-            this.motorSpeeds[1] = speed1;
-            this.motorSpeeds[2] = speed2;
+            this.motorSpeeds = [speed0, speed1, speed2];
             this.calculateForce();
         }
 
@@ -500,6 +501,7 @@
                 motor = this.getMotors()[i];
                 Body.applyForce(motor, motor.position, vector);
             }
+            this.pos = this.getPos();
         }
     }
 
