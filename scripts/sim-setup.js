@@ -30,42 +30,48 @@ function calcBearing(angle, compensate) {
     return bearing*180/Math.PI;
 }
 
+// Give padding to text
+function whiteSpacePadding(text) {
+    return ('      ' + text).slice(-6);
+}
+
 // Make motor speeds look better
 function formatMotorSpeeds(numArray) {
     let text = '';
     numArray.forEach((element, index) => {
-        index != 0 ? text += `, ${element}` : text += `${element}`; 
+        const formatted = whiteSpacePadding(element);
+        index != 0 ? text += ', ' + formatted : text += formatted;
     });
     return text;
 }
 
 // Initial setup of display
 document.getElementById('blue1_motorSpeeds').textContent = formatMotorSpeeds(blue1Orig.motorSpeeds);
-document.getElementById('blue1_prevAngle').textContent = blue1Orig.prevAngle;
+document.getElementById('blue1_prevAngle').textContent = whiteSpacePadding(blue1Orig.prevAngle);
 const blue1BallPos = blue1Orig.getBallPosition(ball)
-document.getElementById('blue1_ballDistance').textContent = blue1BallPos.distance;
-document.getElementById('blue1_ballAngle').textContent = blue1BallPos.angle;
+document.getElementById('blue1_ballDistance').textContent = whiteSpacePadding(blue1BallPos.distance);
+document.getElementById('blue1_ballAngle').textContent = whiteSpacePadding(blue1BallPos.angle);
 
 document.getElementById('blue2_motorSpeeds').textContent = formatMotorSpeeds(blue2Orig.motorSpeeds);
-document.getElementById('blue2_prevAngle').textContent = blue2Orig.prevAngle;
+document.getElementById('blue2_prevAngle').textContent = whiteSpacePadding(blue2Orig.prevAngle);
 const blue2BallPos = blue2Orig.getBallPosition(ball)
-document.getElementById('blue2_ballDistance').textContent = blue2BallPos.distance;
-document.getElementById('blue2_ballAngle').textContent = blue2BallPos.angle;
+document.getElementById('blue2_ballDistance').textContent = whiteSpacePadding(blue2BallPos.distance);
+document.getElementById('blue2_ballAngle').textContent = whiteSpacePadding(blue2BallPos.angle);
 
 // Proxies to catch state changes
 const blue1 = new Proxy(blue1Orig, {
     set: function(target, key, value) {
         switch (key) {
             case 'motorSpeeds':
-                document.getElementById('blue1_motorSpeeds').textContent = formatMotorSpeeds(value.map((element) => element * 500));
+                document.getElementById('blue1_motorSpeeds').textContent = formatMotorSpeeds(value.map((element) => Math.round(element * 500)));
                 break;
             case 'prevAngle':
-                document.getElementById('blue1_prevAngle').textContent = calcBearing(value, true).toFixed(1);
+                document.getElementById('blue1_prevAngle').textContent = whiteSpacePadding(calcBearing(value, true).toFixed(1));
                 break;
             case 'pos':
                 const blue1BallPos = blue1Orig.getBallPosition(ball)
-                document.getElementById('blue1_ballDistance').textContent = blue1BallPos.distance.toFixed(1);
-                document.getElementById('blue1_ballAngle').textContent = calcBearing(blue1BallPos.angle, false).toFixed(1);
+                document.getElementById('blue1_ballDistance').textContent = whiteSpacePadding(blue1BallPos.distance.toFixed(1));
+                document.getElementById('blue1_ballAngle').textContent = whiteSpacePadding(calcBearing(blue1BallPos.angle, false).toFixed(1));
                 break;
             default:
                 break;
@@ -78,15 +84,15 @@ const blue2 = new Proxy(blue2Orig, {
     set: function(target, key, value) {
         switch (key) {
             case 'motorSpeeds':
-                document.getElementById('blue2_motorSpeeds').textContent = formatMotorSpeeds(value.map((element) => element * 500));
+                document.getElementById('blue2_motorSpeeds').textContent = formatMotorSpeeds(value.map((element) => Math.round(element * 500)));
                 break;
             case 'prevAngle':
-                document.getElementById('blue2_prevAngle').textContent = calcBearing(value, true).toFixed(1);
+                document.getElementById('blue2_prevAngle').textContent = whiteSpacePadding(calcBearing(value, true).toFixed(1));
                 break;
             case 'pos':
                 const blue2BallPos = blue2Orig.getBallPosition(ball)
-                document.getElementById('blue2_ballDistance').textContent = blue2BallPos.distance.toFixed(1);
-                document.getElementById('blue2_ballAngle').textContent = calcBearing(blue2BallPos.angle, false).toFixed(1);
+                document.getElementById('blue2_ballDistance').textContent = whiteSpacePadding(blue2BallPos.distance.toFixed(1));
+                document.getElementById('blue2_ballAngle').textContent = whiteSpacePadding(calcBearing(blue2BallPos.angle, false).toFixed(1));
                 break;
             default:
                 break;

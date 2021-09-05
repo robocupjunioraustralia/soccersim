@@ -63,7 +63,7 @@
                 options: {
                     width: fieldWidth,
                     height: fieldHeight,
-                    showVelocity: true,
+                    showVelocity: false,
                     wireframes: false
                 }
             });

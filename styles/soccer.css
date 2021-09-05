@@ -137,19 +137,31 @@ line.blocklyFlyoutLine {
     z-index: 1000;
 }
 
-#robot-stats-table,
-#robot-stats-table th,
-#robot-stats-table td {
-    border: transparent;
+#robot-stats-table {
     background-color: #111111;
-    color: whitesmoke;
     margin-bottom: 1em;
     font-size: small;
+    text-align: left;
+    padding-left: 1em;
+    table-layout: fixed;
+}
+
+#robot-stats-table th {
+    border: transparent;
+    color: whitesmoke;
+    width: 10%;
+}
+
+#robot-stats-table td {
+    border: transparent;
+    color: whitesmoke;
 }
 
 .robot-stat {
+    white-space: pre-wrap;
     display: inline;
 }
+
 #notifications {
     text-align: left;
     position: fixed;
