@@ -39,7 +39,7 @@ function whiteSpacePadding(text) {
 function formatMotorSpeeds(numArray) {
     let text = '';
     numArray.forEach((element, index) => {
-        const formatted = whiteSpacePadding(element);
+        const formatted = whiteSpacePadding(Math.round(element * 500));
         index != 0 ? text += ', ' + formatted : text += formatted;
     });
     return text;
@@ -63,7 +63,7 @@ const blue1 = new Proxy(blue1Orig, {
     set: function(target, key, value) {
         switch (key) {
             case 'motorSpeeds':
-                document.getElementById('blue1_motorSpeeds').textContent = formatMotorSpeeds(value.map((element) => Math.round(element * 500)));
+                document.getElementById('blue1_motorSpeeds').textContent = formatMotorSpeeds(value);
                 break;
             case 'prevAngle':
                 document.getElementById('blue1_prevAngle').textContent = whiteSpacePadding(calcBearing(value, true).toFixed(1));
@@ -84,7 +84,7 @@ const blue2 = new Proxy(blue2Orig, {
     set: function(target, key, value) {
         switch (key) {
             case 'motorSpeeds':
-                document.getElementById('blue2_motorSpeeds').textContent = formatMotorSpeeds(value.map((element) => Math.round(element * 500)));
+                document.getElementById('blue2_motorSpeeds').textContent = formatMotorSpeeds(value);
                 break;
             case 'prevAngle':
                 document.getElementById('blue2_prevAngle').textContent = whiteSpacePadding(calcBearing(value, true).toFixed(1));

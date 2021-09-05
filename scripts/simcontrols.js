@@ -332,27 +332,63 @@
         robotControls.ball = ball;
     };
 
+    robotControls.addProxyBot = function(robotName, type, pos){
+        // never should have switched between array and dictionary
+        const index = robotName.slice(5);
+        let add = null;
+        if (type === 'DualBot'){
+            add = new DualBot('blue', pos.x, pos.y, sim.fieldWidth, sim.fieldHeight);
+        } else if (type === 'TriBot'){
+            add = new TriBot('blue', pos.x, pos.y, sim.fieldWidth, sim.fieldHeight);
+        }
+        const blue = new Proxy(add, {
+            set: function(target, key, value) {
+                switch (key) {
+                    case 'motorSpeeds':
+                        document.getElementById(`blue${index}_motorSpeeds`).textContent = formatMotorSpeeds(value);
+                        break;
+                    case 'prevAngle':
+                        document.getElementById(`blue${index}_prevAngle`).textContent = whiteSpacePadding(calcBearing(value, true).toFixed(1));
+                        break;
+                    case 'pos':
+                        const blueBallPos = add.getBallPosition(ball)
+                        document.getElementById(`blue${index}_ballDistance`).textContent = whiteSpacePadding(blueBallPos.distance.toFixed(1));
+                        document.getElementById(`blue${index}_ballAngle`).textContent = whiteSpacePadding(calcBearing(blueBallPos.angle, false).toFixed(1));
+                        break;
+                    default:
+                        break;
+                }
+                return Reflect.set(...arguments);
+            }
+        });
+        sim.robots.push(blue);
+        sim.addBody(blue.body);
+        // Motor speeds is the only entry currently that changes in format
+        document.getElementById(`blue${index}_motorSpeeds`).textContent = formatMotorSpeeds(add.motorSpeeds);
+        return blue;
+    }
+
     // Change the type of the robot, ie. dualbot -> tribot
     robotControls.switchType = function(type){
-        let robot = null;
+        let selectedRobot = null;
         if (window.config && window.config.INTERFACE_TYPE === 'blocks') {
-            robot = blocklyControls.selected;
+            selectedRobot = blocklyControls.selected;
         }
         else if (window.config && window.config.INTERFACE_TYPE === 'javascript') {
-            robot = jsControls.selected;
+            selectedRobot = jsControls.selected;
         }
-        if (!robot) {
+        if (!selectedRobot) {
             console.error('No selected robot or available interface');
             return;
         }
 
-        let robotObj = robotControls.robots[robot];
+        let robotObj = robotControls.robots[selectedRobot];
         if (robotObj.type != type){
             // Removes old bot and get its pos
             let old = sim.removeBot(robotObj);
             // Add new bot and get obj, add to robotControls
-            let add = sim.addBot(type, old, 'blue');
-            robotControls.robots[robot] = add;
+            let add = this.addProxyBot(selectedRobot, type, old);
+            robotControls.robots[selectedRobot] = add;
         }
     };
 
