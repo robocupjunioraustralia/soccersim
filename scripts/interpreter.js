@@ -138,7 +138,7 @@
             }
         }
         setAsKickoffRobot() {
-            if (competition) {
+            if (window.competition) {
                 competition.kickOffBot[this.robot.team] = parseInt(this.id);
             }
         }
