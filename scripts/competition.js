@@ -171,17 +171,15 @@ Matter.Mouse._getRelativeMousePosition = function(event, element, pixelRatio) {
     });
 
     // Kickoff robot setup
-    let blueKickoffSelect = document.getElementById('blue-kickoff-robot');
     scoringSave.addEventListener('change', function() {
         competition.kickOffBot.blue = parseInt(this.value);
     });
-    let yellowKickoffSelect = document.getElementById('yellow-kickoff-robot');
     scoringSave.addEventListener('change', function() {
         competition.kickOffBot.yellow = parseInt(this.value);
     });
 
     competition.setKickOff = function(team) {
-        for (let robot of robots) {
+        for (let robot of competition.robots) {
             robot.kicking = false;
         }
         if (team === 'blue') {

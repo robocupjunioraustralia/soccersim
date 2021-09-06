@@ -31,6 +31,11 @@ Blockly.JavaScript['initial_position_set'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['kickoff_robot_set'] = function(block) {
+  var code = 'setAsKickoffRobot();\n';
+  return code;
+};
+
 Blockly.JavaScript['procedures_defreturn'] = function(block) {
   // Define a procedure with a return value.
   var funcName = Blockly.JavaScript.variableDB_.getName(
