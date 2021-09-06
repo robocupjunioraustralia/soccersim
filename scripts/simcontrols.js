@@ -6,11 +6,43 @@
         simControls = {};
     blocklyControls.selected = 'robot1';
     blocklyControls.robots = ['robot1', 'robot2'];
+    blocklyControls.starterCode =
+`<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="controls_whileForever" id="_8qus:u7fI*YO_BwfRna" x="450" y="278">
+    <statement name="DO">
+      <block type="motor_set_speed" id="@G+4LgyJyXNV^1ztX*IV">
+        <field name="motor">'motorA'</field>
+        <value name="speed_input">
+          <shadow type="math_number_minmax" id=",SCKuv.TC[s7uYsbf)Wo">
+            <mutation min="-100" max="100" label="Number" precision="0"/>
+            <field name="SLIDER">100</field>
+          </shadow>
+        </value>
+        <next>
+          <block type="motor_set_speed" id="!CF^l^zv2qfn0sR#h6v8">
+            <field name="motor">'motorB'</field>
+            <value name="speed_input">
+              <shadow type="math_number_minmax" id="a?[KBdzk]q5[B/))#8;I">
+                <mutation min="-100" max="100" label="Number" precision="0"/>
+                <field name="SLIDER">100</field>
+              </shadow>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+</xml>`;
 
     let jsControls = {};
     jsControls.selected = 'robot1';
     jsControls.robots = ['robot1', 'robot2'];
-
+    jsControls.starterCode =
+`while(1) {
+  setMotorSpeed('motorA', 100);
+  setMotorSpeed('motorB', 100);
+}`;
+    
     // Define controls for modifying robots directly
     let robotControls = {};
     robotControls.robots = null;
@@ -49,7 +81,7 @@
         // Defaults to currently selected robot
         let xml = localStorage.getItem('soccersim-' + robot);
         if (!xml) {
-            xml = '<xml xmlns="https://developers.google.com/blockly/xml"/>';
+            xml = blocklyControls.starterCode;
         }
         currentWorkspace.clear();
         let dom = Blockly.Xml.textToDom(xml);
@@ -61,7 +93,7 @@
         robot = robot || jsControls.selected;
         let js = localStorage.getItem('soccersim-js-' + robot);
         if (!js) {
-            js = '';
+            js = jsControls.starterCode;
         }
         codeMirrorEditor.setValue(js);
     };
@@ -285,7 +317,7 @@
         for (let robot of jsControls.robots) {
             let js = localStorage.getItem('soccersim-js-' + robot);
             if (!js) {
-                js = '';
+                js = jsControls.starterCode;
             }
             codes.push(js);
         }
