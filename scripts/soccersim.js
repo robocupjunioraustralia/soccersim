@@ -63,7 +63,7 @@
                 options: {
                     width: fieldWidth,
                     height: fieldHeight,
-                    showVelocity: true,
+                    showVelocity: false,
                     wireframes: false
                 }
             });
@@ -92,10 +92,10 @@
                 bots.push(this.robots[i].body);
             }
             // Add to world
-            World.add(this.world, fieldObjects);
-            World.add(this.world, balls);
-            World.add(this.world, walls);
-            World.add(this.world, bots);
+            this.addBody(fieldObjects);
+            this.addBody(balls);
+            this.addBody(walls);
+            this.addBody(bots);
 
             // add mouse control
             var mouse = Mouse.create(this.render.canvas),
@@ -109,7 +109,7 @@
                     }
                 });
 
-            World.add(this.world, mouseConstraint);
+            this.addBody(mouseConstraint);
 
             // keep the mouse in sync with rendering
             this.render.mouse = mouse;
@@ -311,8 +311,13 @@
                 }
             }
             this.robots.push(add);
-            World.add(this.world, add.body);
+            this.addBody(add.body);
             return add;
+        }
+
+        // Add any given body to the world
+        addBody(body){
+           World.add(this.world, body);
         }
 
         /**

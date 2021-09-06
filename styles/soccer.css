@@ -137,6 +137,32 @@ line.blocklyFlyoutLine {
     z-index: 1000;
 }
 
+#robot-stats-table {
+    background-color: #111111;
+    margin-bottom: 1em;
+    font-size: small;
+    text-align: left;
+    table-layout: fixed;
+}
+
+#robot-stats-table th {
+    border: transparent;
+    color: whitesmoke;
+    width: 10%;
+    text-align: center;
+}
+
+#robot-stats-table td {
+    border: transparent;
+    color: whitesmoke;
+    padding-left: 0.5em;
+}
+
+.robot-stat {
+    white-space: pre-wrap;
+    display: inline;
+}
+
 #notifications {
     text-align: left;
     position: fixed;

@@ -131,6 +131,24 @@
                     <span>Stop all</span>
                 </button>
             </div>
+            <table class="table is-fullwidth" id="robot-stats-table">
+                <tbody>
+                    <tr>
+                        <th>Robot 1</th>
+                        <td>Motors: <div class="robot-stat" id="blue1_motorSpeeds"></div></td>
+                        <td>Bearing Angle: <div class="robot-stat" id="blue1_prevAngle"></div>°</td>
+                        <td>Ball Distance: <div class="robot-stat" id="blue1_ballDistance"></div></td>
+                        <td>Ball Direction: <div class="robot-stat" id="blue1_ballAngle"></div>°</td>
+                    </tr>
+                    <tr>
+                        <th>Robot 2</th>
+                        <td>Motors: <div class="robot-stat" id="blue2_motorSpeeds"></div></td>
+                        <td>Bearing Angle: <div class="robot-stat" id="blue2_prevAngle"></div>°</td>
+                        <td>Ball Distance: <div class="robot-stat" id="blue2_ballDistance"></div></td>
+                        <td>Ball Direction: <div class="robot-stat" id="blue2_ballAngle"></div>°</td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="is-flex" style="justify-content: center; flex-direction: row;">
                 <div id="matterjs"></div>
                 <div id="ruler-vertical"></div>

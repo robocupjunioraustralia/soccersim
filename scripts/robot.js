@@ -28,6 +28,10 @@
             this.prevAngle = 0;
             this.fieldWidth = fieldWidth;
             this.fieldHeight = fieldHeight;
+            this.pos = {
+                x: 0,
+                y: 0,
+            };
 
             // Colours
             this.yellow = '#EFCF00';
