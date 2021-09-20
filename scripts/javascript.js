@@ -8,6 +8,7 @@
     enableBasicAutocompletion: true,
     enableLiveAutocompletion: true,
     //enableSnippets: true,
+    fontSize: '14px',
     showPrintMargin: false
   });
 
