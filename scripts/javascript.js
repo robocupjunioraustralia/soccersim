@@ -7,7 +7,7 @@
   editor.setOptions({
     enableBasicAutocompletion: true,
     enableLiveAutocompletion: true,
-    enableSnippets: true,
+    //enableSnippets: true,
     showPrintMargin: false
   });
 
