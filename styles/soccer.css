@@ -36,6 +36,10 @@ body {
     display: block;
 }
 
+#soccersim .ace_autocomplete {
+    width: 50%;
+}
+
 #soccersim #importExport {
     height: calc(20vh - 10px);
     border: 0;
