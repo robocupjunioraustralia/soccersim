@@ -37,6 +37,7 @@
     let jsControls = {};
     jsControls.selected = 'robot1';
     jsControls.robots = ['robot1', 'robot2'];
+    const editor = ace.edit("editor");
     jsControls.starterCode =
 `while(1) {
   setMotorSpeed('motorA', 100);
@@ -67,7 +68,7 @@
     jsControls.saveProgram = function(robot) {
         // Defaults to currently selected robot
         robot = robot || jsControls.selected;
-        let js = codeMirrorEditor.getValue();
+        let js = editor.getValue();
         localStorage.setItem('soccersim-js-' + robot, js);
     };
 
@@ -95,7 +96,7 @@
         if (!js) {
             js = jsControls.starterCode;
         }
-        codeMirrorEditor.setValue(js);
+        editor.setValue(js);
     };
 
     /**
@@ -115,7 +116,7 @@
         if (!confirm('Are you sure you want to clear the workspace?')) {
             return;
         }
-        codeMirrorEditor.setValue('');
+        editor.setValue('');
     };
 
     /**
@@ -153,7 +154,7 @@
 
     jsControls.downloadAsFile = function(robot) {
         robot = robot || jsControls.selected;
-        let js = codeMirrorEditor.getValue();
+        let js = editor.getValue();
         download(js, robot, 'text/javascript');
     }
 
@@ -185,7 +186,7 @@
             reader.readAsText(file, "UTF-8");
             reader.onload = function (evt) {
                 let js = evt.target.result;
-                codeMirrorEditor.setValue(js);
+                editor.setValue(js);
                 document.getElementById("uploaded-file").value = "";
             };
         }

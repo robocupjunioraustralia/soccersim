@@ -31,9 +31,8 @@ body {
     display: block;
 }
 
-#soccersim .CodeMirror {
+#soccersim .ace_editor {
     height: calc(100vh - 112px);
-    width: 100%;
     display: block;
 }
 
